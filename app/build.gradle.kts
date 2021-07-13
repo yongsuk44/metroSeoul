@@ -6,8 +6,8 @@ plugins {
     id(GradlePluginId.kotlinAndroid)
     id(GradlePluginId.kotlinKapt)
     id(GradlePluginId.kotlinAndroidExtensions)
-    id(GradlePluginId.hilt)
 }
+
 val releaseKeystoreFile = rootProject.file("keystore.properties")
 val debugKeystoreFile = file("${projectDir}/debug.keystore")
 val properties = Properties()
@@ -90,15 +90,14 @@ android {
 }
 
 dependencies {
-    implementationList(LibraryList.HiltLibraries)
-    kaptList(LibraryList.HiltLibraryKapt)
+    implementation(project(Modules.base))
+    implementation(project(Modules.domain))
+    implementation(project(Modules.dataremote))
+    implementation(project(Modules.presentation))
 
     implementationList(LibraryList.cameraLibrary)
     implementationList(LibraryList.exoLibrary)
-
-    implementation(AndroidLibraries.kotlinReflection)
     implementationList(LibraryList.RecyclerViewLibraries)
-    implementationList(LibraryList.appLibraries)
     implementationList(LibraryList.NavigationLibraries)
     implementationList(LibraryList.Glide)
 }
