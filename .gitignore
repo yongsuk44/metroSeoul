@@ -48,6 +48,9 @@ Thumbs.db
 *.mov
 *.wmv
 
+*.jks
+*.keystore
+
 .gradle/
 *.imi
 Build/
