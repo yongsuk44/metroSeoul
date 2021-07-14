@@ -1,7 +1,8 @@
-package com.young.metro
+package com.young.metro.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.young.metro.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

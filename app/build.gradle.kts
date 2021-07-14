@@ -104,4 +104,6 @@ dependencies {
     implementationList(LibraryList.Glide)
     implementationList(LibraryList.HiltLibraries)
     kaptList(LibraryList.HiltLibraryKapt)
+
+    testImplementationList(LibraryList.TestLibrary)
 }
