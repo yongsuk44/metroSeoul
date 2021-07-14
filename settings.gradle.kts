@@ -5,5 +5,6 @@ include(
         ":data-remote" ,
         ":domain" ,
         ":presentation" ,
-        ":base"
+        ":base" ,
+        ":data"
 )

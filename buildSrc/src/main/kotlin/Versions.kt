@@ -3,7 +3,7 @@ object Versions {
 
 
     const val gradlePlugin = "4.2.0"
-    const val kotlin = "1.5.0"
+    const val kotlin = "1.4.21"
 
     const val jvmTarget = "1.8"
     const val kotlinLanguageVersion = "1.4"
@@ -29,7 +29,7 @@ object Versions {
     const val recyclerview = "1.2.0-alpha04"
     const val recyclerviewSelection = "1.1.0-rc01"
     const val glide = "4.9.0"
-    const val room = "2.2.6"
+    const val room = "2.2.5"
     const val paging = "3.0.0-alpha11"
     const val pagingJetpack = "1.0.0-alpha04"
     const val anko = "0.10.8"
@@ -55,7 +55,7 @@ object Versions {
     const val flexBox = "2.0.1"
 
     const val camera = "1.0.0-beta04"
-    const val exoPlayer = "2.10.4"
+    const val exoPlayer = "2.14.1"
     const val fragmentVersion = "1.3.0-alpha02"
     const val viewPager = "1.0.0"
 
@@ -75,7 +75,7 @@ object Versions {
     const val mockito = "2.27.0"
     const val mockitoKotlin = "1.5.0"
 
-    const val hiltCore = "2.28.3-alpha"
+    const val hiltCore = "2.35.1"
     const val hiltAndroidX = "1.0.0-alpha02"
 
     const val gpsLocation  ="18.0.0"

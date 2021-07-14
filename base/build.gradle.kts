@@ -2,8 +2,12 @@ plugins {
     id(GradlePluginId.ANDROID_LIBRARY)
 }
 
+android{
+    compileSdkVersion(AppConfig.compileSdk)
+    buildToolsVersion(AppConfig.buildToolsVersion)
+}
+
 dependencies {
     implementationList(LibraryList.appLibraries)
-    implementation(AndroidLibraries.kotlinReflection)
     api(AndroidLibraries.paging)
 }

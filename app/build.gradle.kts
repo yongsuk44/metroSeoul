@@ -6,6 +6,7 @@ plugins {
     id(GradlePluginId.kotlinAndroid)
     id(GradlePluginId.kotlinKapt)
     id(GradlePluginId.kotlinAndroidExtensions)
+    id(GradlePluginId.hilt)
 }
 
 val releaseKeystoreFile = rootProject.file("keystore.properties")
@@ -99,5 +100,8 @@ dependencies {
     implementationList(LibraryList.exoLibrary)
     implementationList(LibraryList.RecyclerViewLibraries)
     implementationList(LibraryList.NavigationLibraries)
+    implementationList(LibraryList.RetrofitLibraries)
     implementationList(LibraryList.Glide)
+    implementationList(LibraryList.HiltLibraries)
+    kaptList(LibraryList.HiltLibraryKapt)
 }

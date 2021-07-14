@@ -7,6 +7,11 @@ plugins {
 }
 
 android {
+    android{
+        compileSdkVersion(AppConfig.compileSdk)
+        buildToolsVersion(AppConfig.buildToolsVersion)
+    }
+
     kotlinOptions {
         jvmTarget = Versions.jvmTarget
         languageVersion = Versions.kotlinLanguageVersion
@@ -16,6 +21,7 @@ android {
 dependencies {
     implementation(project(Modules.base))
     implementationList(LibraryList.RetrofitLibraries)
+    implementation(AndroidLibraries.kotlinReflection)
     testImplementation(Libraries.coroutineAndroid)
     testImplementation(Libraries.coroutineTest)
     implementationList(LibraryList.HiltLibraries)

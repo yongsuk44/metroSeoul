@@ -16,7 +16,6 @@ object Libraries {
 
     const val hiltKapt = "com.google.dagger:hilt-android-compiler:${Versions.hiltCore}"
     const val hiltAndroidx = "androidx.hilt:hilt-compiler:${Versions.hiltAndroidX}"
-    const val hiltCompiler = "com.google.dagger:hilt-android-compiler:${Versions.hiltCore}"
 
     const val gson = "com.google.code.gson:gson:${Versions.gson}"
     const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
@@ -51,6 +50,8 @@ object AndroidX {
         "androidx.arch.core:core-testing:${Versions.androidxArchCoreTest}"
     const val pagingTesting =
         "androidx.paging:paging-common:${Versions.paging}"
+    const val roomTest =
+        "androidx.room:room-testing:${Versions.room}"
 }
 
 object JUnit {
@@ -94,11 +95,11 @@ object AndroidLibraries {
 
     // Room
     const val roomRuntime = "androidx.room:room-runtime:${Versions.room}"
-    const val roomKapt = "androidx.room:room-compiler:${Versions.room}"
     const val roomKtx = "androidx.room:room-ktx:${Versions.room}"
-    const val roomGuava = "androidx.room:room-guava:${Versions.room}"
-    const val roomRx = "androidx.room:room-rxjava2:${Versions.room}"
-    
+
+    // RoomKapt
+    const val roomKapt = "androidx.room:room-compiler:${Versions.room}"
+
     // legacy
     const val legacyCore = "androidx.legacy:legacy-support-core-utils:${Versions.legacy}"
     const val browser = "androidx.browser:browser:${Versions.browser}"
@@ -152,10 +153,7 @@ object LibraryList {
 
     val roomLibrary = arrayListOf<String>().apply {
         add(AndroidLibraries.roomRuntime)
-        add(AndroidLibraries.roomKapt)
         add(AndroidLibraries.roomKtx)
-        add(AndroidLibraries.roomGuava)
-        add(AndroidLibraries.roomRx)
     }
 
     val RecyclerViewLibraries = arrayListOf<String>().apply {
@@ -176,10 +174,6 @@ object LibraryList {
         add(Libraries.hilt)
         add(Libraries.hiltCore)
         add(Libraries.hiltLifecycle)
-    }
-
-    val HiltAnnotation = arrayListOf<String>().apply {
-        add(Libraries.hiltCompiler)
     }
 
     val HiltLibraryKapt = arrayListOf<String>().apply {
@@ -206,6 +200,7 @@ object LibraryList {
         add(JUnit.junitPlatformRunner)
         add(AndroidX.coreTesting)
         add(AndroidX.pagingTesting)
+        add(AndroidX.roomTest)
     }
 
     val AndroidTestLibrary = arrayListOf<String>().apply {

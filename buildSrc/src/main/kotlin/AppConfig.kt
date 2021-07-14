@@ -12,7 +12,6 @@ object AppConfig {
 }
 
 object GradlePluginId {
-    const val BASE_GRADLE_PLUGIN = "base-gradle-plugin"
     const val ANDROID_APP = "com.android.application"
     const val ANDROID_LIBRARY = "com.android.library"
     const val FIREBASE_CRASH ="com.google.firebase.crashlytics"
