@@ -1,6 +1,7 @@
 package com.young.data_remote.api
 
 import com.young.data_remote.model.RemoteSubwayFacilitiesPage
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -12,6 +13,6 @@ interface SubwayFacilitiesService {
     suspend fun getSubWayFacilitiesData(
         @Query("page") page : Int ,
         @Query("perPage") perPage : Int ,
-        @Query("serviceKey") key : String
+        @Query(value = "serviceKey" , encoded = true) key : String
     ) : RemoteSubwayFacilitiesPage
 }

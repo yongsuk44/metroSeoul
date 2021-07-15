@@ -26,7 +26,7 @@ android {
         versionCode = AppConfig.versionCode
         versionName = AppConfig.versionName
 
-        testInstrumentationRunner = "com.kaii.dentii.HiltTestRunner"
+        testInstrumentationRunner = "com.young.metro.HiltTestRunner"
 
         compileOptions {
             sourceCompatibility = JavaVersion.VERSION_1_8
@@ -96,6 +96,7 @@ dependencies {
     implementation(project(Modules.dataremote))
     implementation(project(Modules.presentation))
 
+    implementationList(LibraryList.appLibraries)
     implementationList(LibraryList.cameraLibrary)
     implementationList(LibraryList.exoLibrary)
     implementationList(LibraryList.RecyclerViewLibraries)

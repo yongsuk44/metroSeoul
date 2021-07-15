@@ -1,5 +1,7 @@
 package com.young.presentation.viewfunction
 
+import com.young.presentation.model.UiSubwayFacilities
+
 interface MainViewFunction {
-    suspend fun loadSubWayFacilitiesData(key : String)
+    fun loadSubWayFacilitiesData(key : String)
 }
