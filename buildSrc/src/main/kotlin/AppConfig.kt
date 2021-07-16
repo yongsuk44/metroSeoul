@@ -19,7 +19,7 @@ object GradlePluginId {
     const val kotlin = "kotlin"
     const val kotlinAndroid = "kotlin-android"
     const val kotlinKapt = "kotlin-kapt"
-    const val kotlinAndroidExtensions = "kotlin-android-extensions"
+    const val kotlinAndroidExtensions = "kotlin-parcelize"
     const val hilt = "dagger.hilt.android.plugin"
 
     const val googlePluginService = "com.google.gms.google-services"

@@ -6,10 +6,6 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class LocalSubwayFacilities(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    val id : Int,
-
     @ColumnInfo(name = "train_reservation_station_status")
     val TrainReservationStationStatus: String,
 

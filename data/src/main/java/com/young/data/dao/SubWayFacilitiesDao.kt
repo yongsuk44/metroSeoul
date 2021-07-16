@@ -17,7 +17,13 @@ interface SubWayFacilitiesDao {
     @Query("select * from LocalSubwayFacilities where metro_linenumber == :lineNumber")
     suspend fun getLineMetroData(lineNumber : String) : List<LocalSubwayFacilities>
 
+    @Query("select count() from LocalSubwayFacilities")
+    suspend fun getDataSize() : Int
+
     @Transaction
     @Update
     suspend fun update(items : List<LocalSubwayFacilities>)
+
+    @Query("select * from LocalSubwayFacilities")
+    suspend fun getAllData() : List<LocalSubwayFacilities>
 }

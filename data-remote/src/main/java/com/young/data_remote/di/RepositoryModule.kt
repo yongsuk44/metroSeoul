@@ -6,11 +6,12 @@ import com.young.domain.repository.subwayfacilities.RemoteSubWayFacilitiesReposi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.components.ApplicationComponent
 import javax.inject.Singleton
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ApplicationComponent::class)
 class RepositoryModule {
 
     @Provides

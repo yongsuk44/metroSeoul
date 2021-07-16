@@ -95,6 +95,7 @@ dependencies {
     implementation(project(Modules.domain))
     implementation(project(Modules.dataremote))
     implementation(project(Modules.presentation))
+    implementation(project(Modules.data))
 
     implementationList(LibraryList.appLibraries)
     implementationList(LibraryList.cameraLibrary)

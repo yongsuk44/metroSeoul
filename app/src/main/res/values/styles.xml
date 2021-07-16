@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="GuideLine20Start">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="layout_constraintGuide_begin">20dp</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="GuideLine20End">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="layout_constraintGuide_end">20dp</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="GuideLine40Start" parent="GuideLine20Start">
+        <item name="layout_constraintGuide_begin">40dp</item>
+    </style>
+
+    <style name="GuideLine40End" parent="GuideLine20End">
+        <item name="layout_constraintGuide_end">40dp</item>
+    </style>
+
+    <style name="BlackTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="BlackTextViewMediumSize12" parent="BlackTextView">
+        <item name="android:textSize">12sp</item>
+        <item name="android:lineSpacingExtra">4sp</item>
+    </style>
+
+    <style name="inputDefaultBox" parent="BlackTextViewMediumSize12">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:textColor">@color/colorTextGray</item>
+        <item name="android:cursorVisible">true</item>
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="android:textColorHint">#83879b</item>
+        <item name="android:background">@drawable/border_gray_10_in_white</item>
+        <item name="android:padding">12dp</item>
+    </style>
+</resources>

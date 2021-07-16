@@ -25,7 +25,8 @@ dependencies {
     kaptList(LibraryList.HiltLibraryKapt)
 
     kapt(AndroidLibraries.roomKapt)
-    implementationList(LibraryList.roomLibrary)
+    api(AndroidLibraries.roomRuntime)
+    implementation(AndroidLibraries.roomKtx)
     annotationProcessor(AndroidLibraries.roomKapt)
     testImplementationList(LibraryList.TestLibrary)
 }

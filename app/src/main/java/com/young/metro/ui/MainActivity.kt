@@ -10,7 +10,6 @@ import com.young.metro.base.BindActivity
 import com.young.metro.databinding.ActivityMainBinding
 import com.young.presentation.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -33,6 +32,8 @@ class MainActivity : BindActivity() {
     }
 
     private fun init() {
+        viewModel.loadSubWayFacilitiesData(getString(R.string.key))
+
         viewModel.subWayFacilitiesData.observe(this) {
             with(it) {
                 this

@@ -35,4 +35,11 @@ class LocalSubWayFacilitiesRepositoryImpl @Inject constructor(
             )
         }
     }
+
+    override suspend fun getDataSize(): Int = service.getDataSize()
+
+    override suspend fun getLocalAllData(): Flow<List<DomainSubwayFacilities>> = flow {
+        service.getAllData()
+    }
+
 }

@@ -94,11 +94,13 @@ object AndroidLibraries {
     const val navigationUiKtx = "androidx.navigation:navigation-ui-ktx:${Versions.navigation}"
 
     // Room
-    const val roomRuntime = "androidx.room:room-runtime:${Versions.room}"
     const val roomKtx = "androidx.room:room-ktx:${Versions.room}"
 
     // RoomKapt
     const val roomKapt = "androidx.room:room-compiler:${Versions.room}"
+
+    // Room api
+    const val roomRuntime = "androidx.room:room-runtime:${Versions.room}"
 
     // legacy
     const val legacyCore = "androidx.legacy:legacy-support-core-utils:${Versions.legacy}"
@@ -149,11 +151,6 @@ object LibraryList {
         add(AndroidLibraries.camera2)
         add(AndroidLibraries.cameraLifeCycle)
         add(AndroidLibraries.cameraView)
-    }
-
-    val roomLibrary = arrayListOf<String>().apply {
-        add(AndroidLibraries.roomRuntime)
-        add(AndroidLibraries.roomKtx)
     }
 
     val RecyclerViewLibraries = arrayListOf<String>().apply {

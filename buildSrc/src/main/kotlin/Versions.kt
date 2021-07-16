@@ -75,7 +75,7 @@ object Versions {
     const val mockito = "2.27.0"
     const val mockitoKotlin = "1.5.0"
 
-    const val hiltCore = "2.35.1"
+    const val hiltCore = "2.28-alpha"
     const val hiltAndroidX = "1.0.0-alpha02"
 
     const val gpsLocation  ="18.0.0"

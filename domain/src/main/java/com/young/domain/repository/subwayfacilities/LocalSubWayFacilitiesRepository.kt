@@ -14,4 +14,7 @@ interface LocalSubWayFacilitiesRepository {
 
     suspend fun getStationData(stationNumber : String) : Flow<DomainSubwayFacilities>
 
+    suspend fun getDataSize() : Int
+
+    suspend fun getLocalAllData() : Flow<List<DomainSubwayFacilities>>
 }
