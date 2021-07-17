@@ -34,14 +34,17 @@
         <item name="android:lineSpacingExtra">4sp</item>
     </style>
 
-    <style name="inputDefaultBox" parent="BlackTextViewMediumSize12">
+    <style name="inputSelectBox" parent="BlackTextViewMediumSize12">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">44dp</item>
-        <item name="android:textColor">@color/colorTextGray</item>
+        <item name="android:textColor">@color/black</item>
         <item name="android:cursorVisible">true</item>
         <item name="android:textCursorDrawable">@null</item>
         <item name="android:textColorHint">#83879b</item>
-        <item name="android:background">@drawable/border_gray_10_in_white</item>
         <item name="android:padding">12dp</item>
+    </style>
+
+    <style name="inputDefaultBox" parent="inputSelectBox">
+        <item name="android:background">@drawable/border_gray_10_in_white</item>
     </style>
 </resources>

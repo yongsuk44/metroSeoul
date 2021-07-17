@@ -2,6 +2,15 @@ package com.young.data_remote.model
 
 import com.google.gson.annotations.SerializedName
 
+data class RemoteSubwayFacilitiesPage(
+    val currentCount: Int,
+    val data: List<RemoteSubwayFacilities>,
+    val matchCount: Int,
+    val page: Int,
+    val perPage: Int,
+    val totalCount: Int
+)
+
 data class RemoteSubwayFacilities(
     @SerializedName("기차예매역여부")
     val TrainReservationStationStatus: String,

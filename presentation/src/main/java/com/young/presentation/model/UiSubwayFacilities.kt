@@ -2,6 +2,15 @@ package com.young.presentation.model
 
 import com.google.gson.annotations.SerializedName
 
+data class UiSubwayFacilitiesPage(
+    val currentCount: Int,
+    val data: List<UiSubwayFacilities>,
+    val matchCount: Int,
+    val page: Int,
+    val perPage: Int,
+    val totalCount: Int
+)
+
 data class UiSubwayFacilities(
     @SerializedName("기차예매역여부")
     val TrainReservationStationStatus: String,

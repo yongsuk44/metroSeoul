@@ -2,12 +2,14 @@ package com.young.domain.di
 
 import com.young.domain.repository.subwayfacilities.LocalSubWayFacilitiesRepository
 import com.young.domain.repository.subwayfacilities.RemoteSubWayFacilitiesRepository
+import com.young.domain.repository.subwaytel.RemoteSubWayTelRepository
 import com.young.domain.usecase.BaseUseCase
 import com.young.domain.usecase.subwayfacilities.local.GetSizeTableDataUseCase
 import com.young.domain.usecase.subwayfacilities.local.InsertSubWayFacilitiesDataUseCase
 import com.young.domain.usecase.subwayfacilities.local.LocalGetSubWayFacilitiesDataUseCase
 import com.young.domain.usecase.subwayfacilities.local.UpdateSubWayFacilitiesDataUseCase
 import com.young.domain.usecase.subwayfacilities.remote.RemoteGetSubWayFacilitiesDataUseCase
+import com.young.domain.usecase.subwayfacilities.remote.RemoteGetSubWayTelUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
@@ -26,6 +28,12 @@ object DomainSubWayFacilitiesModule {
     fun provideSubwayFacilities(
         remote : RemoteSubWayFacilitiesRepository
     ) = RemoteGetSubWayFacilitiesDataUseCase(remote)
+
+    @Provides
+    @Reusable
+    fun provideSubwayTel(
+        remote : RemoteSubWayTelRepository
+    ) = RemoteGetSubWayTelUseCase(remote)
 
     @Provides
     @Reusable

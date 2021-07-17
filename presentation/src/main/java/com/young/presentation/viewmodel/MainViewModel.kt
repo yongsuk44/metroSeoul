@@ -22,6 +22,8 @@ interface MainViewFunction {
     fun loadSubWayFacilitiesData(key : String)
     suspend fun getLocalAllSubWayFacilitiesData()
     suspend fun getRemoteSubWayFacilitiesData(key : String)
+
+    fun inputTextClear()
 }
 
 class MainViewModel @ViewModelInject constructor(
@@ -29,16 +31,7 @@ class MainViewModel @ViewModelInject constructor(
     private val insertSubWayFacilitiesDataUseCase: InsertSubWayFacilitiesDataUseCase,
     private val getSubWayTableSizeUseCase : GetSizeTableDataUseCase,
     private val getAllDataUseCase: LocalGetSubWayFacilitiesDataUseCase
-) : ViewModel(), MainViewFunction {
-
-    val handler = CoroutineExceptionHandler { _, exception ->
-        Log.e("test" , exception.message.toString())
-        _loading.value = false
-    }
-
-    private val _loading = MutableLiveData<Boolean>()
-    val loading : LiveData<Boolean>
-        get() = _loading
+) : BaseViewModel(), MainViewFunction {
 
     private val _subWayFacilitiesData = MutableLiveData<List<UiSubwayFacilities>>()
     val subWayFacilitiesData: LiveData<List<UiSubwayFacilities>>
@@ -59,9 +52,9 @@ class MainViewModel @ViewModelInject constructor(
                 BaseMapper.setList(mapper).run { this(it) }
             }
             .catch {
-                _loading.value = false
+                setLoadingValue(false)
             }.onCompletion {
-                _loading.value = true
+                setLoadingValue(true)
             }.collect {
                 _subWayFacilitiesData.postValue(it)
             }
@@ -73,11 +66,15 @@ class MainViewModel @ViewModelInject constructor(
                 insertSubWayFacilitiesDataUseCase(it)
                 BaseMapper.setList(mapper).run { this(it) }
             }.catch {
-                _loading.value = false
+                setLoadingValue(false)
             }.onCompletion {
-                _loading.value = true
+                setLoadingValue(true)
             }.collect {
                 _subWayFacilitiesData.postValue(it)
             }
+    }
+
+    override fun inputTextClear() {
+
     }
 }

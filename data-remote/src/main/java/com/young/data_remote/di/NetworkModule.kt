@@ -2,6 +2,7 @@ package com.young.data_remote.di
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.young.data_remote.api.SubWayTelService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,12 +15,22 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 import com.young.data_remote.api.SubwayFacilitiesService
 import dagger.hilt.android.components.ApplicationComponent
+import javax.inject.Qualifier
 
 @Module
 @InstallIn(ApplicationComponent::class)
 object NetworkModule {
 
-    const val baseUrl = "https://api.odcloud.kr/api/"
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class PortalUrlRetrofit
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class SeoulUrlRetrofit
+
+    const val portalUrl = "https://api.odcloud.kr/api/"
+    const val seoulUrl = "http://openapi.seoul.go.kr:8088/"
 
     val NETWORK_TIME_OUT: Long = 5
 
@@ -64,22 +75,41 @@ object NetworkModule {
             .create()
     }
 
+    @PortalUrlRetrofit
     @Singleton
     @Provides
-    fun provideSubwayFacilitiesService(
+    fun providePortalRetrofit(
         okHttpClient: OkHttpClient,
         gson: Gson
     ): Retrofit = Retrofit.Builder()
-        .baseUrl(baseUrl)
+        .baseUrl(portalUrl)
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 
+    @SeoulUrlRetrofit
+    @Singleton
+    @Provides
+    fun provideSeoulRetrofit(
+        okHttpClient: OkHttpClient,
+        gson: Gson
+    ): Retrofit = Retrofit.Builder()
+        .baseUrl(seoulUrl)
+        .client(okHttpClient)
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .build()
 
     @Provides
     @Singleton
     fun provideApiService(
-        retrofit: Retrofit
+        @PortalUrlRetrofit retrofit: Retrofit
     ): SubwayFacilitiesService =
         retrofit.create(SubwayFacilitiesService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideSubWayTelService(
+        @SeoulUrlRetrofit retrofit: Retrofit ,
+    ): SubWayTelService =
+            retrofit.create(SubWayTelService::class.java)
 }
