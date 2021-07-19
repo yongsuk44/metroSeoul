@@ -97,6 +97,7 @@ dependencies {
     implementation(project(Modules.presentation))
     implementation(project(Modules.data))
 
+    implementation(AndroidLibraries.timber)
     implementationList(LibraryList.appLibraries)
     implementationList(LibraryList.cameraLibrary)
     implementationList(LibraryList.exoLibrary)

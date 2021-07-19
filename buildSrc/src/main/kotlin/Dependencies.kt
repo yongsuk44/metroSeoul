@@ -120,6 +120,11 @@ object AndroidLibraries {
     var exoDash = "com.google.android.exoplayer:exoplayer-dash:${Versions.exoPlayer}"
     var exoMediasession =
         "com.google.android.exoplayer:extension-mediasession:${Versions.exoPlayer}"
+
+    const val googleService = "com.google.android.gms:play-services-location:${Versions.googleLocationService}"
+
+    // Timber
+    val timber = "com.jakewharton.timber:timber:${Versions.timber}"
 }
 
 object LibraryList {
@@ -137,6 +142,7 @@ object LibraryList {
         add(AndroidLibraries.fragment)
         add(AndroidLibraries.googleCore)
         add(AndroidLibraries.viewPager)
+        add(AndroidLibraries.googleService)
     }
 
     val exoLibrary = arrayListOf<String>().apply {
