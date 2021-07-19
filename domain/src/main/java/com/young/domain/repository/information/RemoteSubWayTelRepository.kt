@@ -1,4 +1,4 @@
-package com.young.domain.repository.subwaytel
+package com.young.domain.repository.information
 
 import com.young.domain.model.DomainSubWayTel
 import kotlinx.coroutines.flow.Flow

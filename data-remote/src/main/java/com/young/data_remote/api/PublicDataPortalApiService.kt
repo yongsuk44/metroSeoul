@@ -7,7 +7,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import java.util.concurrent.Flow
 
-interface SubwayFacilitiesService {
+interface PublicDataPortalApiService {
 
     @GET("15044443/v1/uddi:1bf6dd0f-ce92-40a2-840f-a9f5eeb60431")
     suspend fun getSubWayFacilitiesData(

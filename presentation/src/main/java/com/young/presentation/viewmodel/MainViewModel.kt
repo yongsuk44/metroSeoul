@@ -9,6 +9,7 @@ import com.young.domain.usecase.subwayfacilities.local.GetSizeTableDataUseCase
 import com.young.domain.usecase.subwayfacilities.local.InsertSubWayFacilitiesDataUseCase
 import com.young.domain.usecase.subwayfacilities.local.LocalGetSubWayFacilitiesDataUseCase
 import com.young.domain.usecase.subwayfacilities.remote.RemoteGetSubWayFacilitiesDataUseCase
+import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.model.UiSubwayFacilities
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -22,8 +23,6 @@ interface MainViewFunction {
     fun loadSubWayFacilitiesData(key : String)
     suspend fun getLocalAllSubWayFacilitiesData()
     suspend fun getRemoteSubWayFacilitiesData(key : String)
-
-    fun inputTextClear()
 }
 
 class MainViewModel @ViewModelInject constructor(
@@ -72,9 +71,5 @@ class MainViewModel @ViewModelInject constructor(
             }.collect {
                 _subWayFacilitiesData.postValue(it)
             }
-    }
-
-    override fun inputTextClear() {
-
     }
 }

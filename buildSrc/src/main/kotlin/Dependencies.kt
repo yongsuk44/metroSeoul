@@ -61,6 +61,15 @@ object JUnit {
         "org.junit.platform:junit-platform-runner:${Versions.junitPlatformRunner}"
 }
 
+object Mockito {
+    const val mockitoCore =
+        "org.mockito:mockito-core:${Versions.mockito}"
+    const val mockitoInline =
+        "org.mockito:mockito-inline:${Versions.mockito}"
+    const val mockitoKotlin =
+        "com.nhaarman:mockito-kotlin:${Versions.mockitoKotlin}"
+}
+
 object AndroidLibraries {
     // ANDROID
     const val kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
@@ -214,6 +223,12 @@ object LibraryList {
         add(AndroidX.espressoCore)
         add(AndroidX.espressoContrib)
         add(AndroidX.junit)
+    }
+
+    val mockitoLibrary = arrayListOf<String>().apply {
+        add(Mockito.mockitoCore)
+        add(Mockito.mockitoInline)
+        add(Mockito.mockitoKotlin)
     }
 }
 

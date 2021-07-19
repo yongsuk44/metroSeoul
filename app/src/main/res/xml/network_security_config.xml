@@ -4,6 +4,9 @@
         <domain includeSubdomains="true">
             openapi.seoul.go.kr
         </domain>
+        <domain includeSubdomains="true">
+            openapi.kric.go.kr
+        </domain>
     </domain-config>
 </network-security-config>
 

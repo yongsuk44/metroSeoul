@@ -1,18 +1,17 @@
 package com.young.data_remote.repository
 
-import com.young.data_remote.api.SubWayTelService
+import com.young.data_remote.api.SeoulApiService
 import com.young.data_remote.model.RemoteSubWayTel
 import com.young.domain.mapper.BaseMapper
 import com.young.domain.model.DomainSubWayTel
-import com.young.domain.repository.subwaytel.RemoteSubWayTelRepository
+import com.young.domain.repository.information.RemoteSubWayTelRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class RemoteSubWayTelRepositoryImpl @Inject constructor(
-    private val service: SubWayTelService
+    private val service: SeoulApiService
 ) : RemoteSubWayTelRepository {
 
     override suspend fun getSubWayTelData(key: String): Flow<List<DomainSubWayTel>> =

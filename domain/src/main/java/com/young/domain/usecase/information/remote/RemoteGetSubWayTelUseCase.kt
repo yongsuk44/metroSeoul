@@ -1,7 +1,7 @@
-package com.young.domain.usecase.subwayfacilities.remote
+package com.young.domain.usecase.information.remote
 
 import com.young.domain.model.DomainSubWayTel
-import com.young.domain.repository.subwaytel.RemoteSubWayTelRepository
+import com.young.domain.repository.information.RemoteSubWayTelRepository
 import com.young.domain.usecase.BaseUseCase
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

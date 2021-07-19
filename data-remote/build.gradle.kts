@@ -24,4 +24,8 @@ dependencies {
     implementationList(LibraryList.RetrofitLibraries)
     implementationList(LibraryList.HiltLibraries)
     kaptList(LibraryList.HiltLibraryKapt)
+
+    testImplementationList(LibraryList.mockitoLibrary)
+    testImplementationList(LibraryList.TestLibrary)
+    testImplementation(Libraries.coroutineTest)
 }

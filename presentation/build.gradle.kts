@@ -11,6 +11,11 @@ android {
         compileSdkVersion(AppConfig.compileSdk)
         buildToolsVersion(AppConfig.buildToolsVersion)
     }
+
+    kotlinOptions {
+        jvmTarget = Versions.jvmTarget
+        languageVersion = Versions.kotlinLanguageVersion
+    }
 }
 
 
@@ -24,4 +29,5 @@ dependencies {
     implementationList(LibraryList.RetrofitLibraries)
     implementationList(LibraryList.HiltLibraries)
     kaptList(LibraryList.HiltLibraryKapt)
+    implementation(AndroidLibraries.timber)
 }

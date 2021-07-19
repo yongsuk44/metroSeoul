@@ -2,6 +2,7 @@ package com.young.presentation.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.young.presentation.consts.BaseViewModel
 
 interface PermissionFunction {
     fun setLocationPermissionCheck(check : Boolean)

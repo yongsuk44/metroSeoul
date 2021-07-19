@@ -1,15 +1,15 @@
-package com.young.presentation.viewmodel
+package com.young.presentation.consts
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
+import timber.log.Timber
 
 open class BaseViewModel : ViewModel() {
 
     val handler = CoroutineExceptionHandler { _, exception ->
-        Log.e("test" , exception.message.toString())
+        Timber.e(exception)
         _loading.value = false
     }
 

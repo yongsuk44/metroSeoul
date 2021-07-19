@@ -1,23 +1,21 @@
 package com.young.domain.di
 
+import com.young.domain.repository.information.RemoteFullRouteInformationRepository
+import com.young.domain.repository.information.RemoteSubWayTelRepository
+import com.young.domain.repository.information.RemoteTrailTimeTableRepository
 import com.young.domain.repository.subwayfacilities.LocalSubWayFacilitiesRepository
 import com.young.domain.repository.subwayfacilities.RemoteSubWayFacilitiesRepository
-import com.young.domain.repository.subwaytel.RemoteSubWayTelRepository
-import com.young.domain.usecase.BaseUseCase
+import com.young.domain.usecase.information.remote.*
 import com.young.domain.usecase.subwayfacilities.local.GetSizeTableDataUseCase
 import com.young.domain.usecase.subwayfacilities.local.InsertSubWayFacilitiesDataUseCase
 import com.young.domain.usecase.subwayfacilities.local.LocalGetSubWayFacilitiesDataUseCase
 import com.young.domain.usecase.subwayfacilities.local.UpdateSubWayFacilitiesDataUseCase
 import com.young.domain.usecase.subwayfacilities.remote.RemoteGetSubWayFacilitiesDataUseCase
-import com.young.domain.usecase.subwayfacilities.remote.RemoteGetSubWayTelUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import dagger.hilt.InstallIn
-import dagger.Binds
-import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.components.ApplicationComponent
-import javax.inject.Singleton
 
 @Module
 @InstallIn(ApplicationComponent::class)
@@ -40,6 +38,19 @@ object DomainSubWayFacilitiesModule {
     fun provideInsertSubwayFacilities(
         local : LocalSubWayFacilitiesRepository
     ) = InsertSubWayFacilitiesDataUseCase(local)
+
+    @Provides
+    @Reusable
+    fun provideGetTimeTable(
+        remote : RemoteTrailTimeTableRepository
+    ) : RemoteTimeTableUseCase = RemoteGetTimeTableUseCaseImpl(remote)
+
+
+    @Provides
+    @Reusable
+    fun provideGetAllRouteInformation(
+        remote : RemoteFullRouteInformationRepository
+    ) : RemoteFullRouteInformationUseCase = RemoteGetFullRouteInformationUseCase(remote)
 
     @Provides
     @Reusable

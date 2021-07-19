@@ -77,11 +77,6 @@ android {
         dataBinding = true
     }
 
-    composeOptions {
-        kotlinCompilerVersion = Versions.kotlin
-        kotlinCompilerExtensionVersion = "1.0.0-alpha04"
-    }
-
     kotlinOptions {
         jvmTarget = Versions.jvmTarget
         languageVersion = Versions.kotlinLanguageVersion

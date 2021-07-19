@@ -5,7 +5,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 
-interface SubWayTelService {
+interface SeoulApiService {
     @GET("{key}/json/subwayTourInfo/1/1000")
     suspend fun getSubWayTelData(
         @Path("key" , encoded = true) key : String

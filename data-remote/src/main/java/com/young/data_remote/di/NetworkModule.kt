@@ -2,7 +2,7 @@ package com.young.data_remote.di
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.young.data_remote.api.SubWayTelService
+import com.young.data_remote.api.SeoulApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,7 +13,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
-import com.young.data_remote.api.SubwayFacilitiesService
+import com.young.data_remote.api.PublicDataPortalApiService
+import com.young.data_remote.api.TrailPorTalService
 import dagger.hilt.android.components.ApplicationComponent
 import javax.inject.Qualifier
 
@@ -23,14 +24,19 @@ object NetworkModule {
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
-    annotation class PortalUrlRetrofit
+    annotation class PublicDataPortalUrlRetrofit
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
     annotation class SeoulUrlRetrofit
 
-    const val portalUrl = "https://api.odcloud.kr/api/"
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class trailPortalUrlRetrofit
+
+    const val PublicDataPortalUrl = "https://api.odcloud.kr/api/"
     const val seoulUrl = "http://openapi.seoul.go.kr:8088/"
+    const val trailPortalUrl = "http://openapi.kric.go.kr/openapi/"
 
     val NETWORK_TIME_OUT: Long = 5
 
@@ -75,14 +81,14 @@ object NetworkModule {
             .create()
     }
 
-    @PortalUrlRetrofit
+    @PublicDataPortalUrlRetrofit
     @Singleton
     @Provides
     fun providePortalRetrofit(
         okHttpClient: OkHttpClient,
         gson: Gson
     ): Retrofit = Retrofit.Builder()
-        .baseUrl(portalUrl)
+        .baseUrl(PublicDataPortalUrl)
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
@@ -99,17 +105,36 @@ object NetworkModule {
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 
+    @trailPortalUrlRetrofit
+    @Singleton
+    @Provides
+    fun provideTrailPortalRetrofit(
+        okHttpClient: OkHttpClient,
+        gson: Gson
+    ): Retrofit = Retrofit.Builder()
+        .baseUrl(trailPortalUrl)
+        .client(okHttpClient)
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .build()
+
     @Provides
     @Singleton
     fun provideApiService(
-        @PortalUrlRetrofit retrofit: Retrofit
-    ): SubwayFacilitiesService =
-        retrofit.create(SubwayFacilitiesService::class.java)
+        @PublicDataPortalUrlRetrofit retrofit: Retrofit
+    ): PublicDataPortalApiService =
+        retrofit.create(PublicDataPortalApiService::class.java)
 
     @Provides
     @Singleton
     fun provideSubWayTelService(
         @SeoulUrlRetrofit retrofit: Retrofit ,
-    ): SubWayTelService =
-            retrofit.create(SubWayTelService::class.java)
+    ): SeoulApiService =
+        retrofit.create(SeoulApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideTrailPortalService(
+        @trailPortalUrlRetrofit retrofit: Retrofit,
+    ): TrailPorTalService =
+        retrofit.create(TrailPorTalService::class.java)
 }
