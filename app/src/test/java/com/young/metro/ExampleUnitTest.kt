@@ -10,4 +10,16 @@ import org.junit.Assert.*
  */
 class ExampleUnitTest {
 
+    val list = listOf("사당","서울시청","가락시장","서울역","서울대입구")
+
+    @Test
+    fun filterTest() {
+        println("사당".toCharArray())
+        println()
+        list.filter {
+            it.toLowerCase().contains("서울ㅇ".toLowerCase())
+        }.run {
+            println(this)
+        }
+    }
 }

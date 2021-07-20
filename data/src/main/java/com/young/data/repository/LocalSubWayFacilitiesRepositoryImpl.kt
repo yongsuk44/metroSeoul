@@ -7,6 +7,8 @@ import com.young.domain.model.DomainSubwayFacilities
 import com.young.domain.repository.subwayfacilities.LocalSubWayFacilitiesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class LocalSubWayFacilitiesRepositoryImpl @Inject constructor(
@@ -38,8 +40,11 @@ class LocalSubWayFacilitiesRepositoryImpl @Inject constructor(
 
     override suspend fun getDataSize(): Int = service.getDataSize()
 
-    override suspend fun getLocalAllData(): Flow<List<DomainSubwayFacilities>> = flow {
-        service.getAllData()
-    }
-
+    override suspend fun getLocalAllData(): Flow<List<DomainSubwayFacilities>> =
+        flowOf(service.getAllData())
+            .map {
+                BaseMapper.setList(BaseMapper<LocalSubwayFacilities , DomainSubwayFacilities>()).run {
+                    this(it)
+                }
+            }
 }

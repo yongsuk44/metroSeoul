@@ -5,48 +5,25 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.young.domain.mapper.BaseMapper
-import com.young.domain.model.*
+import com.young.domain.model.DomainSubWayTel
 import com.young.domain.usecase.information.remote.RemoteFullRouteInformationUseCase
 import com.young.domain.usecase.information.remote.RemoteGetSubWayTelUseCase
-import com.young.domain.usecase.information.remote.RemoteTimeTableUseCase
 import com.young.presentation.consts.BaseViewModel
+import com.young.presentation.consts.Event
 import com.young.presentation.mapper.DomainToUiMapper.DomainToUi
-import com.young.presentation.mapper.DomainToUiMapper.DomaionToUi
 import com.young.presentation.model.UiAllRouteInformation
 import com.young.presentation.model.UiSubWayTel
-import com.young.presentation.model.UiTrailTimeTable
-import kotlinx.coroutines.flow.*
+import com.young.presentation.modelfunction.CustomTextWatcher
+import com.young.presentation.modelfunction.FullRouteInformationCase
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-interface FullRouteInformationCase {
-    fun loadSubWayTelData(key: String)
-    suspend fun getSubWayTelData(key: String)
-
-    fun loadTrailTimeTableData(
-        key: String,
-        railCode: String,
-        dayCd: String,
-        lineCode: String,
-        stationCode: String
-    )
-
-    suspend fun getTrailTimetables(
-        key: String,
-        railCode: String,
-        dayCd: String,
-        lineCode: String,
-        stationCode: String
-    )
-
-    suspend fun getFullRouteInformation(key: String, lineCode: String)
-
-    fun onChangeTextValue(value : String)
-}
-
 class FullRouteInformationViewModel @ViewModelInject constructor(
     private val telUseCase: RemoteGetSubWayTelUseCase,
-    private val timeTableUseCase: RemoteTimeTableUseCase,
     private val allInformationUseCase: RemoteFullRouteInformationUseCase
 ) : BaseViewModel(), FullRouteInformationCase {
 
@@ -54,14 +31,17 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
     val subWayTelData: LiveData<List<UiSubWayTel>>
         get() = _subWayTelData
 
-    private val _timeTableData = MutableLiveData<UiTrailTimeTable>()
-    val timeTableData: LiveData<UiTrailTimeTable>
-        get() = _timeTableData
-
     private val _fullRouteInformation = MutableLiveData<UiAllRouteInformation>()
     val fullRouteInformation: LiveData<UiAllRouteInformation>
         get() = _fullRouteInformation
 
+    val _userSearchStationName = MutableLiveData<String>()
+    val userSearchStationName : LiveData<String>
+        get() = _userSearchStationName
+
+    private val _searchActionStation = MutableLiveData<Event<String>>()
+    val searchActionStation : LiveData<Event<String>>
+        get() = _searchActionStation
 
     override fun loadSubWayTelData(key: String) {
         viewModelScope.launch(handler) {
@@ -72,7 +52,8 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
     override suspend fun getSubWayTelData(key: String) {
         telUseCase(key)
             .map {
-                BaseMapper.setList(BaseMapper(DomainSubWayTel::class, UiSubWayTel::class)).run { this(it) }
+                BaseMapper.setList(BaseMapper(DomainSubWayTel::class, UiSubWayTel::class))
+                    .run { this(it) }
             }.catch { e ->
                 Timber.e(e)
             }.onCompletion {
@@ -82,38 +63,10 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
             }
     }
 
-    override fun loadTrailTimeTableData(
-        key: String,
-        railCode: String,
-        dayCd: String,
-        lineCode: String,
-        stationCode: String
-    ) {
+    override fun loadFullRouteInformation(key: String, lineCode: String) {
         viewModelScope.launch(handler) {
-//            getTrailTimetables(key, railCode, dayCd, lineCode, stationCode)
             getFullRouteInformation(key, lineCode)
         }
-
-    }
-
-    override suspend fun getTrailTimetables(
-        key: String,
-        railCode: String,
-        dayCd: String,
-        lineCode: String,
-        stationCode: String
-    ) {
-
-        timeTableUseCase.getTrailTimetables(key, railCode, dayCd, lineCode, stationCode)
-            .map {
-                it.DomaionToUi()
-            }.catch { e ->
-                Timber.e(e)
-            }.onCompletion {
-                setLoadingValue(true)
-            }.collect {
-                _timeTableData.value = it
-            }
     }
 
     override suspend fun getFullRouteInformation(key: String, lineCode: String) {
@@ -128,10 +81,4 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
                 _fullRouteInformation.value = it
             }
     }
-
-    override fun onChangeTextValue(value: String) {
-
-    }
-
-    fun getTextChangeListener(): FullRouteInformationCase = this
 }

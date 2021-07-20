@@ -16,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.util.HashMap
 import javax.inject.Inject
 
@@ -36,6 +37,10 @@ class MainViewModel @ViewModelInject constructor(
     val subWayFacilitiesData: LiveData<List<UiSubwayFacilities>>
         get() = _subWayFacilitiesData
 
+    val stationList = Transformations.map(_subWayFacilitiesData) {
+        it.map { it.StationName }
+    }
+
     override fun loadSubWayFacilitiesData(key: String) {
         viewModelScope.launch(handler) {
             if (getSubWayTableSizeUseCase.invoke(Unit) == 0) { getRemoteSubWayFacilitiesData(key) }
@@ -50,8 +55,8 @@ class MainViewModel @ViewModelInject constructor(
             .map {
                 BaseMapper.setList(mapper).run { this(it) }
             }
-            .catch {
-                setLoadingValue(false)
+            .catch { e ->
+                Timber.e(e)
             }.onCompletion {
                 setLoadingValue(true)
             }.collect {
@@ -64,8 +69,8 @@ class MainViewModel @ViewModelInject constructor(
             .map {
                 insertSubWayFacilitiesDataUseCase(it)
                 BaseMapper.setList(mapper).run { this(it) }
-            }.catch {
-                setLoadingValue(false)
+            }.catch { e ->
+                Timber.e(e)
             }.onCompletion {
                 setLoadingValue(true)
             }.collect {

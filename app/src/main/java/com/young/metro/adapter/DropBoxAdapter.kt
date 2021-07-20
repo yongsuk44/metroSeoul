@@ -28,6 +28,7 @@ class DropBoxAdapter(
     override fun onBindViewHolder(holder: BaseViewHolder<ItemStationNameBinding>, position: Int) {
         getItem(position).also {
             holder.binding.vm = vm
+            holder.binding.stationName = it
         }
     }
 
