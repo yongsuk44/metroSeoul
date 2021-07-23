@@ -8,7 +8,7 @@ import com.young.data_remote.model.RemoteAllRouteInformation
 import com.young.domain.mapper.BaseMapper
 import com.young.domain.model.DomainAllRouteInformation
 import com.young.domain.model.DomainConvenienceInformation
-import com.young.domain.repository.information.RemoteFullRouteInformationRepository
+import com.young.domain.repository.information.remote.RemoteFullRouteInformationRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -18,10 +18,9 @@ class RemoteFullRouteInformationRepositoryImpl @Inject constructor(
     private val service: TrailPorTalService
 ) : RemoteFullRouteInformationRepository {
     override suspend fun getFullRouteInformation(
-        key: String,
-        lineCode: String
+        key: String
     ): Flow<DomainAllRouteInformation> =
-        flowOf(service.getFullRouteInformation(key, "json", "01", lineCode))
+        flowOf(service.getFullRouteInformation(key, "json", "01"))
             .map {
                 val timeTableMapper =
                     BaseMapper(RemoteAllRouteInformation::class, DomainAllRouteInformation::class)

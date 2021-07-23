@@ -1,4 +1,4 @@
-package com.young.domain.repository.information
+package com.young.domain.repository.information.remote
 
 import com.young.domain.model.DomainSubWayTel
 import kotlinx.coroutines.flow.Flow

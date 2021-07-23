@@ -3,20 +3,17 @@ package com.young.metro.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.young.metro.R
 import com.young.metro.base.BaseViewHolder
 import com.young.metro.databinding.ItemStationNameBinding
-import com.young.presentation.viewmodel.MainViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.young.presentation.model.AllRouteInformation
+import com.young.presentation.viewmodel.FullRouteInformationViewModel
 
 class DropBoxAdapter(
-    val vm: MainViewModel
-) : ListAdapter<String , BaseViewHolder<ItemStationNameBinding>>(diffCallBack) {
+    val vm: FullRouteInformationViewModel
+) : ListAdapter<AllRouteInformation , BaseViewHolder<ItemStationNameBinding>>(diffCallBack) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<ItemStationNameBinding> =
         BaseViewHolder(
@@ -28,16 +25,16 @@ class DropBoxAdapter(
     override fun onBindViewHolder(holder: BaseViewHolder<ItemStationNameBinding>, position: Int) {
         getItem(position).also {
             holder.binding.vm = vm
-            holder.binding.stationName = it
+            holder.binding.data = it
         }
     }
 
     companion object {
-        val diffCallBack = object : DiffUtil.ItemCallback<String>() {
-            override fun areItemsTheSame(oldItem: String, newItem: String): Boolean =
-                oldItem.length == newItem.length
+        val diffCallBack = object : DiffUtil.ItemCallback<AllRouteInformation>() {
+            override fun areItemsTheSame(oldItem: AllRouteInformation, newItem: AllRouteInformation): Boolean =
+                oldItem.stinCd == newItem.stinCd
 
-            override fun areContentsTheSame(oldItem: String, newItem: String): Boolean =
+            override fun areContentsTheSame(oldItem: AllRouteInformation, newItem: AllRouteInformation): Boolean =
                 oldItem == newItem
         }
     }

@@ -37,10 +37,6 @@ class MainViewModel @ViewModelInject constructor(
     val subWayFacilitiesData: LiveData<List<UiSubwayFacilities>>
         get() = _subWayFacilitiesData
 
-    val stationList = Transformations.map(_subWayFacilitiesData) {
-        it.map { it.StationName }
-    }
-
     override fun loadSubWayFacilitiesData(key: String) {
         viewModelScope.launch(handler) {
             if (getSubWayTableSizeUseCase.invoke(Unit) == 0) { getRemoteSubWayFacilitiesData(key) }

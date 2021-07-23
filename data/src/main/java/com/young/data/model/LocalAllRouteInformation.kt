@@ -1,9 +1,8 @@
-package com.young.data_remote.model
+package com.young.data.model
 
-data class RemoteAllRouteInformation(
-    val body: List<TimeTableBody>,
-    val header: Header
-)
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
 
 /**
  *
@@ -17,12 +16,15 @@ data class RemoteAllRouteInformation(
  *  @param stinNm	역명
  */
 
-data class AllRouteInformation(
+@Entity
+data class FullRouteInformation(
     val mreaWideCd: String?,
     val railOprIsttCd: String,
     val routCd: String,
     val routNm: String?,
     val lnCd: String,
+
+    @PrimaryKey
     val stinCd: String,
     val stinConsOrdr: String,
     val stinNm: String

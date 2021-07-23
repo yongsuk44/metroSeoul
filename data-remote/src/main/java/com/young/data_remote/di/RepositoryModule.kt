@@ -7,9 +7,9 @@ import com.young.data_remote.repository.RemoteFullRouteInformationRepositoryImpl
 import com.young.data_remote.repository.RemoteSubWayFacilitiesRepositoryImpl
 import com.young.data_remote.repository.RemoteSubWayTelRepositoryImpl
 import com.young.data_remote.repository.RemoteTrailTimeTableRepositoryImpl
-import com.young.domain.repository.information.RemoteFullRouteInformationRepository
-import com.young.domain.repository.information.RemoteSubWayTelRepository
-import com.young.domain.repository.information.RemoteTrailTimeTableRepository
+import com.young.domain.repository.information.remote.RemoteFullRouteInformationRepository
+import com.young.domain.repository.information.remote.RemoteSubWayTelRepository
+import com.young.domain.repository.information.remote.RemoteTrailTimeTableRepository
 import com.young.domain.repository.subwayfacilities.RemoteSubWayFacilitiesRepository
 import dagger.Module
 import dagger.Provides

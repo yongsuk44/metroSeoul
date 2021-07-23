@@ -11,4 +11,6 @@
 
     <color name="colorTextGray">#9093a5</color>
     <color name="colorProgressGray">#e8e8e8</color>
+    <color name="colorGray">#5C5C5C</color>
+
 </resources>

@@ -1,7 +1,7 @@
 package com.young.presentation.model
 
 data class UiAllRouteInformation(
-    val body: List<TimeTableBody>,
+    val body: List<AllRouteInformation>,
     val header: Header
 )
 

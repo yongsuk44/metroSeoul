@@ -1,7 +1,7 @@
 package com.young.domain.model
 
 data class DomainAllRouteInformation(
-    val body: List<TimeTableBody>,
+    val body: List<AllRouteInformation>,
     val header: Header
 )
 

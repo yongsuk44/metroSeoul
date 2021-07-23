@@ -1,7 +1,10 @@
 package com.young.data.di
 
+import com.young.data.dao.FullRouteInformationDao
 import com.young.data.dao.SubWayFacilitiesDao
+import com.young.data.repository.LocalFullRouteInformationRepositoryImpl
 import com.young.data.repository.LocalSubWayFacilitiesRepositoryImpl
+import com.young.domain.repository.information.local.LocalFullRouteInformationRepository
 import com.young.domain.repository.subwayfacilities.LocalSubWayFacilitiesRepository
 import dagger.Module
 import dagger.Provides
@@ -19,5 +22,11 @@ class RepositoryModule {
     fun provideLocalSubwayRepository(
         dao: SubWayFacilitiesDao
     ) : LocalSubWayFacilitiesRepository = LocalSubWayFacilitiesRepositoryImpl(dao)
+
+    @Provides
+    @Singleton
+    fun provideLocalFullRouteInformationRepository(
+        dao: FullRouteInformationDao
+    ) : LocalFullRouteInformationRepository = LocalFullRouteInformationRepositoryImpl(dao)
 
 }

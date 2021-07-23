@@ -39,6 +39,14 @@ object DomainToUiMapper {
         }
     }
 
+    fun List<AllRouteInformation>.DomainToUi() : List<com.young.presentation.model.AllRouteInformation> {
+        val bodyMapper = BaseMapper(AllRouteInformation::class, com.young.presentation.model.AllRouteInformation::class)
+
+        BaseMapper.setList(bodyMapper).run {
+            return this(this@DomainToUi)
+        }
+    }
+
     fun DomainConvenienceInformation.DomainToUi() : UiConvenienceInformation {
         val convenienceMapper = BaseMapper(DomainConvenienceInformation::class, com.young.presentation.model.UiConvenienceInformation::class)
         val headerMapper = BaseMapper(com.young.domain.model.Header::class, com.young.presentation.model.Header::class)

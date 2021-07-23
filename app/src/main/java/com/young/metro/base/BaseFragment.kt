@@ -23,6 +23,10 @@ abstract class BaseFragment<B : ViewDataBinding, V : ViewModel> : Fragment() {
     @LayoutRes var dialogLoading: Int? = null
     var progressDialog: AppCompatDialog? = null
 
+    abstract fun initBinding()
+    abstract fun observerLiveData()
+    abstract fun conversionFragment()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return performDataBinding(inflater, container)
     }
@@ -49,10 +53,6 @@ abstract class BaseFragment<B : ViewDataBinding, V : ViewModel> : Fragment() {
         viewDataBinding = DataBindingUtil.inflate(inflater, layoutResource, container, false)
         return viewDataBinding.root
     }
-
-    abstract fun initBinding()
-    abstract fun observerLiveData()
-    abstract fun conversionFragment()
 
     fun progressOn(fragment: Fragment) {
         progressDialog = AppCompatDialog(requireContext())

@@ -11,7 +11,7 @@ open class BaseViewModel : ViewModel() {
 
     val handler = CoroutineExceptionHandler { _, exception ->
         Timber.e(exception)
-        _loading.value = false
+        _loading.value = true
     }
 
     private val _loading = MutableLiveData<Boolean>()

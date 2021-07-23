@@ -7,4 +7,28 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="colorLine1">#263C96</color>
+    <color name="colorLine2">#3CB44A</color>
+    <color name="colorLine3">#FF7300</color>
+    <color name="colorLine4">#2C9EDE</color>
+    <color name="colorLine5">#8936E0</color>
+    <color name="colorLine6">#B5500B</color>
+    <color name="colorLine7">#697215</color>
+    <color name="colorLine8">#E51E6E</color>
+    <color name="colorLine9">#D1A62C</color>
+    <color name="colorLineBundang">#FFCE33</color>
+    <color name="colorLineIncheon">#6F99D0</color>
+    <color name="colorLineNewBundang">#A71E31</color>
+    <color name="colorLineGyeongchun">#08AF7B</color>
+    <color name="colorLineGyeonguiCentral">#7CC4A5</color>
+    <color name="colorLineAirportRailway">#73B6E4</color>
+    <color name="colorLineUijeongbu">#FF9D27</color>
+    <color name="colorLineEver">#77C371</color>
+    <color name="colorLineGimpo">#AD8605</color>
+    <color name="colorLineIncheon2">#F5A251</color>
+    <color name="colorLineGyeonggang">#005BAB</color>
+    <color name="colorLineIncheonMaglev">#FFCD12</color>
+    <color name="colorLineUiSinseol">#B7C450</color>
+    <color name="colorLineSeohea">#8FC31F</color>
 </resources>

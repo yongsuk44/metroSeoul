@@ -1,10 +1,13 @@
 package com.young.domain.di
 
-import com.young.domain.repository.information.RemoteFullRouteInformationRepository
-import com.young.domain.repository.information.RemoteSubWayTelRepository
-import com.young.domain.repository.information.RemoteTrailTimeTableRepository
+import com.young.domain.repository.information.local.LocalFullRouteInformationRepository
+import com.young.domain.repository.information.remote.RemoteFullRouteInformationRepository
+import com.young.domain.repository.information.remote.RemoteSubWayTelRepository
+import com.young.domain.repository.information.remote.RemoteTrailTimeTableRepository
 import com.young.domain.repository.subwayfacilities.LocalSubWayFacilitiesRepository
 import com.young.domain.repository.subwayfacilities.RemoteSubWayFacilitiesRepository
+import com.young.domain.usecase.information.local.LocalGetFullRouteInformationUseCase
+import com.young.domain.usecase.information.local.LocalInsertFullRouteInformationUseCase
 import com.young.domain.usecase.information.remote.*
 import com.young.domain.usecase.subwayfacilities.local.GetSizeTableDataUseCase
 import com.young.domain.usecase.subwayfacilities.local.InsertSubWayFacilitiesDataUseCase
@@ -69,4 +72,16 @@ object DomainSubWayFacilitiesModule {
     fun provideGetLocalAllData(
         local : LocalSubWayFacilitiesRepository
     ) = LocalGetSubWayFacilitiesDataUseCase(local)
+
+    @Provides
+    @Reusable
+    fun provideInsertFullRouteInformation(
+        local : LocalFullRouteInformationRepository
+    ) = LocalInsertFullRouteInformationUseCase(local)
+
+    @Provides
+    @Reusable
+    fun provideGetLocalFullRouteInformation(
+        local : LocalFullRouteInformationRepository
+    ) = LocalGetFullRouteInformationUseCase(local)
 }

@@ -1,9 +1,13 @@
 package com.young.presentation.modelfunction
 
-interface FullRouteInformationCase {
-    fun loadSubWayTelData(key: String)
-    suspend fun getSubWayTelData(key: String)
+import com.young.presentation.model.AllRouteInformation
 
-    fun loadFullRouteInformation(key: String , lineCode: String)
-    suspend fun getFullRouteInformation(key: String, lineCode: String)
+interface FullRouteInformationCase {
+    fun loadFullRouteInformation()
+    suspend fun getFullRouteInformation(key: String)
+    suspend fun getLocalFullRouteInformation()
+
+    fun onSearchEditViewClick(value : Boolean)
+    fun onStationClick(item : AllRouteInformation)
+    fun onSearchEditViewClear()
 }

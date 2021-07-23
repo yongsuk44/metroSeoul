@@ -13,6 +13,7 @@ import com.young.metro.R
 fun Int?.ZeroOrNull() = this != null && this != 0
 fun Int?.intNullCheck() = this != null
 fun String.equlesDataToInt(value: String): Int = if (this == value) 1 else 0
+inline fun <reified T>equalsZeroCheck(value : T) : T? = if (value == 0f) null else value
 
 val Int.toPx: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()

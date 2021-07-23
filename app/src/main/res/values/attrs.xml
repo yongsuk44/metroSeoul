@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="customBackgroundColor" format="reference"/>
+    <attr name="cornerRadius" format="dimension|reference"/>
+    <attr name="customStrokeWidth" format="dimension"/>
+    <attr name="customStrokeColor" format="color|reference"/>
+    <attr name="cornerTopLeftRadius" format="dimension"/>
+    <attr name="cornerTopRightRadius" format="dimension"/>
+    <attr name="cornerBottomLeftadius" format="dimension"/>
+    <attr name="cornerBottomRightRadius" format="dimension"/>
+
+    <declare-styleable name="CustomConstraintLayout">
+        <attr name="customBackgroundColor" />
+        <attr name="cornerRadius" />
+        <attr name="customStrokeWidth"/>
+        <attr name="customStrokeColor"/>
+        <attr name="cornerTopLeftRadius"/>
+        <attr name="cornerTopRightRadius"/>
+        <attr name="cornerBottomLeftadius"/>
+        <attr name="cornerBottomRightRadius"/>
+    </declare-styleable>
+
+
+    <declare-styleable name="CircleTextView">
+        <attr name="customBackgroundColor" />
+        <attr name="cornerRadius" />
+        <attr name="shapeType" format="enum">
+            <enum name="rectangle" value="0"/>
+            <enum name="oval" value="1"/>
+        </attr>
+        <attr name="customStrokeWidth"/>
+        <attr name="customStrokeColor"/>
+    </declare-styleable>
+
+
+    <declare-styleable name="CircleImageView">
+        <attr name="customBackgroundColor" />
+        <attr name="cornerRadius" />
+        <attr name="customStrokeWidth"/>
+        <attr name="customStrokeColor"/>
+    </declare-styleable>
+
+</resources>

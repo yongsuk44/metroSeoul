@@ -1,6 +1,10 @@
 package com.young.presentation.modelfunction
 
 interface DetailStationInformationViewFunction {
+
+    fun loadSubWayTelData(key: String)
+    suspend fun getSubWayTelData(key: String)
+
     suspend fun getConvenienceInformation(
         key: String,
         lineCode: String,

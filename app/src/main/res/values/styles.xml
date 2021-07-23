@@ -29,10 +29,27 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="WhiteTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <style name="BlackTextViewMediumSize12" parent="BlackTextView">
         <item name="android:textSize">12sp</item>
         <item name="android:lineSpacingExtra">4sp</item>
     </style>
+
+    <style name="BlackTextViewMediumSize15" parent="BlackTextView">
+        <item name="android:textSize">15sp</item>
+        <item name="android:lineSpacingExtra">2sp</item>
+    </style>
+
+    <style name="WhiteTextViewMediumSize14" parent="WhiteTextView">
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineSpacingExtra">2sp</item>
+    </style>
+
 
     <style name="inputSelectBox" parent="BlackTextViewMediumSize12">
         <item name="android:layout_width">0dp</item>

@@ -22,8 +22,7 @@ interface TrailPorTalService {
     suspend fun getFullRouteInformation(
         @Query("serviceKey", encoded = true) key: String,
         @Query("format") format: String,
-        @Query("mreaWideCd") mreaWideCd: String,
-        @Query("lnCd") lineCode: String
+        @Query("mreaWideCd") mreaWideCd: String
     ) : RemoteAllRouteInformation
 
     @GET("convenientInfo/stationCnvFacl")
