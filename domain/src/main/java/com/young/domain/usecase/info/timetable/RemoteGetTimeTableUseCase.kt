@@ -1,4 +1,4 @@
-package com.young.domain.usecase.information.remote
+package com.young.domain.usecase.info.timetable
 
 import com.young.domain.model.DomainTrailTimeTable
 import com.young.domain.repository.information.remote.RemoteTrailTimeTableRepository

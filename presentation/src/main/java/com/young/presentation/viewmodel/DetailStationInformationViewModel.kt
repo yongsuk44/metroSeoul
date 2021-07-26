@@ -6,9 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.young.domain.mapper.BaseMapper
 import com.young.domain.model.DomainSubWayTel
-import com.young.domain.usecase.information.remote.RemoteFullRouteInformationUseCase
-import com.young.domain.usecase.information.remote.RemoteGetSubWayTelUseCase
-import com.young.domain.usecase.information.remote.RemoteTimeTableUseCase
+import com.young.domain.usecase.info.information.RemoteFullRouteInformationUseCase
+import com.young.domain.usecase.info.timetable.RemoteTimeTableUseCase
+import com.young.domain.usecase.info.telnumber.RemoteGetSubWayTelUseCase
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.mapper.DomainToUiMapper.DomainToUi
 import com.young.presentation.mapper.DomainToUiMapper.DomaionToUi

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDialog
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -75,5 +76,12 @@ abstract class BaseFragment<B : ViewDataBinding, V : ViewModel> : Fragment() {
             if (it.isShowing) it.dismiss()
         }
     }
+}
 
+fun Fragment.showToast(msg: CharSequence) {
+    (activity as? BindActivity)?.showToast(msg)
+}
+
+fun Fragment.showToast(@StringRes msg : Int) {
+    (activity as? BindActivity)?.showToast(getString(msg))
 }

@@ -6,13 +6,15 @@
         <variable
             name="vm"
             type="com.young.presentation.viewmodel.FullRouteInformationViewModel" />
+        <variable
+            name="permissionVm"
+            type="com.young.presentation.viewmodel.PermissionViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        app:layoutDescription="@xml/scene_main"
         tools:context=".ui.MainActivity">
 
         <androidx.constraintlayout.widget.Guideline
@@ -101,6 +103,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             app:cornerRadius="20dp"
+            android:onClick="@{() -> permissionVm.onLocationSearchClick()}"
             app:customBackgroundColor="@color/colorGray"
             app:layout_constraintTop_toBottomOf="@id/et_station_search"
             app:layout_constraintStart_toStartOf="@id/gl_horizon_center"

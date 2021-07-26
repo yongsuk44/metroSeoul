@@ -28,7 +28,7 @@ object Versions {
     const val lifecycle = "2.3.0-alpha06"
     const val recyclerview = "1.2.0-alpha04"
     const val recyclerviewSelection = "1.1.0-rc01"
-    const val glide = "4.9.0"
+    const val glide = "4.11.0"
     const val room = "2.2.5"
     const val paging = "3.0.0-alpha11"
     const val pagingJetpack = "1.0.0-alpha04"
@@ -53,6 +53,7 @@ object Versions {
     const val timber = "4.7.1"
 
     const val flexBox = "2.0.1"
+    const val lottie = "3.4.3"
 
     const val camera = "1.0.0-beta04"
     const val exoPlayer = "2.14.1"

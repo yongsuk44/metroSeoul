@@ -3,16 +3,15 @@ package com.young.data_remote.di
 import com.young.data_remote.api.PublicDataPortalApiService
 import com.young.data_remote.api.SeoulApiService
 import com.young.data_remote.api.TrailPorTalService
-import com.young.data_remote.repository.RemoteFullRouteInformationRepositoryImpl
-import com.young.data_remote.repository.RemoteSubWayFacilitiesRepositoryImpl
-import com.young.data_remote.repository.RemoteSubWayTelRepositoryImpl
-import com.young.data_remote.repository.RemoteTrailTimeTableRepositoryImpl
+import com.young.data_remote.repository.*
 import com.young.domain.repository.information.remote.RemoteFullRouteInformationRepository
+import com.young.domain.repository.information.remote.RemoteLocationRepository
 import com.young.domain.repository.information.remote.RemoteSubWayTelRepository
 import com.young.domain.repository.information.remote.RemoteTrailTimeTableRepository
 import com.young.domain.repository.subwayfacilities.RemoteSubWayFacilitiesRepository
 import dagger.Module
 import dagger.Provides
+import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import javax.inject.Singleton
@@ -22,28 +21,35 @@ import javax.inject.Singleton
 class RepositoryModule {
 
     @Provides
-    @Singleton
+    @Reusable
+    fun provideLocationRepository(
+        service : TrailPorTalService
+    ) : RemoteLocationRepository =
+        RemoteLocationRepositoryImpl(service)
+
+    @Provides
+    @Reusable
     fun provideSubWayFacilitiesRepository(
         subwayFacilitiesService: PublicDataPortalApiService
     ) : RemoteSubWayFacilitiesRepository =
         RemoteSubWayFacilitiesRepositoryImpl(subwayFacilitiesService)
 
     @Provides
-    @Singleton
+    @Reusable
     fun provideSubWayTelRepository(
         service: SeoulApiService
     ) : RemoteSubWayTelRepository =
         RemoteSubWayTelRepositoryImpl(service)
 
     @Provides
-    @Singleton
+    @Reusable
     fun provideTimeTableRepository(
         service : TrailPorTalService
     ) : RemoteTrailTimeTableRepository =
         RemoteTrailTimeTableRepositoryImpl(service)
 
     @Provides
-    @Singleton
+    @Reusable
     fun provideAllRouteInformationRepository(
         service : TrailPorTalService
     ) : RemoteFullRouteInformationRepository =

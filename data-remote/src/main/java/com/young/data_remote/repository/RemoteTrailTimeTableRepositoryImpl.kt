@@ -7,8 +7,10 @@ import com.young.data_remote.model.TimeTableBody
 import com.young.domain.mapper.BaseMapper
 import com.young.domain.model.DomainTrailTimeTable
 import com.young.domain.repository.information.remote.RemoteTrailTimeTableRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -31,7 +33,7 @@ class RemoteTrailTimeTableRepositoryImpl @Inject constructor(
                 lineCode = lineCode,
                 stationCode = stationCode
             )
-        ).map {
+        ).flowOn(Dispatchers.IO).map {
             val timeTableMapper = BaseMapper(RemoteTrailTimeTable::class, DomainTrailTimeTable::class)
             val headerMapper = BaseMapper(Header::class, com.young.domain.model.Header::class)
             val timeTableBody = BaseMapper(TimeTableBody::class, com.young.domain.model.TimeTableBody::class)
@@ -42,5 +44,5 @@ class RemoteTrailTimeTableRepositoryImpl @Inject constructor(
             }.run {
                 this(it)
             }
-        }
+        }.flowOn(Dispatchers.Default)
 }

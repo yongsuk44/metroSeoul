@@ -9,9 +9,8 @@ import com.young.domain.mapper.BaseMapper
 import com.young.domain.model.DomainAllRouteInformation
 import com.young.domain.model.DomainConvenienceInformation
 import com.young.domain.repository.information.remote.RemoteFullRouteInformationRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 class RemoteFullRouteInformationRepositoryImpl @Inject constructor(
@@ -23,20 +22,27 @@ class RemoteFullRouteInformationRepositoryImpl @Inject constructor(
         flowOf(service.getFullRouteInformation(key, "json", "01"))
             .map {
                 val timeTableMapper =
-                    BaseMapper(RemoteAllRouteInformation::class, DomainAllRouteInformation::class)
-                val headerMapper = BaseMapper(Header::class, com.young.domain.model.Header::class)
-                val bodyMapper = BaseMapper(
-                    AllRouteInformation::class,
+                    com.young.domain.mapper.BaseMapper(
+                        com.young.data_remote.model.RemoteAllRouteInformation::class,
+                        com.young.domain.model.DomainAllRouteInformation::class
+                    )
+                val headerMapper = com.young.domain.mapper.BaseMapper(
+                    com.young.data_remote.model.Header::class,
+                    com.young.domain.model.Header::class
+                )
+                val bodyMapper = com.young.domain.mapper.BaseMapper(
+                    com.young.data_remote.model.AllRouteInformation::class,
                     com.young.domain.model.AllRouteInformation::class
                 )
 
                 timeTableMapper.apply {
                     register("header", headerMapper)
-                    register("body", BaseMapper.setList(bodyMapper))
+                    register("body", com.young.domain.mapper.BaseMapper.setList(bodyMapper))
                 }.run {
                     this(it)
                 }
             }
+
 
     override suspend fun getConvenienceInformation(
         key: String,
@@ -47,5 +53,5 @@ class RemoteFullRouteInformationRepositoryImpl @Inject constructor(
         flowOf(service.getConvenienceInformation(key , "json" , lineCode, trailCode, stationCode))
             .map {
                 it.RemoteToDomain()
-            }
+            }.flowOn(Dispatchers.IO)
 }

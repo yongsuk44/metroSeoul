@@ -1,7 +1,9 @@
 package com.young.metro.base
 
+import android.app.Activity
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -18,4 +20,8 @@ abstract class BindActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setStatusBarColor(this , StatusColor.WHITE)
     }
+}
+
+fun Activity.showToast(msg: CharSequence) {
+    Toast.makeText(applicationContext, msg, Toast.LENGTH_SHORT).show()
 }

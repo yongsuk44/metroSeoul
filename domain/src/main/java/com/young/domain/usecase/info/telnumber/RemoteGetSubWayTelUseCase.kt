@@ -1,9 +1,11 @@
-package com.young.domain.usecase.information.remote
+package com.young.domain.usecase.info.telnumber
 
 import com.young.domain.model.DomainSubWayTel
 import com.young.domain.repository.information.remote.RemoteSubWayTelRepository
 import com.young.domain.usecase.BaseUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 typealias RemoteGetSubWayTelBaseUseCase = BaseUseCase<String , Flow<List<DomainSubWayTel>>>

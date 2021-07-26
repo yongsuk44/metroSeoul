@@ -29,6 +29,8 @@ object Libraries {
 
     const val coroutineAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1"
     const val coroutineTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.1"
+
+    const val lottie = "com.airbnb.android:lottie:${Versions.lottie}"
 }
 
 object AndroidX {

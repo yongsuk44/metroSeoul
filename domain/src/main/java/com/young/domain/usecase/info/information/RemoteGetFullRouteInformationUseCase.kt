@@ -1,9 +1,11 @@
-package com.young.domain.usecase.information.remote
+package com.young.domain.usecase.info.information
 
 import com.young.domain.model.DomainAllRouteInformation
 import com.young.domain.model.DomainConvenienceInformation
 import com.young.domain.repository.information.remote.RemoteFullRouteInformationRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 interface RemoteFullRouteInformationUseCase {

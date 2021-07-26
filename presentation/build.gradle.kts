@@ -30,4 +30,8 @@ dependencies {
     implementationList(LibraryList.HiltLibraries)
     kaptList(LibraryList.HiltLibraryKapt)
     implementation(AndroidLibraries.timber)
+
+    testImplementationList(LibraryList.mockitoLibrary)
+    testImplementationList(LibraryList.TestLibrary)
+    testImplementation(Libraries.coroutineTest)
 }

@@ -92,6 +92,7 @@ dependencies {
     implementation(project(Modules.presentation))
     implementation(project(Modules.data))
 
+    implementation(Libraries.lottie)
     implementation(AndroidLibraries.timber)
     implementationList(LibraryList.appLibraries)
     implementationList(LibraryList.cameraLibrary)
