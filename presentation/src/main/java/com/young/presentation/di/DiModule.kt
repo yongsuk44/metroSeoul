@@ -1,9 +1,11 @@
 package com.young.presentation.di
 
 import android.app.Application
+import android.location.Geocoder
 import com.young.presentation.consts.ResourceProvider
 import dagger.Module
 import dagger.Provides
+import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import javax.inject.Singleton
@@ -14,5 +16,9 @@ object DiModule {
 
     @Provides
     @Singleton
-    fun provideResourceProvider(context:Application): ResourceProvider = ResourceProvider(context)
+    fun provideResourceProvider(context: Application): ResourceProvider = ResourceProvider(context)
+
+    @Provides
+    @Reusable
+    fun provideGeoCoder(context: Application): Geocoder = Geocoder(context)
 }

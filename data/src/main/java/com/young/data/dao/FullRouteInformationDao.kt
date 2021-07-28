@@ -2,6 +2,7 @@ package com.young.data.dao
 
 import androidx.room.*
 import com.young.data.model.FullRouteInformation
+import com.young.data.model.LocalStationNameAndMapXY
 import com.young.data.model.LocalTrailCodeAndLineCode
 import kotlinx.coroutines.flow.Flow
 
@@ -15,6 +16,7 @@ interface FullRouteInformationDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLineCodeAndTrailCode(items : List<LocalTrailCodeAndLineCode>)
 
+
     @Query("select * from LocalTrailCodeAndLineCode")
     suspend fun getTrailCodeAllData() : List<LocalTrailCodeAndLineCode>
 
@@ -23,4 +25,6 @@ interface FullRouteInformationDao {
 
     @Query("select count() from FullRouteInformation")
     suspend fun getDataSize() : Int
+
+
 }

@@ -2,6 +2,7 @@ package com.young.domain.di
 
 import com.young.domain.repository.information.local.LocalFullRouteInformationRepository
 import com.young.domain.repository.information.local.LocalLocationRepository
+import com.young.domain.repository.information.local.LocalStationCoordinatesRepository
 import com.young.domain.repository.information.remote.RemoteFullRouteInformationRepository
 import com.young.domain.repository.information.remote.RemoteLocationRepository
 import com.young.domain.repository.information.remote.RemoteSubWayTelRepository
@@ -13,6 +14,7 @@ import com.young.domain.usecase.info.information.LocalInsertFullRouteInformation
 import com.young.domain.usecase.info.location.GetLocationUseCase
 import com.young.domain.usecase.info.information.RemoteFullRouteInformationUseCase
 import com.young.domain.usecase.info.information.RemoteGetFullRouteInformationUseCase
+import com.young.domain.usecase.info.location.LocalStationCoordinateUseCase
 import com.young.domain.usecase.info.timetable.RemoteGetTimeTableUseCaseImpl
 import com.young.domain.usecase.info.timetable.RemoteTimeTableUseCase
 import com.young.domain.usecase.info.telnumber.RemoteGetSubWayTelUseCase
@@ -30,6 +32,12 @@ import dagger.hilt.android.components.ApplicationComponent
 @Module
 @InstallIn(ApplicationComponent::class)
 object DomainSubWayFacilitiesModule {
+
+    @Provides
+    @Reusable
+    fun provideLocalStationCoordinate(
+        local: LocalStationCoordinatesRepository
+    ) = LocalStationCoordinateUseCase(local)
 
     @Provides
     @Reusable

@@ -1,5 +1,6 @@
 package com.young.metro.ui
 
+import android.location.Geocoder
 import androidx.fragment.app.viewModels
 import com.google.android.gms.location.LocationServices
 import com.young.metro.BR
@@ -24,9 +25,9 @@ class LocationListFragment : BaseFragment<FragmentLocationListBinding, LocationV
     override fun initBinding() {
         viewModel.loadAddressData()
 
-        //                Geocoder(requireContext()).getFromLocationName("경기도 동두천시 평화로 2925" ,1).run {
-//                    showToast("좌표 ${this[0].latitude} , ${this[0].longitude}")
-//                }
+        Geocoder(requireContext()).getFromLocationName("경기도 동두천시 평화로 2925", 1).run {
+            showToast("좌표 ${this[0].latitude} , ${this[0].longitude}")
+        }
     }
 
     override fun observerLiveData() {

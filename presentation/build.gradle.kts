@@ -30,6 +30,7 @@ dependencies {
     implementationList(LibraryList.HiltLibraries)
     kaptList(LibraryList.HiltLibraryKapt)
     implementation(AndroidLibraries.timber)
+    implementation(AndroidLibraries.googleService)
 
     testImplementationList(LibraryList.mockitoLibrary)
     testImplementationList(LibraryList.TestLibrary)
