@@ -3,6 +3,8 @@ package com.young.metro.viewbinding
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.young.metro.adapter.LineLogoAdapter
 
 @BindingAdapter("setDataCheckVisible")
 fun setDataVisibleApply(view: View, data: Any?) {
@@ -13,6 +15,11 @@ fun setDataVisibleApply(view: View, data: Any?) {
         is Boolean -> data
         else -> false
     }
+}
+
+@BindingAdapter("onListAdapterSetting")
+fun setAdapterSetting(view : RecyclerView , adapter : LineLogoAdapter) {
+    view.adapter = adapter
 }
 
 fun Int?.ZeroOrNull() = this != null && this != 0

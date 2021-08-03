@@ -10,5 +10,9 @@ data class LocalStationNameAndMapXY(
     @Embedded val localTrailCodeAndLineCode: LocalTrailCodeAndLineCode,
     val stationName : String ,
     val mapX : Double ,
-    val mapY : Double
+    val mapY : Double ,
+    val localCosX : Double ,
+    val localCosY : Double ,
+    val localSinX : Double ,
+    val localSinY : Double
 )

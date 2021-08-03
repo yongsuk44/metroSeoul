@@ -1,13 +1,16 @@
 package com.young.presentation.mapper
 
+import android.location.Geocoder
 import com.young.domain.mapper.BaseMapper
 import com.young.domain.model.*
-import com.young.presentation.model.UiAllRouteInformation
-import com.young.presentation.model.UiConvenienceInformation
-import com.young.presentation.model.UiTrailTimeTable
+import com.young.domain.model.AllRouteInformation
+import com.young.domain.model.ConvenienceInformationBody
+import com.young.domain.model.Header
+import com.young.domain.model.TimeTableBody
+import com.young.presentation.model.*
 
 object DomainToUiMapper {
-    fun DomainTrailTimeTable.DomaionToUi() : UiTrailTimeTable {
+    fun DomainTrailTimeTable.DomaionToUi(): UiTrailTimeTable {
         val timeTableMapper = BaseMapper(DomainTrailTimeTable::class, UiTrailTimeTable::class)
         val headerMapper = BaseMapper(Header::class, com.young.presentation.model.Header::class)
         val timeTableBody =
@@ -21,7 +24,7 @@ object DomainToUiMapper {
         }
     }
 
-    fun DomainAllRouteInformation.DomainToUi() : UiAllRouteInformation {
+    fun DomainAllRouteInformation.DomainToUi(): UiAllRouteInformation {
         val timeTableMapper =
             BaseMapper(DomainAllRouteInformation::class, UiAllRouteInformation::class)
         val headerMapper =
@@ -39,18 +42,30 @@ object DomainToUiMapper {
         }
     }
 
-    fun List<AllRouteInformation>.DomainToUi() : List<com.young.presentation.model.AllRouteInformation> {
-        val bodyMapper = BaseMapper(AllRouteInformation::class, com.young.presentation.model.AllRouteInformation::class)
+    fun List<AllRouteInformation>.DomainToUi(): List<com.young.presentation.model.AllRouteInformation> {
+        val bodyMapper = BaseMapper(
+            AllRouteInformation::class,
+            com.young.presentation.model.AllRouteInformation::class
+        )
 
         BaseMapper.setList(bodyMapper).run {
             return this(this@DomainToUi)
         }
     }
 
-    fun DomainConvenienceInformation.DomainToUi() : UiConvenienceInformation {
-        val convenienceMapper = BaseMapper(DomainConvenienceInformation::class, com.young.presentation.model.UiConvenienceInformation::class)
-        val headerMapper = BaseMapper(com.young.domain.model.Header::class, com.young.presentation.model.Header::class)
-        val bodyMapper = BaseMapper(ConvenienceInformationBody::class, com.young.presentation.model.ConvenienceInformationBody::class)
+    fun DomainConvenienceInformation.DomainToUi(): UiConvenienceInformation {
+        val convenienceMapper = BaseMapper(
+            DomainConvenienceInformation::class,
+            com.young.presentation.model.UiConvenienceInformation::class
+        )
+        val headerMapper = BaseMapper(
+            com.young.domain.model.Header::class,
+            com.young.presentation.model.Header::class
+        )
+        val bodyMapper = BaseMapper(
+            ConvenienceInformationBody::class,
+            com.young.presentation.model.ConvenienceInformationBody::class
+        )
 
         convenienceMapper.apply {
             register("header", headerMapper)
@@ -58,5 +73,25 @@ object DomainToUiMapper {
         }.run {
             return this(this@DomainToUi)
         }
+    }
+
+    fun UiStationNameAndMapXY.UiToDomain() : DomainStationNameAndMapXY {
+        return DomainStationNameAndMapXY(
+            stinCd = stinCd,
+            stationName = stationName,
+            mapX = mapX,
+            mapY = mapY,
+            trailCodeAndLineCode = DomainTrailCodeAndLineCode(trailCodeAndLineCode.railOprIsttCd,trailCodeAndLineCode.lnCd)
+        )
+    }
+
+    fun DomainStationNameAndMapXY.DomainToUi() : UiStationNameAndMapXY {
+        return UiStationNameAndMapXY(
+            stinCd = stinCd,
+            stationName = stationName,
+            mapX = mapX,
+            mapY = mapY,
+            trailCodeAndLineCode = UiTrailCodeAndLineCode(trailCodeAndLineCode.railOprIsttCd,trailCodeAndLineCode.lnCd)
+        )
     }
 }

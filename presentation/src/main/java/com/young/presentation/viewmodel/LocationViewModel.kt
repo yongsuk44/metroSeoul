@@ -1,91 +1,174 @@
 package com.young.presentation.viewmodel
 
-import android.location.Geocoder
+import android.location.Location
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.young.domain.mapper.BaseMapper
+import com.young.domain.model.DomainStationNameAndMapXY
+import com.young.domain.model.DomainTrailCodeAndLineCode
 import com.young.domain.usecase.info.location.GetLocationUseCase
 import com.young.domain.usecase.info.location.LocalStationCoordinateUseCase
-import com.young.presentation.R
 import com.young.presentation.consts.BaseViewModel
-import com.young.presentation.consts.ResourceProvider
+import com.young.presentation.consts.Event
+import com.young.presentation.mapper.DomainToUiMapper.DomainToUi
+import com.young.presentation.mapper.DomainToUiMapper.UiToDomain
+import com.young.presentation.model.UiStationNameAndMapXY
+import com.young.presentation.model.UiStationNameDistance
+import com.young.presentation.model.UiTrailCodeAndLineCode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.lang.IndexOutOfBoundsException
 
 interface LocationViewModelFunction {
-    fun loadAddressData()
-    suspend fun getTrailCodeAndLineCode()
-    suspend fun getStationCoordinateData()
+    fun setNowLocation(latitude: Double, longitude: Double)
+    fun setAllStationNameAndMapXYData(items: List<UiStationNameAndMapXY>)
+    fun loadAddressDataSize()
+    fun insertAllStationNameAndMapXYData(items: List<UiStationNameAndMapXY>)
+    fun getLocationNearStationList()
+    fun getStartPosEndPosDistanceData(x: Double, y: Double): Int
+    fun onStationClick(data : UiStationNameDistance)
 }
 
 @ExperimentalCoroutinesApi
 @FlowPreview
 class LocationViewModel @ViewModelInject constructor(
     private val locationUseCase: GetLocationUseCase,
-    private val coordinateUseCase: LocalStationCoordinateUseCase,
-    private val provider: ResourceProvider,
-    private val geocoder: Geocoder
+    private val coordinateUseCase: LocalStationCoordinateUseCase
 ) : BaseViewModel(), LocationViewModelFunction {
 
-    private val _locationStringList = MutableLiveData<List<String>>()
-    val locationStringList: LiveData<List<String>>
-        get() = _locationStringList
+    private val _failedLocationData = MutableLiveData<Boolean>()
+    val failedLocationData: LiveData<Boolean>
+        get() = _failedLocationData
 
-    override fun loadAddressData() {
+    private val _nowLocationLatitude = MutableLiveData<Double>()
+    val nowLocationLatitude: LiveData<Double>
+        get() = _nowLocationLatitude
+
+    private val _nowLocationLongitude = MutableLiveData<Double>()
+    val nowLocationLongitude: LiveData<Double>
+        get() = _nowLocationLongitude
+
+    private val _stationNameAndMapXY = MutableLiveData<List<UiStationNameDistance>>()
+    val stationNameAndMapXY: LiveData<List<UiStationNameDistance>>
+        get() = _stationNameAndMapXY
+
+    private val _stationCoordinateDataSize = MutableLiveData<Int>()
+    val stationCoordinateDataSize: LiveData<Int>
+        get() = _stationCoordinateDataSize
+
+    private val _stationClick = MutableLiveData<Event<UiStationNameDistance>>()
+    val stationClick: LiveData<Event<UiStationNameDistance>>
+        get() = _stationClick
+
+    override fun setNowLocation(latitude: Double, longitude: Double) {
+        _nowLocationLatitude.value = latitude
+        _nowLocationLongitude.value = longitude
+
+        if (nowLocationLongitude.value != null && nowLocationLatitude.value != null) {
+            loadAddressDataSize()
+        }
+    }
+
+    override fun loadAddressDataSize() {
         viewModelScope.launch(handler) {
-            Timber.d("start TEST11")
             coordinateUseCase.getStationCoordinateDataSize().flowOn(Dispatchers.IO).take(1)
                 .collect {
-                    if (it > 0) getStationCoordinateData()
-                    else getTrailCodeAndLineCode()
+                    _stationCoordinateDataSize.value = it
                 }
         }
     }
 
-    override suspend fun getTrailCodeAndLineCode() {
-        locationUseCase.getTrailCodeAndLineCode()
-            .flowOn(Dispatchers.IO)
-            .flatMapConcat { responseList ->
-
-                val list = ArrayList<Flow<List<String>>>()
-
-                responseList.forEach { data ->
-                    list.add(
-                        locationUseCase.getStationAddress(
-                            provider.getString(R.string.trailKey),
-                            data.railOprIsttCd,
-                            data.lnCd
-                        )
-                    )
-                }
-
-                combine(list) {
-                    it.reduce { a, b -> a + b }
-                }
-
-            }
-            .transform {
-                it.map {
-                    emit(geocoder.getFromLocationName(it, 1))
-                }
-            }
-            .flowOn(Dispatchers.Default)
-            .catch { e ->
-                Timber.e(e)
-            }.onCompletion {
-                setLoadingValue(false)
-            }.collect {
-                _locationStringList.value = it
-            }
+    override fun setAllStationNameAndMapXYData(items: List<UiStationNameAndMapXY>) {
+        insertAllStationNameAndMapXYData(items)
     }
 
+    override fun insertAllStationNameAndMapXYData(items: List<UiStationNameAndMapXY>) {
+        viewModelScope.launch(handler) {
+            flowOf(coordinateUseCase.insertStationCoordinateData(
+                items.map {
+                    it.UiToDomain()
+                }
+            ))
+                .flowOn(Dispatchers.IO)
+                .collect {
+                    getLocationNearStationList()
+                }
+        }
+    }
 
-    override suspend fun getStationCoordinateData() {
-        TODO("Not yet implemented")
+    override fun getLocationNearStationList() {
+        viewModelScope.launch(handler) {
+            if (nowLocationLatitude.value != null && nowLocationLongitude.value != null) {
+
+                coordinateUseCase.getLocationNearStationList(
+                    nowLocationLatitude.value!!,
+                    nowLocationLongitude.value!!,
+                    3.0
+                )
+                    .transform {
+
+                        emit(
+                            it.groupBy {
+                                it.mapX to it.mapY
+                            }.map {
+                                it.value.run {
+                                    if (size >= 2) {
+
+                                        UiStationNameDistance(
+                                            first().stinCd,
+                                            map { it.trailCodeAndLineCode.railOprIsttCd },
+                                            map { it.trailCodeAndLineCode.lnCd },
+                                            first().stationName,
+                                            getStartPosEndPosDistanceData(first().mapX, first().mapY)
+                                        )
+                                    } else {
+                                        first().run {
+                                            UiStationNameDistance(
+                                                stinCd,
+                                                listOf(trailCodeAndLineCode.railOprIsttCd),
+                                                listOf(trailCodeAndLineCode.lnCd),
+                                                first().stationName,
+                                                getStartPosEndPosDistanceData(first().mapX, first().mapY)
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        )
+                    }
+                    .flowOn(Dispatchers.IO)
+                    .catch { e ->
+                        Timber.e(e)
+                        _failedLocationData.value = true
+                    }.onCompletion {
+                        setLoadingValue(false)
+                    }
+                    .collect {
+                        _stationNameAndMapXY.value = it
+                    }
+            }
+        }
+    }
+
+    override fun getStartPosEndPosDistanceData(x: Double, y: Double): Int {
+        val start = Location("").apply {
+            latitude = nowLocationLatitude.value!!
+            longitude = nowLocationLongitude.value!!
+        }
+
+        val end = Location("").apply {
+            latitude = x
+            longitude = y
+        }
+
+        return start.distanceTo(end).toInt()
+    }
+
+    override fun onStationClick(data: UiStationNameDistance) {
+        _stationClick.value = Event(data)
     }
 }

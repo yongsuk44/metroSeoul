@@ -9,6 +9,7 @@ interface LocalStationCoordinateBaseUseCase {
     suspend fun insertStationCoordinateData(items : List<DomainStationNameAndMapXY>)
     suspend fun getStationCoordinateAllData() : Flow<List<DomainStationNameAndMapXY>>
     suspend fun getStationCoordinateDataSize() : Flow<Int>
+    suspend fun getLocationNearStationList(lastX : Double , lastY :Double , km : Double) : Flow<List<DomainStationNameAndMapXY>>
 }
 
 class LocalStationCoordinateUseCase @Inject constructor(
@@ -23,4 +24,8 @@ class LocalStationCoordinateUseCase @Inject constructor(
 
     override suspend fun getStationCoordinateDataSize(): Flow<Int> =
         local.getStationCoordinateDataSize()
+
+    override suspend fun getLocationNearStationList(lastX : Double , lastY :Double , km : Double): Flow<List<DomainStationNameAndMapXY>> =
+        local.getLocationNearStationList(lastX, lastY, km)
+
 }

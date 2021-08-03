@@ -18,7 +18,6 @@ class MainActivity : BindActivity() {
         binding.apply {
             lifecycleOwner = this@MainActivity
         }
-
     }
 
 }

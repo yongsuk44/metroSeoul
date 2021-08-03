@@ -7,4 +7,6 @@ interface LocalStationCoordinatesRepository {
     suspend fun insertStationCoordinateData(items : List<DomainStationNameAndMapXY>)
     suspend fun getStationCoordinateAllData() : Flow<List<DomainStationNameAndMapXY>>
     suspend fun getStationCoordinateDataSize() : Flow<Int>
+
+    suspend fun getLocationNearStationList(lastX : Double , lastY :Double , km : Double) : Flow<List<DomainStationNameAndMapXY>>
 }

@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import com.young.data.AppDataBase
 import com.young.data.dao.FullRouteInformationDao
+import com.young.data.dao.LocationDao
 import com.young.data.dao.SubWayFacilitiesDao
 import com.young.data.repository.LocalSubWayFacilitiesRepositoryImpl
 import com.young.domain.repository.subwayfacilities.LocalSubWayFacilitiesRepository
@@ -20,7 +21,9 @@ class LocalModule {
     @Provides
     @Singleton
     fun provideRoomInstance(context : Application) : AppDataBase {
-        return Room.databaseBuilder(context , AppDataBase::class.java , "metroDB").build()
+        return Room.databaseBuilder(context , AppDataBase::class.java , "metroDB")
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides
@@ -32,6 +35,11 @@ class LocalModule {
     @Singleton
     fun provideFullRouteInformationDao(database : AppDataBase) : FullRouteInformationDao =
         database.fullRouteInformationDao()
+
+    @Provides
+    @Singleton
+    fun provideLocationDao(database : AppDataBase) : LocationDao =
+        database.locationDao()
 
 
 }

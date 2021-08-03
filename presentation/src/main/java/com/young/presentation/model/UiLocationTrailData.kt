@@ -7,19 +7,19 @@ data class UiLocationTrailData(
 
 data class LocationData(
     val lnCd: String,
-    val lonmAdr: String,
+    val lonmAdr: String?,
     val mapCordX: Double?,
     val mapCordY: Double?,
     val railOprIsttCd: String,
-    val roadNmAdr: String,
+    val roadNmAdr: String?,
     val stinCd: String,
     val stinLocLat: String?,
     val stinLocLon: String?,
     val stinNm: String,
     val stinNmEng: String,
     val stinNmJpn: String,
-    val stinNmRom: String,
+    val stinNmRom: String?,
     val stinNmSimpcina: String,
-    val stinNmTradcina: String,
+    val stinNmTradcina: String?,
     val strkZone: String?
 )

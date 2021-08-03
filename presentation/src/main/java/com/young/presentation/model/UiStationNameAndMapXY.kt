@@ -8,3 +8,11 @@ data class UiStationNameAndMapXY(
     val mapX : Double ,
     val mapY : Double
 )
+
+data class UiStationNameDistance(
+    val stinCd: String,
+    val trailCode: List<String>,
+    val lineCode: List<String>,
+    val stationName : String ,
+    val distance : Int
+)

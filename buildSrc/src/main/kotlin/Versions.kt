@@ -83,7 +83,7 @@ object Versions {
 
     const val gpsLocation  ="18.0.0"
 
-    const val  firebaseBom ="26.7.0"
+    const val firebaseBom ="28.3.0"
 
     const val ratingBar ="1.0.5"
 }

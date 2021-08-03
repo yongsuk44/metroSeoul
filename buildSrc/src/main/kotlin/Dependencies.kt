@@ -132,13 +132,25 @@ object AndroidLibraries {
     var exoMediasession =
         "com.google.android.exoplayer:extension-mediasession:${Versions.exoPlayer}"
 
-    const val googleService = "com.google.android.gms:play-services-location:${Versions.googleLocationService}"
-
     // Timber
     val timber = "com.jakewharton.timber:timber:${Versions.timber}"
 }
 
+object googleCloudeService {
+    const val googleService = "com.google.android.gms:play-services-location:${Versions.googleLocationService}"
+    const val googleBom = "com.google.firebase:firebase-bom:${Versions.firebaseBom}"
+    const val analytics = "com.google.firebase:firebase-analytics"
+    const val database = "com.google.firebase:firebase-database-ktx"
+
+}
+
 object LibraryList {
+    val firebaseLibrary = arrayListOf<String>().apply {
+        add(googleCloudeService.googleService)
+        add(googleCloudeService.analytics)
+        add(googleCloudeService.database)
+    }
+
     val appLibraries = arrayListOf<String>().apply {
         add(AndroidLibraries.kotlin)
         add(AndroidLibraries.appCompat)
@@ -153,7 +165,6 @@ object LibraryList {
         add(AndroidLibraries.fragment)
         add(AndroidLibraries.googleCore)
         add(AndroidLibraries.viewPager)
-        add(AndroidLibraries.googleService)
     }
 
     val exoLibrary = arrayListOf<String>().apply {

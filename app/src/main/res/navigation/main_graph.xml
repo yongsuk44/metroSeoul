@@ -17,10 +17,22 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_fragment_home_to_stationInformationDetailFragment"
+            app:destination="@id/stationInformationDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/locationListFragment"
         android:name="com.young.metro.ui.LocationListFragment"
         tools:layout="@layout/fragment_location_list"
-        android:label="LocationListFragment" />
+        android:label="LocationListFragment" >
+        <action
+            android:id="@+id/action_locationListFragment_to_stationInformationDetailFragment"
+            app:destination="@id/stationInformationDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/stationInformationDetailFragment"
+        android:name="com.young.metro.ui.StationInformationDetailFragment"
+        tools:layout="@layout/fragment_station_information_detail"
+        android:label="StationInformationDetailFragment" />
 </navigation>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.young.presentation.viewmodel.LocationViewModel" />
+
+        <variable
+            name="data"
+            type="com.young.presentation.model.UiStationNameDistance" />
+
+        <variable
+            name="adapter"
+            type="com.young.metro.adapter.LineLogoAdapter" />
+    </data>
+
+    <com.young.metro.ui.custom.CustomConstraintLayout
+        android:id="@+id/lo_item_location_near_station"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:onClick="@{() -> vm.onStationClick(data) }"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/white"
+        android:elevation="@dimen/defaultViewShadow"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:translationY="@dimen/defaultViewShadowTansY"
+        app:cornerRadius="10dp"
+        app:customStrokeColor="@color/black"
+        app:customStrokeWidth="1.5dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_item_location_near_line_logo"
+            onListAdapterSetting="@{adapter}"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:overScrollMode="never"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:orientation="horizontal"
+            android:transitionName="StationLineNumber"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="@id/tv_item_location_near_station_name"
+            app:layout_constraintEnd_toStartOf="@id/iv_item_location_near_station_next"
+            app:layout_constraintStart_toEndOf="@id/tv_item_location_near_station_name"
+            app:layout_constraintTop_toTopOf="@id/tv_item_location_near_station_name"
+            tools:listitem="@layout/item_line_logo" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_item_location_near_station_name"
+            style="@style/BlackTextViewMediumSize15"
+            android:layout_marginTop="15dp"
+            android:transitionName="StationName"
+            android:text="@{data.stationName}"
+            app:layout_constraintBottom_toTopOf="@id/tv_item_location_near_station_distance"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_item_location_near_station_distance"
+            style="@style/BlackTextViewMediumSize12"
+            StringPlusMeter="@{data.distance}"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_item_location_near_station_name" />
+
+        <com.young.metro.ui.custom.CircleImageView
+            android:id="@+id/iv_item_location_near_station_next"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="center"
+            app:cornerRadius="100dp"
+            app:customBackgroundColor="@color/white"
+            app:customStrokeColor="@color/black"
+            app:customStrokeWidth="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_arrow_next_black" />
+    </com.young.metro.ui.custom.CustomConstraintLayout>
+</layout>

@@ -7,6 +7,7 @@ plugins {
     id(GradlePluginId.kotlinKapt)
     id(GradlePluginId.kotlinAndroidExtensions)
     id(GradlePluginId.hilt)
+    id(GradlePluginId.googlePluginService)
 }
 
 val releaseKeystoreFile = rootProject.file("keystore.properties")
@@ -91,6 +92,9 @@ dependencies {
     implementation(project(Modules.dataremote))
     implementation(project(Modules.presentation))
     implementation(project(Modules.data))
+
+    implementation(platform(googleCloudeService.googleBom))
+    implementationList(LibraryList.firebaseLibrary)
 
     implementation(Libraries.lottie)
     implementation(AndroidLibraries.timber)

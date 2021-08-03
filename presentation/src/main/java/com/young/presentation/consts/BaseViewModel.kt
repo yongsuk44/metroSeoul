@@ -12,15 +12,23 @@ open class BaseViewModel : ViewModel() {
 
     val handler = CoroutineExceptionHandler { _, exception ->
         Timber.e(exception)
-        _loading.value = true
+        _loading.value = false
     }
 
-    private val _loading = MutableLiveData<Boolean>()
+    private val _loading = MutableLiveData<Boolean>(true)
     val loading : LiveData<Boolean>
         get() = _loading
 
+    private val _toastMsg = MutableLiveData<String>()
+    val toastMsg : LiveData<String>
+        get() = _toastMsg
+
     fun setLoadingValue(check : Boolean) {
         _loading.value = check
+    }
+
+    fun setToastMsg(value : String) {
+        _toastMsg.value = value
     }
 }
 

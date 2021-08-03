@@ -1,8 +1,8 @@
 package com.young.presentation
 
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.*
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
@@ -16,5 +16,14 @@ import org.mockito.junit.MockitoJUnitRunner
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
 class ExampleUnitTest {
+    @get:Rule
+    val rule = TestCoroutineRule()
 
+    @Test
+    fun test() {
+        rule.launch {
+
+        }
+
+    }
 }
