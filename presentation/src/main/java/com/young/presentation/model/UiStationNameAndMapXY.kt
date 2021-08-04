@@ -10,7 +10,7 @@ data class UiStationNameAndMapXY(
 )
 
 data class UiStationNameDistance(
-    val stinCd: String,
+    val stinCd: List<String>,
     val trailCode: List<String>,
     val lineCode: List<String>,
     val stationName : String ,

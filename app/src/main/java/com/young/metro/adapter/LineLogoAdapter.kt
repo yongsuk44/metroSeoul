@@ -23,7 +23,6 @@ class LineLogoAdapter: ListAdapter<String, BaseViewHolder<ItemLineLogoBinding>>(
         )
 
     override fun onBindViewHolder(holder: BaseViewHolder<ItemLineLogoBinding>, position: Int) {
-        Timber.d("test $position : ${getItem(position)}")
         holder.binding.data = getItem(position)
     }
 

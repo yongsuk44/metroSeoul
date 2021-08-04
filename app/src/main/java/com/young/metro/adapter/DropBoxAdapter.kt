@@ -2,6 +2,7 @@ package com.young.metro.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -23,9 +24,11 @@ class DropBoxAdapter(
         )
 
     override fun onBindViewHolder(holder: BaseViewHolder<ItemStationNameBinding>, position: Int) {
+        holder.binding.loItemStationName.animation = AnimationUtils.loadAnimation(holder.itemView.context , R.anim.anim_item_alpha)
         getItem(position).also {
             holder.binding.vm = vm
             holder.binding.data = it
+            holder.binding.adapter = LineLogoAdapter().apply { submitList(it.lnCd) }
         }
     }
 

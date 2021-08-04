@@ -2,12 +2,13 @@ package com.young.metro.ui
 
 import android.location.Geocoder
 import android.os.Bundle
+import android.os.Looper
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
@@ -65,17 +66,9 @@ class LocationListFragment : BaseFragment<FragmentLocationListBinding, LocationV
         viewModel.stationClick.observe(viewLifecycleOwner , EventObserver {
 
             findNavController().navigate(
-                R.id.action_locationListFragment_to_stationInformationDetailFragment ,
-                Bundle().apply {
-                    putString("StationName" , requireView().transitionName)
-                    putString("StationLineNumber" , requireView().transitionName)
-                    putString("stinCode" , it.stinCd)
-                }
+                R.id.action_locationListFragment_to_stationInformationDetailFragment
             )
         })
-    }
-
-    override fun conversionFragment() {
     }
 
     private fun getFireBaseStationNameAndMapXyData() {
@@ -105,24 +98,28 @@ class LocationListFragment : BaseFragment<FragmentLocationListBinding, LocationV
         try {
             LocationServices.getFusedLocationProviderClient(requireContext()).run {
                 lastLocation.addOnSuccessListener { location ->
-                    Geocoder(requireContext(), Locale.KOREAN).getFromLocation(
-                        location.latitude,
-                        location.longitude,
-                        2
-                    )?.also { address ->
-                        when (address.size) {
-                            1 -> {
-                                viewModel.setNowLocation(address[0].latitude, address[0].longitude)
-                            }
+                    if (location == null) {
+                        throw SecurityException("Location Data를 얻지 못함")
+                    } else {
+                        Geocoder(requireContext(), Locale.KOREAN).getFromLocation(
+                            location.latitude,
+                            location.longitude,
+                            2
+                        )?.also { address ->
+                            when (address.size) {
+                                1 -> {
+                                    viewModel.setNowLocation(address[0].latitude, address[0].longitude)
+                                }
 
-                            2 -> {
-                                viewModel.setNowLocation(
-                                    listOf(address[0].latitude, address[1].latitude).average(),
-                                    listOf(address[0].longitude, address[1].longitude).average()
-                                )
-                            }
+                                2 -> {
+                                    viewModel.setNowLocation(
+                                        listOf(address[0].latitude, address[1].latitude).average(),
+                                        listOf(address[0].longitude, address[1].longitude).average()
+                                    )
+                                }
 
-                            else -> showToast(R.string.toast_location_data_failed)
+                                else -> showToast(R.string.toast_location_data_failed)
+                            }
                         }
                     }
                 }.addOnFailureListener { e ->
@@ -137,4 +134,5 @@ class LocationListFragment : BaseFragment<FragmentLocationListBinding, LocationV
             showToast(R.string.toast_location_data_failed)
         }
     }
+
 }

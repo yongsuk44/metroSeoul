@@ -1,4 +1,4 @@
-package com.young.domain.usecase.info.information
+package com.young.domain.usecase.info.information.local
 
 import com.young.domain.model.AllRouteInformation
 import com.young.domain.repository.information.local.LocalFullRouteInformationRepository

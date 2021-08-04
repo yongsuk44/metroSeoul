@@ -4,9 +4,9 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.young.domain.usecase.info.information.LocalGetFullRouteInformationUseCase
-import com.young.domain.usecase.info.information.LocalInsertFullRouteInformationUseCase
-import com.young.domain.usecase.info.information.RemoteFullRouteInformationUseCase
+import com.young.domain.usecase.info.information.local.LocalGetFullRouteInformationUseCase
+import com.young.domain.usecase.info.information.local.LocalInsertFullRouteInformationUseCase
+import com.young.domain.usecase.info.information.remote.RemoteFullRouteInformationUseCase
 import com.young.presentation.R
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.consts.Event
@@ -27,6 +27,10 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
     private val localGetUseCase: LocalGetFullRouteInformationUseCase,
     private val resourceProvider: ResourceProvider
 ) : BaseViewModel(), FullRouteInformationCase {
+
+    private val _failedInformationData = MutableLiveData<Boolean>(false)
+    val failedInformationData: LiveData<Boolean>
+        get() = _failedInformationData
 
     private val _fullRouteInformation = MutableLiveData<List<AllRouteInformation>>()
     val fullRouteInformation: LiveData<List<AllRouteInformation>>
@@ -63,8 +67,7 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
             .flowOn(Dispatchers.IO)
             .catch { e ->
                 Timber.e(e)
-            }.onCompletion {
-                setLoadingValue(false)
+                _failedInformationData.value = true
             }.collect {
                 getLocalFullRouteInformation()
             }
@@ -74,11 +77,11 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
         localGetUseCase.invoke(Unit)
             .map {
                 it.DomainToUi()
-            }.flowOn(Dispatchers.IO)
+            }
+            .flowOn(Dispatchers.IO)
             .catch { e ->
                 Timber.e(e)
-            }.onCompletion {
-                setLoadingValue(false)
+                _failedInformationData.value = true
             }.collect {
                 _fullRouteInformation.value = it
             }

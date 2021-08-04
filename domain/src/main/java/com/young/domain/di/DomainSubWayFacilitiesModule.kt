@@ -9,15 +9,16 @@ import com.young.domain.repository.information.remote.RemoteSubWayTelRepository
 import com.young.domain.repository.information.remote.RemoteTrailTimeTableRepository
 import com.young.domain.repository.subwayfacilities.LocalSubWayFacilitiesRepository
 import com.young.domain.repository.subwayfacilities.RemoteSubWayFacilitiesRepository
-import com.young.domain.usecase.info.information.LocalGetFullRouteInformationUseCase
-import com.young.domain.usecase.info.information.LocalInsertFullRouteInformationUseCase
+import com.young.domain.usecase.info.information.local.LocalGetFullRouteInformationUseCase
+import com.young.domain.usecase.info.information.local.LocalGetStationDataUseCase
+import com.young.domain.usecase.info.information.local.LocalInsertFullRouteInformationUseCase
+import com.young.domain.usecase.info.information.remote.RemoteFullRouteInformationUseCase
+import com.young.domain.usecase.info.information.remote.RemoteGetFullRouteInformationUseCase
 import com.young.domain.usecase.info.location.GetLocationUseCase
-import com.young.domain.usecase.info.information.RemoteFullRouteInformationUseCase
-import com.young.domain.usecase.info.information.RemoteGetFullRouteInformationUseCase
 import com.young.domain.usecase.info.location.LocalStationCoordinateUseCase
+import com.young.domain.usecase.info.telnumber.RemoteGetSubWayTelUseCase
 import com.young.domain.usecase.info.timetable.RemoteGetTimeTableUseCaseImpl
 import com.young.domain.usecase.info.timetable.RemoteTimeTableUseCase
-import com.young.domain.usecase.info.telnumber.RemoteGetSubWayTelUseCase
 import com.young.domain.usecase.subwayfacilities.local.GetSizeTableDataUseCase
 import com.young.domain.usecase.subwayfacilities.local.InsertSubWayFacilitiesDataUseCase
 import com.young.domain.usecase.subwayfacilities.local.LocalGetSubWayFacilitiesDataUseCase
@@ -106,4 +107,10 @@ object DomainSubWayFacilitiesModule {
     fun provideGetLocalFullRouteInformation(
         local: LocalFullRouteInformationRepository
     ) = LocalGetFullRouteInformationUseCase(local)
+
+    @Provides
+    @Reusable
+    fun provideGetLocalStationData(
+        local: LocalFullRouteInformationRepository
+    ) = LocalGetStationDataUseCase(local)
 }

@@ -24,8 +24,4 @@ class SplashFragment : BaseFragment<FragmentSplashBinding , LocationViewModel>()
     override fun observerLiveData() {
 
     }
-
-    override fun conversionFragment() {
-
-    }
 }

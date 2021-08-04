@@ -2,25 +2,18 @@ package com.young.presentation.modelfunction
 
 interface DetailStationInformationViewFunction {
 
-    fun loadSubWayTelData(key: String)
-    suspend fun getSubWayTelData(key: String)
+    fun getStationData(stinCodes : List<String>)
 
-    suspend fun getConvenienceInformation(
+    fun getSubWayTelData(key: String)
+
+    fun getConvenienceInformation(
         key: String,
         lineCode: String,
         trailCode: String,
         stationCode: String
     )
 
-    fun loadTrailTimeTableData(
-        key: String,
-        railCode: String,
-        dayCd: String,
-        lineCode: String,
-        stationCode: String
-    )
-
-    suspend fun getTrailTimetables(
+    fun getTrailTimetables(
         key: String,
         railCode: String,
         dayCd: String,

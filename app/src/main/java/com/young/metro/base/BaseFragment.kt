@@ -26,7 +26,6 @@ abstract class BaseFragment<B : ViewDataBinding, V : ViewModel> : Fragment() {
 
     abstract fun initBinding()
     abstract fun observerLiveData()
-    abstract fun conversionFragment()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return performDataBinding(inflater, container)
@@ -41,7 +40,6 @@ abstract class BaseFragment<B : ViewDataBinding, V : ViewModel> : Fragment() {
         }
 
         initBinding()
-        conversionFragment()
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {

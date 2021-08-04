@@ -117,9 +117,8 @@ class LocationViewModel @ViewModelInject constructor(
                             }.map {
                                 it.value.run {
                                     if (size >= 2) {
-
                                         UiStationNameDistance(
-                                            first().stinCd,
+                                            map { it.stinCd },
                                             map { it.trailCodeAndLineCode.railOprIsttCd },
                                             map { it.trailCodeAndLineCode.lnCd },
                                             first().stationName,
@@ -128,7 +127,7 @@ class LocationViewModel @ViewModelInject constructor(
                                     } else {
                                         first().run {
                                             UiStationNameDistance(
-                                                stinCd,
+                                                listOf(stinCd),
                                                 listOf(trailCodeAndLineCode.railOprIsttCd),
                                                 listOf(trailCodeAndLineCode.lnCd),
                                                 first().stationName,

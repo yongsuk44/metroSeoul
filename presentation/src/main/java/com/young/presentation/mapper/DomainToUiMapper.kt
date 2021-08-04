@@ -8,6 +8,7 @@ import com.young.domain.model.ConvenienceInformationBody
 import com.young.domain.model.Header
 import com.young.domain.model.TimeTableBody
 import com.young.presentation.model.*
+import timber.log.Timber
 
 object DomainToUiMapper {
     fun DomainTrailTimeTable.DomaionToUi(): UiTrailTimeTable {
@@ -43,13 +44,44 @@ object DomainToUiMapper {
     }
 
     fun List<AllRouteInformation>.DomainToUi(): List<com.young.presentation.model.AllRouteInformation> {
-        val bodyMapper = BaseMapper(
-            AllRouteInformation::class,
-            com.young.presentation.model.AllRouteInformation::class
-        )
+//        val bodyMapper = BaseMapper(
+//            AllRouteInformation::class,
+//            com.young.presentation.model.AllRouteInformation::class
+//        )
+//
+//        BaseMapper.setList(bodyMapper).run {
+//            return this(this@DomainToUi)
+//        }
+        return this.groupBy {
+            it.stinNm
+        }.map {
+            it.value.run {
 
-        BaseMapper.setList(bodyMapper).run {
-            return this(this@DomainToUi)
+                if (this.size >= 2) {
+                    com.young.presentation.model.AllRouteInformation(
+                        first().mreaWideCd,
+                        this.map { it.railOprIsttCd },
+                        first().routCd,
+                        first().routNm,
+                        this.map { it.lnCd },
+                        this.map { it.stinCd },
+                        first().stinConsOrdr,
+                        first().stinNm,
+                    )
+                } else {
+                    com.young.presentation.model.AllRouteInformation(
+                        first().mreaWideCd,
+                        listOf(first().railOprIsttCd),
+                        first().routCd,
+                        first().routNm,
+                        listOf(first().lnCd),
+                        listOf(first().stinCd),
+                        first().stinConsOrdr,
+                        first().stinNm,
+                    )
+                }
+
+            }
         }
     }
 

@@ -1,4 +1,4 @@
-package com.young.domain.usecase.info.information
+package com.young.domain.usecase.info.information.remote
 
 import com.young.domain.model.DomainAllRouteInformation
 import com.young.domain.model.DomainConvenienceInformation

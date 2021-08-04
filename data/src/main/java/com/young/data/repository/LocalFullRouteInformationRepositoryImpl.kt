@@ -4,6 +4,7 @@ import android.util.Log
 import com.young.data.dao.FullRouteInformationDao
 import com.young.data.mapper.LocalToDomainMapper.DomainToLocal
 import com.young.data.mapper.LocalToDomainMapper.LocalToDomain
+import com.young.data.model.FullRouteInformation
 import com.young.data.model.LocalTrailCodeAndLineCode
 import com.young.domain.mapper.BaseMapper
 import com.young.domain.model.AllRouteInformation
@@ -34,22 +35,28 @@ class LocalFullRouteInformationRepositoryImpl @Inject constructor(
         }
     }
 
-        override suspend fun getAllData(): Flow<List<AllRouteInformation>> =
-            flowOf(dao.getAllData())
-                .map {
-                    it.map { it.LocalToDomain() }
-                }
+    override suspend fun getAllData(): Flow<List<AllRouteInformation>> =
+        flowOf(dao.getAllData())
+            .map {
+                it.map { it.LocalToDomain() }
+            }
 
-        override suspend fun getDataSize(): Flow<Int> =
-            flowOf(dao.getDataSize())
+    override suspend fun getDataSize(): Flow<Int> =
+        flowOf(dao.getDataSize())
 
-        override suspend fun getTrailCodeAllData(): Flow<List<DomainTrailCodeAndLineCode>> =
-            flowOf(dao.getTrailCodeAllData())
-                .map {
-                    BaseMapper.setList(BaseMapper<LocalTrailCodeAndLineCode, DomainTrailCodeAndLineCode>())
-                        .run {
-                            this(it)
-                        }
-                }
+    override suspend fun getTrailCodeAllData(): Flow<List<DomainTrailCodeAndLineCode>> =
+        flowOf(dao.getTrailCodeAllData())
+            .map {
+                BaseMapper.setList(BaseMapper<LocalTrailCodeAndLineCode, DomainTrailCodeAndLineCode>())
+                    .run {
+                        this(it)
+                    }
+            }
 
-    }
+    override suspend fun getStationData(stinCode : List<String>): Flow<List<AllRouteInformation>> =
+        flowOf(dao.getStationData(stinCode))
+            .map {
+                it.map { it.LocalToDomain() }
+            }
+
+}

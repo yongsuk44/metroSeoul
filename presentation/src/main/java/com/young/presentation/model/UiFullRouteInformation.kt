@@ -19,11 +19,11 @@ data class UiAllRouteInformation(
 
 data class AllRouteInformation(
     val mreaWideCd: String?,
-    val railOprIsttCd: String,
+    val railOprIsttCd: List<String>,
     val routCd: String,
     val routNm: String?,
-    val lnCd: String,
-    val stinCd: String,
+    val lnCd: List<String>,
+    val stinCd: List<String>,
     val stinConsOrdr: String,
     val stinNm: String
 )
