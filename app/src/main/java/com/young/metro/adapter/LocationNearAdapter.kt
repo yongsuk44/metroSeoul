@@ -16,18 +16,16 @@ class LocationNearAdapter(
     val vm : LocationViewModel
 ) : ListAdapter<UiStationNameDistance , BaseViewHolder<ItemLocationNearStationBinding>>(diffCallBack) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<ItemLocationNearStationBinding> =
-        BaseViewHolder(
-            DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context) , R.layout.item_location_near_station , parent , false
-            )
-        )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<ItemLocationNearStationBinding> {
+        return  BaseViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_location_near_station, parent, false))
+    }
 
     override fun onBindViewHolder(holder: BaseViewHolder<ItemLocationNearStationBinding>, position: Int) {
         holder.binding.loItemLocationNearStation.animation = AnimationUtils.loadAnimation(holder.itemView.context , R.anim.anim_item_scale)
         holder.binding.vm = vm
         holder.binding.data = getItem(position)
         holder.binding.adapter = LineLogoAdapter().apply { submitList(getItem(position).lineCode) }
+        holder.binding.position = position
     }
 
     companion object {

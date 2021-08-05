@@ -3,11 +3,17 @@ package com.young.metro.ui
 import android.location.Geocoder
 import android.os.Bundle
 import android.os.Looper
+import android.transition.TransitionInflater
+import android.view.View
+import android.widget.TextView
+import androidx.core.view.doOnPreDraw
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -20,6 +26,8 @@ import com.young.metro.adapter.LocationNearAdapter
 import com.young.metro.base.BaseFragment
 import com.young.metro.base.showToast
 import com.young.metro.databinding.FragmentLocationListBinding
+import com.young.metro.util.toTransitionGroup
+import com.young.metro.util.waitForTransition
 import com.young.presentation.consts.EventObserver
 import com.young.presentation.model.UiStationNameAndMapXY
 import com.young.presentation.viewmodel.LocationViewModel
@@ -47,7 +55,7 @@ class LocationListFragment : BaseFragment<FragmentLocationListBinding, LocationV
     override fun initBinding() {
         viewDataBinding.lottieLoading.playAnimation()
         getLastLocationServiceData()
-        viewDataBinding.rvLocationNearStation.adapter = adapter
+        viewDataBinding.rvLocationNearStation.adapter = this@LocationListFragment.adapter
     }
 
     override fun observerLiveData() {
@@ -61,14 +69,25 @@ class LocationListFragment : BaseFragment<FragmentLocationListBinding, LocationV
 
         viewModel.stationNameAndMapXY.observe(viewLifecycleOwner) {
             adapter.submitList(it)
+            waitForTransition(viewDataBinding.rvLocationNearStation)
         }
 
         viewModel.stationClick.observe(viewLifecycleOwner , EventObserver {
+            val holderBinding = viewDataBinding.rvLocationNearStation.findViewHolderForLayoutPosition(viewModel.selectPosition.value ?: 0)?.itemView ?: return@EventObserver
+            val extras = FragmentNavigatorExtras(
+                holderBinding.findViewById<RecyclerView>(R.id.rv_item_location_near_line_logo).toTransitionGroup(),
+                holderBinding.findViewById<TextView>(R.id.tv_item_location_near_station_name).toTransitionGroup()
+            )
 
             findNavController().navigate(
-                R.id.action_locationListFragment_to_stationInformationDetailFragment
+                LocationListFragmentDirections.actionLocationListFragmentToStationInformationDetailFragment(it.stinCd.toTypedArray() , it.stationName),
+                extras
             )
         })
+    }
+
+    override fun transitionBind() {
+
     }
 
     private fun getFireBaseStationNameAndMapXyData() {
@@ -134,5 +153,4 @@ class LocationListFragment : BaseFragment<FragmentLocationListBinding, LocationV
             showToast(R.string.toast_location_data_failed)
         }
     }
-
 }

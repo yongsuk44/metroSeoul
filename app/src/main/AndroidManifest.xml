@@ -21,7 +21,8 @@
         android:theme="@style/Theme.Metro">
         <activity android:name=".ui.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="fullSensor">
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -23,6 +23,7 @@ object GradlePluginId {
     const val hilt = "dagger.hilt.android.plugin"
 
     const val googlePluginService = "com.google.gms.google-services"
+    const val safeArgs = "androidx.navigation.safeargs.kotlin"
 }
 
 

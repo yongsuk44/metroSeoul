@@ -5,6 +5,11 @@ import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.young.metro.adapter.LineLogoAdapter
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.*
 
 @BindingAdapter("setDataCheckVisible")
 fun setDataVisibleApply(view: View, data: Any?) {
@@ -18,9 +23,9 @@ fun setDataVisibleApply(view: View, data: Any?) {
 }
 
 @BindingAdapter("onListAdapterSetting")
-fun setAdapterSetting(view : RecyclerView , adapter : LineLogoAdapter) {
+fun setAdapterSetting(view: RecyclerView, adapter: LineLogoAdapter) {
     view.adapter = adapter
 }
 
 fun Int?.ZeroOrNull() = this != null && this != 0
-fun String.equlesDataToInt(value : String) : Int = if (this == value) 1 else 0
+fun String.equlesDataToInt(value: String): Int = if (this == value) 1 else 0

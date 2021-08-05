@@ -8,6 +8,7 @@ plugins {
     id(GradlePluginId.kotlinAndroidExtensions)
     id(GradlePluginId.hilt)
     id(GradlePluginId.googlePluginService)
+    id(GradlePluginId.safeArgs)
 }
 
 val releaseKeystoreFile = rootProject.file("keystore.properties")

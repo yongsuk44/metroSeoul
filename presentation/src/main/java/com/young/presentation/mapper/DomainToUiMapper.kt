@@ -1,6 +1,7 @@
 package com.young.presentation.mapper
 
 import android.location.Geocoder
+import android.location.Location
 import com.young.domain.mapper.BaseMapper
 import com.young.domain.model.*
 import com.young.domain.model.AllRouteInformation
@@ -44,14 +45,6 @@ object DomainToUiMapper {
     }
 
     fun List<AllRouteInformation>.DomainToUi(): List<com.young.presentation.model.AllRouteInformation> {
-//        val bodyMapper = BaseMapper(
-//            AllRouteInformation::class,
-//            com.young.presentation.model.AllRouteInformation::class
-//        )
-//
-//        BaseMapper.setList(bodyMapper).run {
-//            return this(this@DomainToUi)
-//        }
         return this.groupBy {
             it.stinNm
         }.map {
@@ -125,5 +118,47 @@ object DomainToUiMapper {
             mapY = mapY,
             trailCodeAndLineCode = UiTrailCodeAndLineCode(trailCodeAndLineCode.railOprIsttCd,trailCodeAndLineCode.lnCd)
         )
+    }
+
+    fun List<DomainStationNameAndMapXY>.DomainToUiDistance(nowLocationLatitude: Double,nowLocationLongitude: Double) : List<UiStationNameDistance> {
+        return groupBy {
+            it.mapX to it.mapY
+        }.map {
+            it.value.run {
+                if (size >= 2) {
+                    UiStationNameDistance(
+                        map { it.stinCd },
+                        map { it.trailCodeAndLineCode.railOprIsttCd },
+                        map { it.trailCodeAndLineCode.lnCd },
+                        first().stationName,
+                        getStartPosEndPosDistanceData(nowLocationLatitude,nowLocationLongitude,first().mapX, first().mapY)
+                    )
+                } else {
+                    first().run {
+                        UiStationNameDistance(
+                            listOf(stinCd),
+                            listOf(trailCodeAndLineCode.railOprIsttCd),
+                            listOf(trailCodeAndLineCode.lnCd),
+                            first().stationName,
+                            getStartPosEndPosDistanceData(nowLocationLatitude,nowLocationLongitude,first().mapX, first().mapY)
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    fun getStartPosEndPosDistanceData(nowLocationLatitude : Double , nowLocationLongitude : Double , x: Double, y: Double): Int {
+        val start = Location("").apply {
+            latitude = nowLocationLatitude
+            longitude = nowLocationLongitude
+        }
+
+        val end = Location("").apply {
+            latitude = x
+            longitude = y
+        }
+
+        return start.distanceTo(end).toInt()
     }
 }

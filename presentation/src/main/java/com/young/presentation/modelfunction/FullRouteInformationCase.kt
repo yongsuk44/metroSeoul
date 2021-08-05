@@ -8,6 +8,6 @@ interface FullRouteInformationCase {
     suspend fun getLocalFullRouteInformation()
 
     fun onSearchEditViewClick(value : Boolean)
-    fun onStationClick(item : AllRouteInformation)
+    fun onStationClick(item : AllRouteInformation , position : Int)
     fun onSearchEditViewClear()
 }

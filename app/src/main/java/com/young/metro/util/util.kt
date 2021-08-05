@@ -7,8 +7,22 @@ import android.os.Parcelable
 import android.util.Patterns
 import android.view.View
 import androidx.annotation.RequiresApi
+import androidx.core.view.doOnPreDraw
+import androidx.databinding.BindingAdapter
+import androidx.fragment.app.Fragment
 import com.young.metro.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.ObsoleteCoroutinesApi
+import kotlinx.coroutines.channels.actor
 
+
+fun Fragment.waitForTransition(view : View) {
+    postponeEnterTransition()
+    view.doOnPreDraw { startPostponedEnterTransition() }
+}
+
+fun View.toTransitionGroup() = this to transitionName
 
 fun Int?.ZeroOrNull() = this != null && this != 0
 fun Int?.intNullCheck() = this != null

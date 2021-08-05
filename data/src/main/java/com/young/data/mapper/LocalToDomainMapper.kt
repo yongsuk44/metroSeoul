@@ -20,7 +20,7 @@ object LocalToDomainMapper {
             routCd = routCd,
             routNm = routNm,
             stinConsOrdr = stinConsOrdr,
-            stinNm = stinNm
+            stinNm = if (stinNm.contains("복정")) "복정" else stinNm
         )
     }
 

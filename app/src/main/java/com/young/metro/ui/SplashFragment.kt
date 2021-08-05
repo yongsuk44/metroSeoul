@@ -1,5 +1,6 @@
 package com.young.metro.ui
 
+import android.view.View
 import androidx.fragment.app.viewModels
 import com.young.metro.BR
 import com.young.metro.R
@@ -22,6 +23,10 @@ class SplashFragment : BaseFragment<FragmentSplashBinding , LocationViewModel>()
     }
 
     override fun observerLiveData() {
+
+    }
+
+    override fun transitionBind() {
 
     }
 }

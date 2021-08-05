@@ -11,6 +11,7 @@ import com.young.domain.usecase.info.location.LocalStationCoordinateUseCase
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.consts.Event
 import com.young.presentation.mapper.DomainToUiMapper.DomainToUi
+import com.young.presentation.mapper.DomainToUiMapper.DomainToUiDistance
 import com.young.presentation.mapper.DomainToUiMapper.UiToDomain
 import com.young.presentation.model.UiStationNameAndMapXY
 import com.young.presentation.model.UiStationNameDistance
@@ -29,8 +30,7 @@ interface LocationViewModelFunction {
     fun loadAddressDataSize()
     fun insertAllStationNameAndMapXYData(items: List<UiStationNameAndMapXY>)
     fun getLocationNearStationList()
-    fun getStartPosEndPosDistanceData(x: Double, y: Double): Int
-    fun onStationClick(data : UiStationNameDistance)
+    fun onStationClick(data : UiStationNameDistance , position: Int)
 }
 
 @ExperimentalCoroutinesApi
@@ -63,6 +63,10 @@ class LocationViewModel @ViewModelInject constructor(
     private val _stationClick = MutableLiveData<Event<UiStationNameDistance>>()
     val stationClick: LiveData<Event<UiStationNameDistance>>
         get() = _stationClick
+
+    private val _selectPosition = MutableLiveData<Int>()
+    val selectPosition: LiveData<Int>
+        get() = _selectPosition
 
     override fun setNowLocation(latitude: Double, longitude: Double) {
         _nowLocationLatitude.value = latitude
@@ -104,39 +108,10 @@ class LocationViewModel @ViewModelInject constructor(
         viewModelScope.launch(handler) {
             if (nowLocationLatitude.value != null && nowLocationLongitude.value != null) {
 
-                coordinateUseCase.getLocationNearStationList(
-                    nowLocationLatitude.value!!,
-                    nowLocationLongitude.value!!,
-                    3.0
-                )
+                coordinateUseCase.getLocationNearStationList(nowLocationLatitude.value!!, nowLocationLongitude.value!!, 3.0)
                     .transform {
-
                         emit(
-                            it.groupBy {
-                                it.mapX to it.mapY
-                            }.map {
-                                it.value.run {
-                                    if (size >= 2) {
-                                        UiStationNameDistance(
-                                            map { it.stinCd },
-                                            map { it.trailCodeAndLineCode.railOprIsttCd },
-                                            map { it.trailCodeAndLineCode.lnCd },
-                                            first().stationName,
-                                            getStartPosEndPosDistanceData(first().mapX, first().mapY)
-                                        )
-                                    } else {
-                                        first().run {
-                                            UiStationNameDistance(
-                                                listOf(stinCd),
-                                                listOf(trailCodeAndLineCode.railOprIsttCd),
-                                                listOf(trailCodeAndLineCode.lnCd),
-                                                first().stationName,
-                                                getStartPosEndPosDistanceData(first().mapX, first().mapY)
-                                            )
-                                        }
-                                    }
-                                }
-                            }
+                            it.DomainToUiDistance(nowLocationLatitude.value!! , nowLocationLongitude.value!!)
                         )
                     }
                     .flowOn(Dispatchers.IO)
@@ -153,21 +128,8 @@ class LocationViewModel @ViewModelInject constructor(
         }
     }
 
-    override fun getStartPosEndPosDistanceData(x: Double, y: Double): Int {
-        val start = Location("").apply {
-            latitude = nowLocationLatitude.value!!
-            longitude = nowLocationLongitude.value!!
-        }
-
-        val end = Location("").apply {
-            latitude = x
-            longitude = y
-        }
-
-        return start.distanceTo(end).toInt()
-    }
-
-    override fun onStationClick(data: UiStationNameDistance) {
+    override fun onStationClick(data: UiStationNameDistance , position : Int) {
+        _selectPosition.value = position
         _stationClick.value = Event(data)
     }
 }

@@ -11,6 +11,7 @@ buildscript {
         classpath(GradleClasspath.hiltGradlePlugin)
         classpath(GradleClasspath.googleService)
         classpath(GradleClasspath.googleCrashlytics)
+        classpath(GradleClasspath.safeArgs)
     }
 }
 

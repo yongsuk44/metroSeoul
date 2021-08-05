@@ -48,6 +48,12 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
     val searchEditViewClick: LiveData<Event<Boolean>>
         get() = _searchEditViewClick
 
+    private val _selectPosition = MutableLiveData<Int>()
+    val selectPosition: LiveData<Int>
+
+        get() = _selectPosition
+
+
     override fun loadFullRouteInformation() {
         viewModelScope.launch(handler) {
             localGetUseCase.getDataSize().take(1).flowOn(Dispatchers.IO).collect { size ->
@@ -91,7 +97,8 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
         _searchEditViewClick.value = Event(value)
     }
 
-    override fun onStationClick(item: AllRouteInformation) {
+    override fun onStationClick(item: AllRouteInformation , position : Int) {
+        _selectPosition.value = position
         _searchActionStation.value = Event(item)
     }
 

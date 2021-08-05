@@ -11,19 +11,23 @@
         <variable
             name="adapter"
             type="com.young.metro.adapter.LineLogoAdapter" />
+        <variable
+            name="position"
+            type="Integer" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lo_item_station_name"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> vm.onStationClick(data)}">
+        android:onClick="@{() -> vm.onStationClick(data , position)}">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/item_tv_station_name"
+            android:id="@+id/tv_item_search_station_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="15sp"
+            android:transitionName="@{@string/transition_station_name(data.stinNm)}"
             android:text="@{data.stinNm}"
             android:textColor="@color/black"
             android:layout_marginTop="10dp"
@@ -35,6 +39,7 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_item_station_search_line_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -42,10 +47,11 @@
             android:orientation="horizontal"
             onListAdapterSetting="@{adapter}"
             android:overScrollMode="never"
+            android:transitionName="@{@string/transition_station_line_number(data.stinNm)}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintTop_toTopOf="@id/item_tv_station_name"
-            app:layout_constraintBottom_toBottomOf="@id/item_tv_station_name"
-            app:layout_constraintStart_toEndOf="@id/item_tv_station_name"/>
+            app:layout_constraintTop_toTopOf="@id/tv_item_search_station_name"
+            app:layout_constraintBottom_toBottomOf="@id/tv_item_search_station_name"
+            app:layout_constraintStart_toEndOf="@id/tv_item_search_station_name"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

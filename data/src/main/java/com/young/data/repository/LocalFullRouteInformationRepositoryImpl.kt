@@ -21,7 +21,9 @@ class LocalFullRouteInformationRepositoryImpl @Inject constructor(
 
         val data = flowOf(param)
             .map {
-                it.map { it.DomainToLocal() }
+                it.map {
+                    it.DomainToLocal()
+                }
             }.single()
 
         dao.insertSubWayFacilitiesData(data)
