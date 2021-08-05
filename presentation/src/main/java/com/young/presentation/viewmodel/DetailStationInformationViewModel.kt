@@ -5,43 +5,42 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.young.domain.mapper.BaseMapper
+import com.young.domain.model.DomainPlatformEntrance
 import com.young.domain.model.DomainSubWayTel
-import com.young.domain.usecase.info.information.local.LocalGetStationDataUseCase
-import com.young.domain.usecase.info.information.remote.RemoteFullRouteInformationUseCase
-import com.young.domain.usecase.info.telnumber.RemoteGetSubWayTelUseCase
-import com.young.domain.usecase.info.timetable.RemoteTimeTableUseCase
+import com.young.domain.usecase.info.basic.local.LocalGetStationDataUseCase
+import com.young.domain.usecase.info.basic.remote.RemoteFullRouteInformationUseCase
+import com.young.domain.usecase.info.detail.platformentrance.PlatformEntranceUseCase
+import com.young.domain.usecase.info.detail.telnumber.RemoteGetSubWayTelUseCase
+import com.young.domain.usecase.info.detail.timetable.RemoteTimeTableUseCase
+import com.young.presentation.R
 import com.young.presentation.consts.BaseViewModel
+import com.young.presentation.consts.ResourceProvider
 import com.young.presentation.mapper.DomainToUiMapper.DomainToUi
 import com.young.presentation.mapper.DomainToUiMapper.DomaionToUi
-import com.young.presentation.model.AllRouteInformation
-import com.young.presentation.model.UiConvenienceInformation
-import com.young.presentation.model.UiSubWayTel
-import com.young.presentation.model.UiTrailTimeTable
+import com.young.presentation.model.*
 import com.young.presentation.modelfunction.DetailStationInformationViewFunction
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-
+@FlowPreview
+@ExperimentalCoroutinesApi
 class DetailStationInformationViewModel @ViewModelInject constructor(
+    private val provider: ResourceProvider,
     private val telUseCase: RemoteGetSubWayTelUseCase,
-    private val timeTableUseCase: RemoteTimeTableUseCase,
-    private val allInformationUseCase: RemoteFullRouteInformationUseCase ,
     private val stationDataUseCase: LocalGetStationDataUseCase
 ) : BaseViewModel(), DetailStationInformationViewFunction {
 
-    private val _selectStationData = MutableLiveData<AllRouteInformation>()
-    val selectStationData : LiveData<AllRouteInformation>
+    private val _selectStationData = MutableLiveData<List<IndexAllRouteInformation>>()
+    val selectStationData : LiveData<List<IndexAllRouteInformation>>
         get() = _selectStationData
 
-    private val _convenienceInformation = MutableLiveData<UiConvenienceInformation>()
-    val convenienceInformation: LiveData<UiConvenienceInformation>
-        get() = _convenienceInformation
-
-    private val _timeTableData = MutableLiveData<UiTrailTimeTable>()
-    val timeTableData: LiveData<UiTrailTimeTable>
-        get() = _timeTableData
+    private val _selectLineCodePositionChange = MutableLiveData<Int>(0)
+    val selectLineCodePositionChange : LiveData<Int>
+        get() = _selectLineCodePositionChange
 
     private val _subWayTelData = MutableLiveData<List<UiSubWayTel>>()
     val subWayTelData: LiveData<List<UiSubWayTel>>
@@ -51,56 +50,20 @@ class DetailStationInformationViewModel @ViewModelInject constructor(
         viewModelScope.launch(handler) {
             stationDataUseCase(stinCodes)
                 .map {
-                    it.DomainToUi()
+                    it.map { it.DomainToUi() }
                 }
                 .flowOn(Dispatchers.IO)
                 .catch { e ->
                     Timber.e(e)
                 }.collect {
-                    _selectStationData.value = it.first()
+                    _selectStationData.value = it
                 }
         }
     }
 
-    override fun getTrailTimetables(key: String, railCode: String, dayCd: String, lineCode: String, stationCode: String) {
-        viewModelScope.launch(handler) {
-            timeTableUseCase.getTrailTimetables(key, railCode, dayCd, lineCode, stationCode)
-                .map {
-                    it.DomaionToUi()
-                }
-                .flowOn(Dispatchers.IO)
-                .catch { e ->
-                    Timber.e(e)
-                }
-                .onCompletion {
-                    setLoadingValue(false)
-                }
-                .collect {
-                    _timeTableData.value = it
-                }
-        }
-    }
-
-    override fun getConvenienceInformation(key: String, lineCode: String, trailCode: String, stationCode: String) {
-        viewModelScope.launch(handler) {
-            allInformationUseCase.getConvenienceInformation(key, lineCode, trailCode, stationCode)
-                .map {
-                    it.DomainToUi()
-                }
-                .flowOn(Dispatchers.IO)
-                .catch { e ->
-                    Timber.e(e)
-                }.onCompletion {
-                    setLoadingValue(false)
-                }.collect {
-                    _convenienceInformation.value = it
-                }
-        }
-    }
-
-    override fun getSubWayTelData(key: String) {
+    override fun getSubWayTelData() {
         viewModelScope.launch(handler){
-            telUseCase(key)
+            telUseCase(provider.getString(R.string.trailKey))
                 .map {
                     BaseMapper.setList(BaseMapper(DomainSubWayTel::class, UiSubWayTel::class))
                         .run { this(it) }
@@ -111,8 +74,12 @@ class DetailStationInformationViewModel @ViewModelInject constructor(
                 }.onCompletion {
                     setLoadingValue(false)
                 }.collect {
-                    _subWayTelData.postValue(it)
+                    _subWayTelData.value = it
                 }
         }
+    }
+
+    override fun onLinePositionClick(position: Int) {
+        _selectLineCodePositionChange.value = position
     }
 }

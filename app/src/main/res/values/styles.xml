@@ -45,6 +45,12 @@
         <item name="android:lineSpacingExtra">2sp</item>
     </style>
 
+    <style name="BlackTextViewBoldSize18" parent="BlackTextView">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:lineSpacingExtra">2sp</item>
+    </style>
+
     <style name="WhiteTextViewMediumSize14" parent="WhiteTextView">
         <item name="android:textSize">14sp</item>
         <item name="android:lineSpacingExtra">2sp</item>

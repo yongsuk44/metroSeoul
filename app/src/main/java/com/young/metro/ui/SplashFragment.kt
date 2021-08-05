@@ -26,7 +26,4 @@ class SplashFragment : BaseFragment<FragmentSplashBinding , LocationViewModel>()
 
     }
 
-    override fun transitionBind() {
-
-    }
 }

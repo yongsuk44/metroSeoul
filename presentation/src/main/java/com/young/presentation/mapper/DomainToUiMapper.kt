@@ -1,15 +1,13 @@
 package com.young.presentation.mapper
 
-import android.location.Geocoder
 import android.location.Location
 import com.young.domain.mapper.BaseMapper
 import com.young.domain.model.*
-import com.young.domain.model.AllRouteInformation
 import com.young.domain.model.ConvenienceInformationBody
 import com.young.domain.model.Header
+import com.young.domain.model.PlatformEntranceBody
 import com.young.domain.model.TimeTableBody
 import com.young.presentation.model.*
-import timber.log.Timber
 
 object DomainToUiMapper {
     fun DomainTrailTimeTable.DomaionToUi(): UiTrailTimeTable {
@@ -26,32 +24,26 @@ object DomainToUiMapper {
         }
     }
 
-    fun DomainAllRouteInformation.DomainToUi(): UiAllRouteInformation {
-        val timeTableMapper =
-            BaseMapper(DomainAllRouteInformation::class, UiAllRouteInformation::class)
-        val headerMapper =
-            BaseMapper(Header::class, com.young.presentation.model.Header::class)
+    fun AllRouteInformation.DomainToUi(): com.young.presentation.model.IndexAllRouteInformation {
+
         val bodyMapper = BaseMapper(
             AllRouteInformation::class,
-            com.young.presentation.model.AllRouteInformation::class
+            com.young.presentation.model.IndexAllRouteInformation::class
         )
 
-        timeTableMapper.apply {
-            register("header", headerMapper)
-            register("body", BaseMapper.setList(bodyMapper))
-        }.run {
+        bodyMapper.run {
             return this(this@DomainToUi)
         }
     }
 
-    fun List<AllRouteInformation>.DomainToUi(): List<com.young.presentation.model.AllRouteInformation> {
+    fun List<AllRouteInformation>.DomainToUi(): List<com.young.presentation.model.ListRouteInformation> {
         return this.groupBy {
             it.stinNm
         }.map {
             it.value.run {
 
                 if (this.size >= 2) {
-                    com.young.presentation.model.AllRouteInformation(
+                    com.young.presentation.model.ListRouteInformation(
                         first().mreaWideCd,
                         this.map { it.railOprIsttCd },
                         first().routCd,
@@ -62,7 +54,7 @@ object DomainToUiMapper {
                         first().stinNm,
                     )
                 } else {
-                    com.young.presentation.model.AllRouteInformation(
+                    com.young.presentation.model.ListRouteInformation(
                         first().mreaWideCd,
                         listOf(first().railOprIsttCd),
                         first().routCd,
@@ -160,5 +152,18 @@ object DomainToUiMapper {
         }
 
         return start.distanceTo(end).toInt()
+    }
+
+    fun DomainPlatformEntrance.DomainToUi() : UiPlatformEntrance {
+        val mapper = BaseMapper<DomainPlatformEntrance , UiPlatformEntrance>()
+        val body = BaseMapper<PlatformEntranceBody, com.young.presentation.model.PlatformEntranceBody>()
+        val header = BaseMapper(com.young.domain.model.Header::class, com.young.presentation.model.Header::class)
+
+        mapper.apply {
+            register("header" , header)
+            register("body" ,BaseMapper.setList(body))
+        }.run {
+            return this(this@DomainToUi)
+        }
     }
 }

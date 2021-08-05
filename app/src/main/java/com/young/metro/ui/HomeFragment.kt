@@ -87,9 +87,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, FullRouteInformationViewM
         viewModel.loadFullRouteInformation()
     }
 
-    override fun transitionBind() {
-
-    }
 
     override fun observerLiveData() {
 

@@ -7,7 +7,7 @@
             type="com.young.presentation.viewmodel.FullRouteInformationViewModel" />
         <variable
             name="data"
-            type="com.young.presentation.model.AllRouteInformation" />
+            type="com.young.presentation.model.ListRouteInformation" />
         <variable
             name="adapter"
             type="com.young.metro.adapter.LineLogoAdapter" />

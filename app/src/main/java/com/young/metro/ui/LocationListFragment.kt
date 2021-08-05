@@ -86,9 +86,6 @@ class LocationListFragment : BaseFragment<FragmentLocationListBinding, LocationV
         })
     }
 
-    override fun transitionBind() {
-
-    }
 
     private fun getFireBaseStationNameAndMapXyData() {
         lifecycleScope.launch {

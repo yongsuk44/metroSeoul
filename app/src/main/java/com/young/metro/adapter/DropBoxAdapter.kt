@@ -10,12 +10,12 @@ import androidx.recyclerview.widget.ListAdapter
 import com.young.metro.R
 import com.young.metro.base.BaseViewHolder
 import com.young.metro.databinding.ItemStationNameBinding
-import com.young.presentation.model.AllRouteInformation
+import com.young.presentation.model.ListRouteInformation
 import com.young.presentation.viewmodel.FullRouteInformationViewModel
 
 class DropBoxAdapter(
     val vm: FullRouteInformationViewModel
-) : ListAdapter<AllRouteInformation , BaseViewHolder<ItemStationNameBinding>>(diffCallBack) {
+) : ListAdapter<ListRouteInformation , BaseViewHolder<ItemStationNameBinding>>(diffCallBack) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<ItemStationNameBinding> {
         return BaseViewHolder(
@@ -37,11 +37,11 @@ class DropBoxAdapter(
     }
 
     companion object {
-        val diffCallBack = object : DiffUtil.ItemCallback<AllRouteInformation>() {
-            override fun areItemsTheSame(oldItem: AllRouteInformation, newItem: AllRouteInformation): Boolean =
+        val diffCallBack = object : DiffUtil.ItemCallback<ListRouteInformation>() {
+            override fun areItemsTheSame(oldItem: ListRouteInformation, newItem: ListRouteInformation): Boolean =
                 oldItem.stinCd == newItem.stinCd
 
-            override fun areContentsTheSame(oldItem: AllRouteInformation, newItem: AllRouteInformation): Boolean =
+            override fun areContentsTheSame(oldItem: ListRouteInformation, newItem: ListRouteInformation): Boolean =
                 oldItem == newItem
         }
     }

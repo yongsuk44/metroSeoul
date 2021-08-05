@@ -4,15 +4,15 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.young.domain.usecase.info.information.local.LocalGetFullRouteInformationUseCase
-import com.young.domain.usecase.info.information.local.LocalInsertFullRouteInformationUseCase
-import com.young.domain.usecase.info.information.remote.RemoteFullRouteInformationUseCase
+import com.young.domain.usecase.info.basic.local.LocalGetFullRouteInformationUseCase
+import com.young.domain.usecase.info.basic.local.LocalInsertFullRouteInformationUseCase
+import com.young.domain.usecase.info.basic.remote.RemoteFullRouteInformationUseCase
 import com.young.presentation.R
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.consts.Event
 import com.young.presentation.consts.ResourceProvider
 import com.young.presentation.mapper.DomainToUiMapper.DomainToUi
-import com.young.presentation.model.AllRouteInformation
+import com.young.presentation.model.ListRouteInformation
 import com.young.presentation.modelfunction.FullRouteInformationCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
@@ -32,16 +32,16 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
     val failedInformationData: LiveData<Boolean>
         get() = _failedInformationData
 
-    private val _fullRouteInformation = MutableLiveData<List<AllRouteInformation>>()
-    val fullRouteInformation: LiveData<List<AllRouteInformation>>
+    private val _fullRouteInformation = MutableLiveData<List<ListRouteInformation>>()
+    val fullRouteInformation: LiveData<List<ListRouteInformation>>
         get() = _fullRouteInformation
 
     val _userSearchStationName = MutableLiveData<String>()
     val userSearchStationName: LiveData<String>
         get() = _userSearchStationName
 
-    private val _searchActionStation = MutableLiveData<Event<AllRouteInformation>>()
-    val searchActionStation: LiveData<Event<AllRouteInformation>>
+    private val _searchActionStation = MutableLiveData<Event<ListRouteInformation>>()
+    val searchActionStation: LiveData<Event<ListRouteInformation>>
         get() = _searchActionStation
 
     private val _searchEditViewClick = MutableLiveData<Event<Boolean>>()
@@ -97,7 +97,7 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
         _searchEditViewClick.value = Event(value)
     }
 
-    override fun onStationClick(item: AllRouteInformation , position : Int) {
+    override fun onStationClick(item: ListRouteInformation , position : Int) {
         _selectPosition.value = position
         _searchActionStation.value = Event(item)
     }

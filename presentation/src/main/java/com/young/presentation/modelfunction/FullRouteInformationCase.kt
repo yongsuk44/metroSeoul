@@ -1,6 +1,6 @@
 package com.young.presentation.modelfunction
 
-import com.young.presentation.model.AllRouteInformation
+import com.young.presentation.model.ListRouteInformation
 
 interface FullRouteInformationCase {
     fun loadFullRouteInformation()
@@ -8,6 +8,6 @@ interface FullRouteInformationCase {
     suspend fun getLocalFullRouteInformation()
 
     fun onSearchEditViewClick(value : Boolean)
-    fun onStationClick(item : AllRouteInformation , position : Int)
+    fun onStationClick(item : ListRouteInformation , position : Int)
     fun onSearchEditViewClear()
 }

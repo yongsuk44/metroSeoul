@@ -1,7 +1,7 @@
 package com.young.presentation.model
 
 data class UiAllRouteInformation(
-    val body: List<AllRouteInformation>,
+    val body: List<ListRouteInformation>,
     val header: Header
 )
 
@@ -17,13 +17,24 @@ data class UiAllRouteInformation(
  *  @param stinNm	역명
  */
 
-data class AllRouteInformation(
+data class ListRouteInformation(
     val mreaWideCd: String?,
     val railOprIsttCd: List<String>,
     val routCd: String,
     val routNm: String?,
     val lnCd: List<String>,
     val stinCd: List<String>,
+    val stinConsOrdr: String,
+    val stinNm: String
+)
+
+data class IndexAllRouteInformation(
+    val mreaWideCd: String?,
+    val railOprIsttCd: String,
+    val routCd: String,
+    val routNm: String?,
+    val lnCd: String,
+    val stinCd: String,
     val stinConsOrdr: String,
     val stinNm: String
 )

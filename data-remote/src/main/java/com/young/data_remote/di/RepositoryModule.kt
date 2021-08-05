@@ -4,17 +4,17 @@ import com.young.data_remote.api.PublicDataPortalApiService
 import com.young.data_remote.api.SeoulApiService
 import com.young.data_remote.api.TrailPorTalService
 import com.young.data_remote.repository.*
+import com.young.domain.repository.informationdetail.RemoteDetailInformationRepository
 import com.young.domain.repository.information.remote.RemoteFullRouteInformationRepository
 import com.young.domain.repository.information.remote.RemoteLocationRepository
-import com.young.domain.repository.information.remote.RemoteSubWayTelRepository
-import com.young.domain.repository.information.remote.RemoteTrailTimeTableRepository
+import com.young.domain.repository.informationdetail.RemoteSubWayTelRepository
+import com.young.domain.repository.informationdetail.RemoteTrailTimeTableRepository
 import com.young.domain.repository.subwayfacilities.RemoteSubWayFacilitiesRepository
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
-import javax.inject.Singleton
 
 @Module
 @InstallIn(ApplicationComponent::class)
@@ -54,4 +54,11 @@ class RepositoryModule {
         service : TrailPorTalService
     ) : RemoteFullRouteInformationRepository =
         RemoteFullRouteInformationRepositoryImpl(service)
+
+    @Provides
+    @Reusable
+    fun provideDetailInformationRepository(
+        service : TrailPorTalService
+    ) : RemoteDetailInformationRepository =
+        RemoteDetailInformationRepositoryImpl(service)
 }
