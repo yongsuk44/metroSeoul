@@ -9,6 +9,10 @@
             type="com.young.presentation.viewmodel.DetailStationInformationViewModel" />
 
         <variable
+            name="timeTableViewModel"
+            type="com.young.presentation.viewmodel.StationTimeTableViewModel" />
+
+        <variable
             name="stationName"
             type="String" />
     </data>
@@ -19,13 +23,21 @@
         android:layout_height="match_parent"
         android:background="@color/white">
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_start"
+            style="@style/GuideLine20Start" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_end"
+            style="@style/GuideLine20End" />
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_detail_information_station_name"
             style="@style/BlackTextViewBoldSize18"
-            android:layout_marginTop="15dp"
             android:layout_marginStart="20dp"
-            android:transitionName="@{@string/transition_station_name(stationName)}"
+            android:layout_marginTop="15dp"
             android:text="@{stationName}"
+            android:transitionName="@{@string/transition_station_name(stationName)}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,17 +46,46 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:transitionName="@{@string/transition_station_line_number(stationName)}"
+            android:layout_marginEnd="10dp"
             android:orientation="horizontal"
             android:overScrollMode="never"
+            android:transitionName="@{@string/transition_station_line_number(stationName)}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="@id/tv_detail_information_station_name"
+            app:layout_constraintEnd_toStartOf="@id/tv_detail_information_station_tel"
             app:layout_constraintStart_toEndOf="@id/tv_detail_information_station_name"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_detail_information_station_name"
             tools:listitem="@layout/item_line_logo_select" />
 
+        <com.young.metro.ui.custom.CircleTextView
+            android:id="@+id/tv_detail_information_station_tel"
+            style="@style/SkyTextViewMediumSize12"
+            android:layout_marginEnd="20dp"
+            android:gravity="center"
+            android:text="@{vm.stationTelNumber}"
+            android:onClick="@{() -> vm.onStationCallClick()}"
+            app:cornerRadius="50dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            app:customBackgroundColor="@color/white"
+            app:customStrokeColor="@color/sky"
+            app:customStrokeWidth="1dp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_detail_information_station_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_detail_information_station_name" />
 
 
+        <include
+            android:id="@+id/inc_timetable"
+            app:vm="@{timeTableViewModel}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            layout="@layout/include_station_timetable"
+            app:layout_constraintStart_toStartOf="@id/gl_start"
+            app:layout_constraintEnd_toEndOf="@id/gl_end"
+            app:layout_constraintTop_toBottomOf="@id/tv_detail_information_station_name"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

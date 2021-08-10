@@ -22,11 +22,75 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.25" />
 
+        <HorizontalScrollView
+            android:id="@+id/hsv_area_radius"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            app:layout_constraintTop_toTopOf="parent">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <com.young.metro.ui.custom.CircleTextView
+                    android:id="@+id/tv_location_area_radius_1"
+                    style="@style/LocationAreaRadiusTextView"
+                    android:text="@string/location_radius_1"
+                    android:onClick="@{() -> vm.onLocationRadiusData(1.0)}"
+                    LocationRadiusClickCheck="@{vm.locationRadiusData == 1.0}"
+                    android:layout_marginStart="20dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <com.young.metro.ui.custom.CircleTextView
+                    android:id="@+id/tv_location_area_radius_3"
+                    style="@style/LocationAreaRadiusTextView"
+                    android:text="@string/location_radius_3"
+                    android:onClick="@{() -> vm.onLocationRadiusData(3.0)}"
+                    LocationRadiusClickCheck="@{vm.locationRadiusData == 3.0}"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_location_area_radius_1"/>
+
+                <com.young.metro.ui.custom.CircleTextView
+                    android:id="@+id/tv_location_area_radius_5"
+                    style="@style/LocationAreaRadiusTextView"
+                    android:text="@string/location_radius_5"
+                    android:onClick="@{() -> vm.onLocationRadiusData(5.0)}"
+                    LocationRadiusClickCheck="@{vm.locationRadiusData == 5.0}"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_location_area_radius_3"/>
+
+                <com.young.metro.ui.custom.CircleTextView
+                    android:id="@+id/tv_location_area_radius_7"
+                    style="@style/LocationAreaRadiusTextView"
+                    android:text="@string/location_radius_7"
+                    android:onClick="@{() -> vm.onLocationRadiusData(7.0)}"
+                    LocationRadiusClickCheck="@{vm.locationRadiusData == 7.0}"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_location_area_radius_5"/>
+
+                <com.young.metro.ui.custom.CircleTextView
+                    android:id="@+id/tv_location_area_radius_10"
+                    style="@style/LocationAreaRadiusTextView"
+                    android:text="@string/location_radius_10"
+                    android:onClick="@{() -> vm.onLocationRadiusData(50.0)}"
+                    LocationRadiusClickCheck="@{vm.locationRadiusData == 50.0}"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_location_area_radius_7"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </HorizontalScrollView>
+
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottie_loading"
             setDataCheckVisible="@{vm.loading}"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            app:lottie_repeatCount="10"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/gl_loading_top"
@@ -46,8 +110,8 @@
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_location_failed_icon"
             setDataCheckVisible="@{vm.failedLocationData}"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/gl_loading_top"
@@ -64,12 +128,33 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_location_failed_icon" />
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_location_data_reload"
+            setDataCheckVisible="@{vm.zeroLocationDataList}"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/gl_loading_top"
+            app:srcCompat="@drawable/ic_refresh_black" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/BlackTextViewMediumSize15"
+            setDataCheckVisible="@{vm.zeroLocationDataList}"
+            android:layout_width="0dp"
+            android:layout_margin="20dp"
+            android:gravity="center"
+            android:text="@string/txt_location_data_size_zero"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_location_data_reload" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_location_near_station"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:overScrollMode="never"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hsv_area_radius"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

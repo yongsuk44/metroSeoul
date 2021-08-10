@@ -199,4 +199,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, FullRouteInformationViewM
             fusedLocationProviderClient.removeLocationUpdates(this)
         }
     }
+
+    override fun onDestroy() {
+        popup.dismiss()
+        super.onDestroy()
+    }
 }

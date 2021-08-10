@@ -1,44 +1,57 @@
 package com.young.presentation.viewmodel
 
-import android.location.Location
+import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.*
-import com.young.domain.mapper.BaseMapper
-import com.young.domain.model.DomainStationNameAndMapXY
-import com.young.domain.model.DomainTrailCodeAndLineCode
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
+import com.google.firebase.database.FirebaseDatabase
+import com.google.gson.Gson
 import com.young.domain.usecase.info.location.GetLocationUseCase
 import com.young.domain.usecase.info.location.LocalStationCoordinateUseCase
+import com.young.presentation.R
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.consts.Event
-import com.young.presentation.mapper.DomainToUiMapper.DomainToUi
+import com.young.presentation.consts.ResourceProvider
 import com.young.presentation.mapper.DomainToUiMapper.DomainToUiDistance
 import com.young.presentation.mapper.DomainToUiMapper.UiToDomain
 import com.young.presentation.model.UiStationNameAndMapXY
 import com.young.presentation.model.UiStationNameDistance
-import com.young.presentation.model.UiTrailCodeAndLineCode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.lang.IndexOutOfBoundsException
 
 interface LocationViewModelFunction {
     fun setNowLocation(latitude: Double, longitude: Double)
-    fun setAllStationNameAndMapXYData(items: List<UiStationNameAndMapXY>)
     fun loadAddressDataSize()
     fun insertAllStationNameAndMapXYData(items: List<UiStationNameAndMapXY>)
-    fun getLocationNearStationList()
+    fun getLocationNearStationList(areaKm : Double)
     fun onStationClick(data : UiStationNameDistance , position: Int)
+    fun getFireBaseMapXYData(firebase : FirebaseDatabase)
+    fun onLocationRadiusData(data : Double)
+    fun onSaveLocationRadiusData(data : Double)
 }
 
 @ExperimentalCoroutinesApi
 @FlowPreview
 class LocationViewModel @ViewModelInject constructor(
+    private val provider : ResourceProvider,
     private val locationUseCase: GetLocationUseCase,
-    private val coordinateUseCase: LocalStationCoordinateUseCase
+    private val coordinateUseCase: LocalStationCoordinateUseCase,
+    @Assisted private val saveInstance : SavedStateHandle
 ) : BaseViewModel(), LocationViewModelFunction {
+
+    private val _locationRadiusData = MutableLiveData<Double>(saveInstance.get("locationRadius"))
+    val locationRadiusData: LiveData<Double>
+        get() = _locationRadiusData
+
+    private val _zeroLocationDataList = MutableLiveData<Boolean>(false)
+    val zeroLocationDataList: LiveData<Boolean>
+        get() = _zeroLocationDataList
 
     private val _failedLocationData = MutableLiveData<Boolean>()
     val failedLocationData: LiveData<Boolean>
@@ -68,6 +81,10 @@ class LocationViewModel @ViewModelInject constructor(
     val selectPosition: LiveData<Int>
         get() = _selectPosition
 
+    override fun onSaveLocationRadiusData(data: Double) {
+        saveInstance.set("locationRadius" , data)
+    }
+
     override fun setNowLocation(latitude: Double, longitude: Double) {
         _nowLocationLatitude.value = latitude
         _nowLocationLongitude.value = longitude
@@ -86,8 +103,26 @@ class LocationViewModel @ViewModelInject constructor(
         }
     }
 
-    override fun setAllStationNameAndMapXYData(items: List<UiStationNameAndMapXY>) {
-        insertAllStationNameAndMapXYData(items)
+    override fun getFireBaseMapXYData(firebase: FirebaseDatabase) {
+        viewModelScope.launch {
+            flowOf(firebase.reference.child("StationLocationData").get())
+                .flowOn(Dispatchers.IO)
+                .catch { e ->
+                    Timber.e(e)
+                    setToastMsg(provider.getString(R.string.toast_location_data_failed))
+                }
+                .collect {
+                    it.addOnSuccessListener {
+                        insertAllStationNameAndMapXYData(
+                            (it.value as List<String>).map {
+                                Gson().fromJson(it, UiStationNameAndMapXY::class.java)
+                            }
+                        )
+                    }.addOnCanceledListener {
+                        setToastMsg(provider.getString(R.string.toast_location_data_cancel))
+                    }
+                }
+        }
     }
 
     override fun insertAllStationNameAndMapXYData(items: List<UiStationNameAndMapXY>) {
@@ -99,22 +134,23 @@ class LocationViewModel @ViewModelInject constructor(
             ))
                 .flowOn(Dispatchers.IO)
                 .collect {
-                    getLocationNearStationList()
+                    _locationRadiusData.value = 3.0
                 }
         }
     }
 
-    override fun getLocationNearStationList() {
-        viewModelScope.launch(handler) {
+    override fun getLocationNearStationList(areaKm: Double) {
+        viewModelScope.launch {
             if (nowLocationLatitude.value != null && nowLocationLongitude.value != null) {
 
-                coordinateUseCase.getLocationNearStationList(nowLocationLatitude.value!!, nowLocationLongitude.value!!, 3.0)
+                coordinateUseCase.getLocationNearStationList(nowLocationLatitude.value!!, nowLocationLongitude.value!!, areaKm)
+                    .flowOn(Dispatchers.IO)
                     .transform {
                         emit(
                             it.DomainToUiDistance(nowLocationLatitude.value!! , nowLocationLongitude.value!!)
                         )
                     }
-                    .flowOn(Dispatchers.IO)
+                    .flowOn(Dispatchers.Default)
                     .catch { e ->
                         Timber.e(e)
                         _failedLocationData.value = true
@@ -122,6 +158,7 @@ class LocationViewModel @ViewModelInject constructor(
                         setLoadingValue(false)
                     }
                     .collect {
+                        _zeroLocationDataList.value = it.isEmpty()
                         _stationNameAndMapXY.value = it
                     }
             }
@@ -131,5 +168,9 @@ class LocationViewModel @ViewModelInject constructor(
     override fun onStationClick(data: UiStationNameDistance , position : Int) {
         _selectPosition.value = position
         _stationClick.value = Event(data)
+    }
+
+    override fun onLocationRadiusData(data: Double) {
+        _locationRadiusData.value = data
     }
 }

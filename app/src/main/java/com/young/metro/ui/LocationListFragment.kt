@@ -1,27 +1,16 @@
 package com.young.metro.ui
 
 import android.location.Geocoder
-import android.os.Bundle
-import android.os.Looper
-import android.transition.TransitionInflater
-import android.view.View
 import android.widget.TextView
-import androidx.core.view.doOnPreDraw
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.google.gson.Gson
-import com.young.domain.model.DomainStationNameAndMapXY
 import com.young.metro.BR
 import com.young.metro.R
-import com.young.metro.adapter.LineLogoAdapter
 import com.young.metro.adapter.LocationNearAdapter
 import com.young.metro.base.BaseFragment
 import com.young.metro.base.showToast
@@ -29,18 +18,13 @@ import com.young.metro.databinding.FragmentLocationListBinding
 import com.young.metro.util.toTransitionGroup
 import com.young.metro.util.waitForTransition
 import com.young.presentation.consts.EventObserver
-import com.young.presentation.model.UiStationNameAndMapXY
 import com.young.presentation.viewmodel.LocationViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -54,6 +38,7 @@ class LocationListFragment : BaseFragment<FragmentLocationListBinding, LocationV
 
     override fun initBinding() {
         viewDataBinding.lottieLoading.playAnimation()
+
         getLastLocationServiceData()
         viewDataBinding.rvLocationNearStation.adapter = this@LocationListFragment.adapter
     }
@@ -62,9 +47,12 @@ class LocationListFragment : BaseFragment<FragmentLocationListBinding, LocationV
         viewModel.loading.observe(viewLifecycleOwner) {
             if (it) viewDataBinding.lottieLoading.cancelAnimation()
         }
+
         viewModel.stationCoordinateDataSize.observe(viewLifecycleOwner) {
-            if (it > 0) viewModel.getLocationNearStationList()
-            else getFireBaseStationNameAndMapXyData()
+            it?.let {
+                if (it > 0) viewModel.onLocationRadiusData(viewModel.locationRadiusData.value ?: 3.0)
+                else viewModel.getFireBaseMapXYData(Firebase.database)
+            }
         }
 
         viewModel.stationNameAndMapXY.observe(viewLifecycleOwner) {
@@ -84,30 +72,13 @@ class LocationListFragment : BaseFragment<FragmentLocationListBinding, LocationV
                 extras
             )
         })
-    }
 
-
-    private fun getFireBaseStationNameAndMapXyData() {
-        lifecycleScope.launch {
-            flowOf(Firebase.database.reference.child("StationLocationData").get())
-                .flowOn(Dispatchers.IO)
-                .catch { e ->
-                    Timber.e(e)
-                    showToast(R.string.toast_location_data_failed)
-                }
-                .collect {
-                    it.addOnSuccessListener {
-                        viewModel.setAllStationNameAndMapXYData(
-                            (it.value as List<String>).map {
-                                Gson().fromJson(it, UiStationNameAndMapXY::class.java)
-                            }
-                        )
-                    }.addOnCanceledListener {
-                        showToast(R.string.toast_location_data_cancel)
-                    }
-                }
+        viewModel.locationRadiusData.observe(viewLifecycleOwner) {
+            it?.let {
+                viewModel.onSaveLocationRadiusData(it)
+                viewModel.getLocationNearStationList(it)
+            }
         }
-
     }
 
     private fun getLastLocationServiceData() {

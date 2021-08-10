@@ -7,6 +7,7 @@ data class RemoteSubWayTelPage(
 )
 
 data class SubwayTourInfo(
+    val list_total_count : Int,
     val RESULT: RESULT,
     val row: List<RemoteSubWayTel>
 )

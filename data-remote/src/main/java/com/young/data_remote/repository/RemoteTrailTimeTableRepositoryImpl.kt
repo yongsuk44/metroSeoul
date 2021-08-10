@@ -6,7 +6,7 @@ import com.young.data_remote.model.RemoteTrailTimeTable
 import com.young.data_remote.model.TimeTableBody
 import com.young.domain.mapper.BaseMapper
 import com.young.domain.model.DomainTrailTimeTable
-import com.young.domain.repository.informationdetail.RemoteTrailTimeTableRepository
+import com.young.domain.repository.informationdetail.remote.RemoteTrailTimeTableRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map

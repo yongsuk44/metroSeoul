@@ -57,10 +57,8 @@ object AndroidX {
 }
 
 object JUnit {
-    const val junit =
-        "junit:junit:${Versions.junit}"
-    const val junitPlatformRunner =
-        "org.junit.platform:junit-platform-runner:${Versions.junitPlatformRunner}"
+    const val junit = "junit:junit:${Versions.junit}"
+    const val junitPlatformRunner = "org.junit.platform:junit-platform-runner:${Versions.junitPlatformRunner}"
 }
 
 object Mockito {

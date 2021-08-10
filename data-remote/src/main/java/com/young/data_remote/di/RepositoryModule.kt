@@ -4,11 +4,11 @@ import com.young.data_remote.api.PublicDataPortalApiService
 import com.young.data_remote.api.SeoulApiService
 import com.young.data_remote.api.TrailPorTalService
 import com.young.data_remote.repository.*
-import com.young.domain.repository.informationdetail.RemoteDetailInformationRepository
+import com.young.domain.repository.informationdetail.remote.RemoteDetailInformationRepository
 import com.young.domain.repository.information.remote.RemoteFullRouteInformationRepository
 import com.young.domain.repository.information.remote.RemoteLocationRepository
-import com.young.domain.repository.informationdetail.RemoteSubWayTelRepository
-import com.young.domain.repository.informationdetail.RemoteTrailTimeTableRepository
+import com.young.domain.repository.informationdetail.remote.RemoteSubWayTelRepository
+import com.young.domain.repository.informationdetail.remote.RemoteTrailTimeTableRepository
 import com.young.domain.repository.subwayfacilities.RemoteSubWayFacilitiesRepository
 import dagger.Module
 import dagger.Provides
@@ -37,9 +37,10 @@ class RepositoryModule {
     @Provides
     @Reusable
     fun provideSubWayTelRepository(
-        service: SeoulApiService
+        service: SeoulApiService,
+        publicDataPortalApiService: PublicDataPortalApiService
     ) : RemoteSubWayTelRepository =
-        RemoteSubWayTelRepositoryImpl(service)
+        RemoteSubWayTelRepositoryImpl(service ,publicDataPortalApiService)
 
     @Provides
     @Reusable

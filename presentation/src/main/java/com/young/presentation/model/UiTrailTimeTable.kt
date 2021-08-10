@@ -1,8 +1,9 @@
 package com.young.presentation.model
 
 data class UiTrailTimeTable(
-    val body: List<TimeTableBody>,
-    val header: Header
+    val body: List<TimeTableBody>?,
+    val firstTime : String ,
+    val lastTime : String
 )
 
 data class Header(
@@ -21,12 +22,8 @@ data class Header(
  * @param dayNm 요일 명
  */
 data class TimeTableBody(
-    val arvTm: String?,
-    val dayCd: String,
-    val dayNm: String,
-    val dptTm: String?,
+    val arvTm: String,
     val lnCd: String,
     val railOprIsttCd: String,
-    val stinCd: String,
-    val trnNo: String
+    val stinCd: String
 )

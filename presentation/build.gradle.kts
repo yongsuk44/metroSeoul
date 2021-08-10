@@ -26,6 +26,9 @@ dependencies {
     implementation(AndroidLibraries.lifecycleLiveData)
     implementation(AndroidLibraries.lifecycleExtensions)
 
+    implementation(platform(googleCloudeService.googleBom))
+    implementationList(LibraryList.firebaseLibrary)
+
     implementationList(LibraryList.RetrofitLibraries)
     implementationList(LibraryList.HiltLibraries)
     kaptList(LibraryList.HiltLibraryKapt)

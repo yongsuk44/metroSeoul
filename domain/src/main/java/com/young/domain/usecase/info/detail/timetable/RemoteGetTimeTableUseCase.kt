@@ -1,7 +1,7 @@
 package com.young.domain.usecase.info.detail.timetable
 
 import com.young.domain.model.DomainTrailTimeTable
-import com.young.domain.repository.informationdetail.RemoteTrailTimeTableRepository
+import com.young.domain.repository.informationdetail.remote.RemoteTrailTimeTableRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

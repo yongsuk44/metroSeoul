@@ -80,7 +80,7 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
     }
 
     override suspend fun getLocalFullRouteInformation() {
-        localGetUseCase.invoke(Unit)
+        localGetUseCase.getAllData()
             .map {
                 it.DomainToUi()
             }

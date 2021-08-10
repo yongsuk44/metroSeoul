@@ -11,7 +11,11 @@ import com.young.metro.databinding.ItemLineLogoBinding
 import com.young.metro.databinding.ItemLineLogoSelectBinding
 import com.young.presentation.model.IndexAllRouteInformation
 import com.young.presentation.viewmodel.DetailStationInformationViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
+@ExperimentalCoroutinesApi
+@FlowPreview
 class LineLogoSelectAdapter(
     val vm: DetailStationInformationViewModel
 ) : ListAdapter<IndexAllRouteInformation, BaseViewHolder<ItemLineLogoSelectBinding>>(diffCallBack) {

@@ -1,27 +1,50 @@
 package com.young.presentation.mapper
 
 import android.location.Location
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.young.domain.mapper.BaseMapper
 import com.young.domain.model.*
 import com.young.domain.model.ConvenienceInformationBody
-import com.young.domain.model.Header
 import com.young.domain.model.PlatformEntranceBody
 import com.young.domain.model.TimeTableBody
 import com.young.presentation.model.*
+import java.lang.StringBuilder
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 object DomainToUiMapper {
-    fun DomainTrailTimeTable.DomaionToUi(): UiTrailTimeTable {
-        val timeTableMapper = BaseMapper(DomainTrailTimeTable::class, UiTrailTimeTable::class)
-        val headerMapper = BaseMapper(Header::class, com.young.presentation.model.Header::class)
-        val timeTableBody =
-            BaseMapper(TimeTableBody::class, com.young.presentation.model.TimeTableBody::class)
 
-        timeTableMapper.apply {
-            register("header", headerMapper)
-            register("body", BaseMapper.setList(timeTableBody))
-        }.run {
-            return this(this@DomaionToUi)
+    fun getLocalTime(time: String): String = StringBuilder().append(time)
+        .delete(4,6)
+        .insert(2, ":")
+        .toString()
+
+
+    fun DomainTrailTimeTable.DomainToUi() : UiTrailTimeTable {
+
+        val bodyObject = body?.map {
+            com.young.presentation.model.TimeTableBody(
+                arvTm = getLocalTime(it.arvTm),
+                lnCd = it.lnCd ,
+                railOprIsttCd = it.railOprIsttCd ,
+                stinCd = it.stinCd
+            )
         }
+
+//        val parsingLocalTime = body?.map {
+//            LocalTime.parse(getLocalTime(it.arvTm) , DateTimeFormatter.ISO_LOCAL_TIME)
+//        }?.groupBy {
+//            it.hour == 0
+//        }?.run {
+//            MutableList<List<LocalTime>>(size) { index ->
+//                if (index == 0) getValue(false).sorted()
+//                else getValue(true).sorted()
+//            }.reduce { a, b -> a+b }
+//        }
+
+//        return UiTrailTimeTable(bodyObject , parsingLocalTime?.first().toString() , parsingLocalTime?.last().toString())
+        return UiTrailTimeTable(bodyObject , "" , "")
     }
 
     fun AllRouteInformation.DomainToUi(): com.young.presentation.model.IndexAllRouteInformation {

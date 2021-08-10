@@ -3,4 +3,7 @@
     <string name="key">Rmc8JdIku25QhnYp5H98FqAySAFM%2F73Zil7qnZDM%2Fwla0LBK4dQqu1qqogV3iTyGzG31CVzT3Grg5UQxoGzPiA%3D%3D</string>
     <string name="seoulKey">4e76674e57726c6135305559706671</string>
     <string name="trailKey">$2a$10$OeFg.B1.T5UlJzsVe73wguLb94enoY3mTYddw6DPeUfqMsdggcUum</string>
+
+    <string name="toast_location_data_failed">위치 정보를 얻어올 수 없습니다.</string>
+    <string name="toast_location_data_cancel">위치 정보를 얻어오는 중 취소 하였습니다.</string>
 </resources>

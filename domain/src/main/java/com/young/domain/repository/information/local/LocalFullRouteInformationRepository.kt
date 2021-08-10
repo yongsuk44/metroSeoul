@@ -10,4 +10,5 @@ interface LocalFullRouteInformationRepository {
     suspend fun getDataSize() : Flow<Int>
     suspend fun getTrailCodeAllData() : Flow<List<DomainTrailCodeAndLineCode>>
     suspend fun getStationData(stinCode : List<String>) : Flow<List<AllRouteInformation>>
+    suspend fun getStationNameToFullRouteInformationData(name : String) : Flow<AllRouteInformation>
 }

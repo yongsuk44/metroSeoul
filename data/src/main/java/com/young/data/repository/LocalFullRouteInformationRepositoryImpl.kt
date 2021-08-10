@@ -1,6 +1,5 @@
 package com.young.data.repository
 
-import android.util.Log
 import com.young.data.dao.FullRouteInformationDao
 import com.young.data.mapper.LocalToDomainMapper.DomainToLocal
 import com.young.data.mapper.LocalToDomainMapper.LocalToDomain
@@ -10,8 +9,10 @@ import com.young.domain.mapper.BaseMapper
 import com.young.domain.model.AllRouteInformation
 import com.young.domain.model.DomainTrailCodeAndLineCode
 import com.young.domain.repository.information.local.LocalFullRouteInformationRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.single
 import javax.inject.Inject
 
 class LocalFullRouteInformationRepositoryImpl @Inject constructor(
@@ -59,6 +60,12 @@ class LocalFullRouteInformationRepositoryImpl @Inject constructor(
         flowOf(dao.getStationData(stinCode))
             .map {
                 it.map { it.LocalToDomain() }
+            }
+
+    override suspend fun getStationNameToFullRouteInformationData(name: String): Flow<AllRouteInformation> =
+        flowOf(dao.getStationNameToFullRouteInformationData(name))
+            .map {
+                BaseMapper<FullRouteInformation , AllRouteInformation>().run { this(it) }
             }
 
 }

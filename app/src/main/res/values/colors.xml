@@ -8,9 +8,12 @@
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="sky">@color/colorLineIncheon</color>
 
     <color name="colorTextGray">#9093a5</color>
     <color name="colorProgressGray">#e8e8e8</color>
     <color name="colorGray">#5C5C5C</color>
+    <color name="colorGrayStroke">#ECECEC</color>
+    <color name="colorBg">#E6E6E6</color>
 
 </resources>

@@ -1,4 +1,4 @@
-package com.young.domain.repository.informationdetail
+package com.young.domain.repository.informationdetail.remote
 
 import com.young.domain.model.DomainPlatformEntrance
 import kotlinx.coroutines.flow.Flow

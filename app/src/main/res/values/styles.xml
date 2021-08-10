@@ -35,13 +35,30 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="SkyTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/sky</item>
+    </style>
+
     <style name="BlackTextViewMediumSize12" parent="BlackTextView">
         <item name="android:textSize">12sp</item>
         <item name="android:lineSpacingExtra">4sp</item>
     </style>
 
+    <style name="BlackTextViewMediumSize13" parent="BlackTextView">
+        <item name="android:textSize">13sp</item>
+        <item name="android:lineSpacingExtra">4sp</item>
+    </style>
+
     <style name="BlackTextViewMediumSize15" parent="BlackTextView">
         <item name="android:textSize">15sp</item>
+        <item name="android:lineSpacingExtra">2sp</item>
+    </style>
+
+    <style name="BlackTextViewBoldSize15" parent="BlackTextView">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:lineSpacingExtra">2sp</item>
     </style>
 
@@ -53,6 +70,11 @@
 
     <style name="WhiteTextViewMediumSize14" parent="WhiteTextView">
         <item name="android:textSize">14sp</item>
+        <item name="android:lineSpacingExtra">2sp</item>
+    </style>
+
+    <style name="SkyTextViewMediumSize12" parent="SkyTextView">
+        <item name="android:textSize">12sp</item>
         <item name="android:lineSpacingExtra">2sp</item>
     </style>
 
@@ -69,5 +91,17 @@
 
     <style name="inputDefaultBox" parent="inputSelectBox">
         <item name="android:background">@drawable/border_gray_10_in_white</item>
+    </style>
+
+    <style name="LocationAreaRadiusTextView" parent="BlackTextViewMediumSize12">
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="customBackgroundColor">@color/white</item>
+        <item name="customStrokeColor">@color/black</item>
+        <item name="customStrokeWidth">1dp</item>
+        <item name="cornerRadius">15dp</item>
+        <item name="android:layout_marginStart">10dp</item>
     </style>
 </resources>

@@ -1,7 +1,7 @@
 package com.young.domain.usecase.info.detail.platformentrance
 
 import com.young.domain.model.DomainPlatformEntrance
-import com.young.domain.repository.informationdetail.RemoteDetailInformationRepository
+import com.young.domain.repository.informationdetail.remote.RemoteDetailInformationRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

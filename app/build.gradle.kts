@@ -83,7 +83,9 @@ android {
         jvmTarget = Versions.jvmTarget
         languageVersion = Versions.kotlinLanguageVersion
     }
-
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
 
 }
 
@@ -110,4 +112,5 @@ dependencies {
     kaptList(LibraryList.HiltLibraryKapt)
 
     testImplementationList(LibraryList.TestLibrary)
+    testImplementation(Libraries.coroutineTest)
 }

@@ -5,8 +5,9 @@ import com.young.domain.repository.information.local.LocalLocationRepository
 import com.young.domain.repository.information.local.LocalStationCoordinatesRepository
 import com.young.domain.repository.information.remote.RemoteFullRouteInformationRepository
 import com.young.domain.repository.information.remote.RemoteLocationRepository
-import com.young.domain.repository.informationdetail.RemoteSubWayTelRepository
-import com.young.domain.repository.informationdetail.RemoteTrailTimeTableRepository
+import com.young.domain.repository.informationdetail.local.LocalStationTelRepository
+import com.young.domain.repository.informationdetail.remote.RemoteSubWayTelRepository
+import com.young.domain.repository.informationdetail.remote.RemoteTrailTimeTableRepository
 import com.young.domain.repository.subwayfacilities.LocalSubWayFacilitiesRepository
 import com.young.domain.repository.subwayfacilities.RemoteSubWayFacilitiesRepository
 import com.young.domain.usecase.info.basic.local.LocalGetFullRouteInformationUseCase
@@ -14,6 +15,7 @@ import com.young.domain.usecase.info.basic.local.LocalGetStationDataUseCase
 import com.young.domain.usecase.info.basic.local.LocalInsertFullRouteInformationUseCase
 import com.young.domain.usecase.info.basic.remote.RemoteFullRouteInformationUseCase
 import com.young.domain.usecase.info.basic.remote.RemoteGetFullRouteInformationUseCase
+import com.young.domain.usecase.info.detail.telnumber.LocalStationTelUseCase
 import com.young.domain.usecase.info.location.GetLocationUseCase
 import com.young.domain.usecase.info.location.LocalStationCoordinateUseCase
 import com.young.domain.usecase.info.detail.telnumber.RemoteGetSubWayTelUseCase
@@ -113,4 +115,10 @@ object DomainSubWayFacilitiesModule {
     fun provideGetLocalStationData(
         local: LocalFullRouteInformationRepository
     ) = LocalGetStationDataUseCase(local)
+
+    @Provides
+    @Reusable
+    fun provideLocalStationTelData(
+        local: LocalStationTelRepository
+    ) = LocalStationTelUseCase(local)
 }

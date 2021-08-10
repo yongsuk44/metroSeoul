@@ -31,4 +31,8 @@ interface FullRouteInformationDao {
     suspend fun getStationData(stinCodes : List<String>) : List<FullRouteInformation>
 
 
+    @Query("select * from FullRouteInformation where stinNm = :stationName")
+    suspend fun getStationNameToFullRouteInformationData(stationName : String) : FullRouteInformation
+
+
 }

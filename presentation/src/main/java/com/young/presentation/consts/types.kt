@@ -100,3 +100,17 @@ enum class STATION_LINE(val lnCd : String) {
     abstract fun getColor() : Int
     abstract fun getLineLogo() : Int
 }
+
+fun getApiPath(lincode : String): String? = when (lincode) {
+    "I1" -> "15041410"
+    "1" -> "15041414"
+    "2" -> "15041415"
+    "3" -> "15041416"
+    "4" -> "15041417"
+    "5" -> "15041418"
+    "6" -> "15041419"
+    "7" -> "15041420"
+    "8" -> "15041421"
+    "9" -> "15041422"
+    else -> null
+}

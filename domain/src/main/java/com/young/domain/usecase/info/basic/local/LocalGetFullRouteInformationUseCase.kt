@@ -6,14 +6,22 @@ import com.young.domain.usecase.BaseUseCase
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-typealias LocalGetFullRouteInformationBaseUseCase = BaseUseCase<Unit , Flow<List<AllRouteInformation>>>
+interface LocalGetFullRouteInformationBaseUseCase {
+    suspend fun getAllData() : Flow<List<AllRouteInformation>>
+    suspend fun getDataSize() : Flow<Int>
+    suspend fun getStationNameToFullRouteInformationData(name : String) : Flow<AllRouteInformation>
+}
 
 class LocalGetFullRouteInformationUseCase @Inject constructor(
     private val local : LocalFullRouteInformationRepository
 ) : LocalGetFullRouteInformationBaseUseCase {
-    override suspend fun invoke(param: Unit): Flow<List<AllRouteInformation>> =
+    override suspend fun getAllData(): Flow<List<AllRouteInformation>> =
         local.getAllData()
 
-    suspend fun getDataSize() : Flow<Int> =
+    override suspend fun getDataSize() : Flow<Int> =
         local.getDataSize()
+
+    override suspend fun getStationNameToFullRouteInformationData(name: String): Flow<AllRouteInformation> =
+        local.getStationNameToFullRouteInformationData(name)
+
 }
