@@ -8,7 +8,7 @@ import com.young.data.model.LocalTrailCodeAndLineCode
 import com.young.domain.mapper.BaseMapper
 import com.young.domain.model.AllRouteInformation
 import com.young.domain.model.DomainTrailCodeAndLineCode
-import com.young.domain.repository.information.local.LocalFullRouteInformationRepository
+import com.young.domain.repository.location.LocalFullRouteInformationRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map

@@ -1,50 +1,56 @@
 package com.young.presentation.mapper
 
 import android.location.Location
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.young.domain.mapper.BaseMapper
 import com.young.domain.model.*
 import com.young.domain.model.ConvenienceInformationBody
 import com.young.domain.model.PlatformEntranceBody
-import com.young.domain.model.TimeTableBody
+import com.young.domain.model.Row
 import com.young.presentation.model.*
-import java.lang.StringBuilder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 object DomainToUiMapper {
 
+    fun Row.DomainToUi() : com.young.presentation.model.Row {
+        return BaseMapper<Row , com.young.presentation.model.Row>().run { this(this@DomainToUi) }
+    }
+
     fun getLocalTime(time: String): String = StringBuilder().append(time)
-        .delete(4,6)
-        .insert(2, ":")
+        .insert(time.length-4, ":")
+        .insert(time.length-1, ":")
         .toString()
 
 
-    fun DomainTrailTimeTable.DomainToUi() : UiTrailTimeTable {
+    suspend fun DomainTrailTimeTable.DomainToUi() : UiTrailTimeTable? {
+        if (body.isNullOrEmpty()) return null
+        else {
+            val bodyObject = body!!.map {
+                com.young.presentation.model.TimeTableBody(
+                    arvTm = it.arvTm,
+                    lnCd = it.lnCd,
+                    railOprIsttCd = it.railOprIsttCd,
+                    stinCd = it.stinCd
+                )
+            }
 
-        val bodyObject = body?.map {
-            com.young.presentation.model.TimeTableBody(
-                arvTm = getLocalTime(it.arvTm),
-                lnCd = it.lnCd ,
-                railOprIsttCd = it.railOprIsttCd ,
-                stinCd = it.stinCd
-            )
+            return flowOf(bodyObject)
+                .transform {
+                    it.map {
+                        getLocalTime(it.arvTm)
+                    }.run {
+                        emit(filter { it.substring(0..1).toInt() > 1 })
+                        emit(filter { it.substring(0..1).toInt() <= 1 })
+                    }
+                }
+                .map {
+                    val min = it.first().toString()
+                    val max = it.last().toString()
+                    UiTrailTimeTable(bodyObject , min , max)
+                }.first()
         }
-
-//        val parsingLocalTime = body?.map {
-//            LocalTime.parse(getLocalTime(it.arvTm) , DateTimeFormatter.ISO_LOCAL_TIME)
-//        }?.groupBy {
-//            it.hour == 0
-//        }?.run {
-//            MutableList<List<LocalTime>>(size) { index ->
-//                if (index == 0) getValue(false).sorted()
-//                else getValue(true).sorted()
-//            }.reduce { a, b -> a+b }
-//        }
-
-//        return UiTrailTimeTable(bodyObject , parsingLocalTime?.first().toString() , parsingLocalTime?.last().toString())
-        return UiTrailTimeTable(bodyObject , "" , "")
     }
 
     fun AllRouteInformation.DomainToUi(): com.young.presentation.model.IndexAllRouteInformation {

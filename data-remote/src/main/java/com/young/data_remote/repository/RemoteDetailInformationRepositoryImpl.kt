@@ -3,7 +3,7 @@ package com.young.data_remote.repository
 import com.young.data_remote.api.TrailPorTalService
 import com.young.data_remote.mapper.RemoteToDomainMapper.RemoteToDomain
 import com.young.domain.model.DomainPlatformEntrance
-import com.young.domain.repository.informationdetail.remote.RemoteDetailInformationRepository
+import com.young.domain.repository.remote.RemoteDetailInformationRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map

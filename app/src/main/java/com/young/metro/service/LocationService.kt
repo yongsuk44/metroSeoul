@@ -1,17 +1,10 @@
 package com.young.metro.service
 
-import android.Manifest
 import android.app.Service
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Binder
 import android.os.IBinder
-import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationServices
-import timber.log.Timber
-import javax.inject.Inject
 
 class LocationService : Service() {
 

@@ -1,8 +1,9 @@
 package com.young.presentation.viewmodel
 
-import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.young.domain.mapper.BaseMapper
 import com.young.domain.model.DomainSubwayFacilities
 import com.young.domain.usecase.subwayfacilities.local.GetSizeTableDataUseCase
@@ -11,14 +12,12 @@ import com.young.domain.usecase.subwayfacilities.local.LocalGetSubWayFacilitiesD
 import com.young.domain.usecase.subwayfacilities.remote.RemoteGetSubWayFacilitiesDataUseCase
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.model.UiSubwayFacilities
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.util.HashMap
-import javax.inject.Inject
 
 interface MainViewFunction {
     fun loadSubWayFacilitiesData(key : String)

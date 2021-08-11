@@ -3,15 +3,12 @@ package com.young.data.repository
 import com.young.data.dao.LocationDao
 import com.young.data.mapper.LocalToDomainMapper.DomainToLocal
 import com.young.data.mapper.LocalToDomainMapper.LocalToDomain
-import com.young.data.model.LocalStationNameAndMapXY
-import com.young.domain.mapper.BaseMapper
 import com.young.domain.model.DomainStationNameAndMapXY
-import com.young.domain.repository.information.local.LocalStationCoordinatesRepository
+import com.young.domain.repository.location.LocalStationCoordinatesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
-import kotlin.math.acos
 import kotlin.math.cos
 import kotlin.math.sin
 

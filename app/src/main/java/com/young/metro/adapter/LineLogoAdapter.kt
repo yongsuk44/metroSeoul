@@ -8,10 +8,6 @@ import androidx.recyclerview.widget.ListAdapter
 import com.young.metro.R
 import com.young.metro.base.BaseViewHolder
 import com.young.metro.databinding.ItemLineLogoBinding
-import com.young.metro.databinding.ItemLocationNearStationBinding
-import com.young.presentation.model.UiStationNameDistance
-import com.young.presentation.viewmodel.LocationViewModel
-import timber.log.Timber
 
 class LineLogoAdapter: ListAdapter<String, BaseViewHolder<ItemLineLogoBinding>>(diffCallBack) {
 

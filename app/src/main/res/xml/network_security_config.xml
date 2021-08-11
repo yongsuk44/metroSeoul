@@ -7,6 +7,10 @@
         <domain includeSubdomains="true">
             openapi.kric.go.kr
         </domain>
+
+        <domain includeSubdomains="true">
+            api.data.go.kr
+        </domain>
     </domain-config>
 </network-security-config>
 

@@ -1,6 +1,5 @@
 package com.young.metro.viewbinding
 
-import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.young.metro.R
 import com.young.metro.ui.custom.CircleImageView

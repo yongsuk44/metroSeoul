@@ -1,10 +1,11 @@
 package com.young.metro
 
 import androidx.compose.runtime.emit
-import com.young.metro.TestCoroutineRule
+import com.young.presentation.model.UiTrailTimeTable
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -38,8 +39,8 @@ class TimeStampTest {
     }
 
     fun getLocalTime(time: String): String = StringBuilder().append(time)
-        .insert(2, ":")
-        .insert(5, ":")
+        .insert(time.length-4, ":")
+        .insert(time.length-1, ":")
         .toString()
 
     @Test
@@ -85,19 +86,33 @@ class TimeStampTest {
         }
 
 
+    }
 
-        val date2 = LocalDate.parse(localDay, localDayFormat)
-
-//        println(date)
-//        println("hour ${date.hour}")
-//        println("minute ${date.minute}")
-//        println("second ${date.second}")
-//
-//        println(date2)
-//        println("year ${date2.dayOfYear}")
-//        println("month ${date2.dayOfMonth}")
-//        println("day ${date2.dayOfWeek}")
-
+    @Test
+    fun coroutineTest() {
+        runBlockingTest {
+            flowOf(listOf("012345" ,"110321", "082213" , "003213" , "230045" , "060900"))
+//                .flatMapConcat {
+//                    flowOf(
+//                        it.map {
+//                            LocalTime.parse(getLocalTime(it), DateTimeFormatter.ISO_LOCAL_TIME)
+//                        }
+//                    )
+//                }
+                .transform {
+                    it.map { getLocalTime(it) }.run {
+                        emit(filter { it.substring(0..1).toInt() > 1 }.sorted())
+                        emit(filter { it.substring(0..1).toInt() <= 1 }.sorted())
+                    }
+                }
+                .map {
+                    val min = it.first().toString()
+                    val max = it.last().toString()
+                    println(min)
+                    println(max)
+                    println(it)
+                }.single()
+        }
     }
 
     fun <T, K> Flow<T>.groupBy(getKey : (T) -> K): Flow<Pair<K, List<T>>> = flow {

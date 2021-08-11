@@ -10,6 +10,11 @@ android {
     android {
         compileSdkVersion(AppConfig.compileSdk)
         buildToolsVersion(AppConfig.buildToolsVersion)
+        
+        defaultConfig.apply {
+            minSdkVersion(AppConfig.minSdk)
+            targetSdkVersion(AppConfig.targetSdk)
+        }
     }
 
     kotlinOptions {

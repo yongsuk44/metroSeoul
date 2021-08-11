@@ -1,7 +1,7 @@
 package com.young.presentation.model
 
 data class UiTrailTimeTable(
-    val body: List<TimeTableBody>?,
+    val body: List<TimeTableBody>,
     val firstTime : String ,
     val lastTime : String
 )

@@ -3,19 +3,12 @@ package com.young.metro.util
 import android.app.Activity
 import android.content.res.Resources
 import android.os.Build
-import android.os.Parcelable
 import android.util.Patterns
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.view.doOnPreDraw
-import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import com.young.metro.R
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.ObsoleteCoroutinesApi
-import kotlinx.coroutines.channels.actor
-import java.lang.StringBuilder
 
 fun Fragment.waitForTransition(view : View) {
     postponeEnterTransition()

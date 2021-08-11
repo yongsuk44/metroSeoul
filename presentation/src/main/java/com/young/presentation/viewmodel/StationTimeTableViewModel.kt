@@ -1,27 +1,25 @@
 package com.young.presentation.viewmodel
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
-import com.young.domain.usecase.info.detail.timetable.RemoteTimeTableUseCase
+import com.young.domain.usecase.remote.RemoteTimeTableUseCase
 import com.young.presentation.R
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.consts.ResourceProvider
 import com.young.presentation.mapper.DomainToUiMapper.DomainToUi
+import com.young.presentation.model.IndexAllRouteInformation
 
 import com.young.presentation.model.UiTrailTimeTable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
+import java.time.LocalTime
 
 interface StationTimeTableFunction {
-    fun getStationTimeTable(railCode: String, lineCode: String, stationCode: String)
+    fun getStationTimeTable(indexAllRouteInformation: IndexAllRouteInformation)
 }
 
 class StationTimeTableViewModel @ViewModelInject constructor(
@@ -29,39 +27,29 @@ class StationTimeTableViewModel @ViewModelInject constructor(
     private val timeTableUseCase: RemoteTimeTableUseCase
 ) : BaseViewModel(), StationTimeTableFunction {
 
-    private val _timeTableData = MutableLiveData<List<UiTrailTimeTable>>()
-    val timeTableData: LiveData<List<UiTrailTimeTable>>
-        get() = _timeTableData
+    private val _weekTimeTable = MutableLiveData<UiTrailTimeTable>()
+    val weekTimeTable: LiveData<UiTrailTimeTable>
+        get() = _weekTimeTable
 
-    override fun getStationTimeTable(railCode: String, lineCode: String, stationCode: String) {
+    private val _satTimeTable = MutableLiveData<UiTrailTimeTable>()
+    val satTimeTable: LiveData<UiTrailTimeTable>
+        get() = _satTimeTable
+
+    private val _sunTimeTable = MutableLiveData<UiTrailTimeTable>()
+    val sunTimeTable: LiveData<UiTrailTimeTable>
+        get() = _sunTimeTable
+
+    override fun getStationTimeTable(indexAllRouteInformation: IndexAllRouteInformation) {
         viewModelScope.launch(handler) {
-            val weekFlow = timeTableUseCase.getTrailTimetables(
-                provider.getString(R.string.trailKey),
-                railCode,
-                "8",
-                lineCode,
-                stationCode
-            )
-            val satFlow = timeTableUseCase.getTrailTimetables(
-                provider.getString(R.string.trailKey),
-                railCode,
-                "7",
-                lineCode,
-                stationCode
-            )
-            val sunFlow = timeTableUseCase.getTrailTimetables(
-                provider.getString(R.string.trailKey),
-                railCode,
-                "9",
-                lineCode,
-                stationCode
-            )
+            val weekFlow = generateStationTimeTableFlow("8" , indexAllRouteInformation)
+            val satFlow = generateStationTimeTableFlow("7" , indexAllRouteInformation)
+            val sunFlow = generateStationTimeTableFlow("9" , indexAllRouteInformation)
 
             combine(weekFlow, satFlow, sunFlow) { week, sat, sun ->
 
                 listOf(
                     week.DomainToUi() ,
-                    if (sat.body.isNullOrEmpty()) sun.DomainToUi() else sat.DomainToUi() ,
+                    sat.DomainToUi() ?: sun.DomainToUi() ,
                     sun.DomainToUi()
                 )
             }
@@ -73,8 +61,14 @@ class StationTimeTableViewModel @ViewModelInject constructor(
                     setLoadingValue(false)
                 }
                 .collect {
-                    _timeTableData.value = it
+                    _weekTimeTable.value = it.first()
+                    _satTimeTable.value = it[1]
+                    _sunTimeTable.value = it.last()
                 }
         }
     }
+
+    suspend fun generateStationTimeTableFlow(dayCode : String , data : IndexAllRouteInformation) =
+        timeTableUseCase.getStationTimetables(provider.getString(R.string.trailKey), data.railOprIsttCd, dayCode, data.lnCd, data.stinCd)
+
 }

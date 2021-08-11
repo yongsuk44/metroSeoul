@@ -1,12 +1,8 @@
 package com.young.data_remote.api
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.times
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
-import com.young.data_remote.repository.RemoteTrailTimeTableRepositoryImpl
-import com.young.domain.repository.timetable.RemoteTrailTimeTableRepository
+import com.young.data_remote.repository.RemoteStationTimeTableRepositoryImpl
+import com.young.domain.repository.timetable.RemoteStationTimeTableRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
@@ -16,13 +12,12 @@ import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
-import kotlin.math.ln
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
 class TrailTimeTableImplTest {
 
-    private lateinit var repository : RemoteTrailTimeTableRepository
+    private lateinit var repository : RemoteStationTimeTableRepository
 
     @get:Rule
     val rule : TestRule = InstantTaskExecutorRule()
@@ -33,7 +28,7 @@ class TrailTimeTableImplTest {
 
     @Before
     fun setUp() {
-        repository = RemoteTrailTimeTableRepositoryImpl(
+        repository = RemoteStationTimeTableRepositoryImpl(
             service = service
         )
     }

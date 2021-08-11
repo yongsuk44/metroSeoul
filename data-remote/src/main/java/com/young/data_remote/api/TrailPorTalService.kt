@@ -6,15 +6,15 @@ import retrofit2.http.Query
 
 interface TrailPorTalService {
 
-    @GET("trainUseInfo/subwayTimetable")
-    suspend fun getTrailTimetables(
+    @GET("convenientInfo/stationTimetable")
+    suspend fun getStationTimetables(
         @Query("serviceKey", encoded = true) key: String,
         @Query("format") format: String,
         @Query("railOprIsttCd") trailCode: String,
         @Query("dayCd") toDayCode: String,
         @Query("lnCd") lineCode: String,
         @Query("stinCd") stationCode: String
-    ): RemoteTrailTimeTable
+    ): RemoteStationTimeTable
 
     @GET("trainUseInfo/subwayRouteInfo")
     suspend fun getFullRouteInformation(

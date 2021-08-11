@@ -2,7 +2,6 @@ package com.young.metro
 
 import com.young.presentation.consts.STATION_LINE
 import org.junit.Test
-import org.junit.Assert.*
 
 /**
  * Example local unit test, which will execute on the development machine (host).

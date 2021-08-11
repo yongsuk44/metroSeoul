@@ -1,16 +1,10 @@
 package com.young.presentation.consts
 
-import android.util.Log
-import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.ObsoleteCoroutinesApi
-import kotlinx.coroutines.channels.actor
 import timber.log.Timber
 
 open class BaseViewModel : ViewModel() {

@@ -5,11 +5,6 @@ import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.young.metro.adapter.LineLogoAdapter
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.*
 
 @BindingAdapter("setDataCheckVisible")
 fun setDataVisibleApply(view: View, data: Any?) {

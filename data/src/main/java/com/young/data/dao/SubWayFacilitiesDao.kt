@@ -2,7 +2,6 @@ package com.young.data.dao
 
 import androidx.room.*
 import com.young.data.model.LocalSubwayFacilities
-import java.util.*
 
 @Dao
 interface SubWayFacilitiesDao {

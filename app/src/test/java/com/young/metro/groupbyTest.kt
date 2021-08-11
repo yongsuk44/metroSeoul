@@ -2,7 +2,6 @@ package com.young.metro
 
 import com.young.domain.model.DomainStationNameAndMapXY
 import com.young.domain.model.DomainTrailCodeAndLineCode
-import com.young.presentation.model.UiStationNameDistance
 import org.junit.Test
 
 class groupbyTest {

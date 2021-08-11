@@ -2,11 +2,9 @@ package com.young.domain.usecase.info.location
 
 import com.young.domain.model.DomainTrailCodeAndLineCode
 import com.young.domain.model.LocationData
-import com.young.domain.repository.information.local.LocalLocationRepository
-import com.young.domain.repository.information.remote.RemoteLocationRepository
-import com.young.domain.usecase.BaseUseCase
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import com.young.domain.repository.location.LocalLocationRepository
+import com.young.domain.repository.remote.RemoteLocationRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 interface GetLocationBaseUseCase {

@@ -8,17 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.PopupWindow
-import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.translationMatrix
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.lottie.LottieDrawable
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
@@ -31,7 +27,6 @@ import com.young.metro.base.showToast
 import com.young.metro.databinding.BaseSpinnerListBinding
 import com.young.metro.databinding.FragmentHomeBinding
 import com.young.metro.locationPermissionList
-import com.young.metro.util.toTransitionGroup
 import com.young.presentation.consts.EventObserver
 import com.young.presentation.viewmodel.FullRouteInformationViewModel
 import com.young.presentation.viewmodel.PermissionViewModel

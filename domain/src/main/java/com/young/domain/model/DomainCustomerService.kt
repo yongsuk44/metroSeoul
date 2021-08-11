@@ -1,7 +1,5 @@
 package com.young.domain.model
 
-import com.google.gson.annotations.SerializedName
-
 data class DomainCustomerService(
     val currentCount: Int,
     val data : List<Data>,

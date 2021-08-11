@@ -1,5 +1,6 @@
 package com.young.metro.viewbinding
 
+import android.animation.ValueAnimator
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.young.metro.R
@@ -7,7 +8,13 @@ import com.young.metro.ui.custom.CircleTextView
 
 @BindingAdapter("StringPlusMeter")
 fun setStringPlusMeter(view : TextView , data : Double) {
-    view.text = "${data.toInt()}미터"
+
+    ValueAnimator.ofInt(0 , data.toInt()).apply {
+        duration = 600
+        addUpdateListener {
+            view.text = "${it.animatedValue}미터"
+        }
+    }.start()
 }
 
 @BindingAdapter("LocationRadiusClickCheck")

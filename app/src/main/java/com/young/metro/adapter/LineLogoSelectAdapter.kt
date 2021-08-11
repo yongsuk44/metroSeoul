@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.young.metro.R
 import com.young.metro.base.BaseViewHolder
-import com.young.metro.databinding.ItemLineLogoBinding
 import com.young.metro.databinding.ItemLineLogoSelectBinding
 import com.young.presentation.model.IndexAllRouteInformation
 import com.young.presentation.viewmodel.DetailStationInformationViewModel

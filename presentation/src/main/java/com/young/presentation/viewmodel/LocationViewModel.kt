@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson
 import com.young.domain.usecase.info.location.GetLocationUseCase
-import com.young.domain.usecase.info.location.LocalStationCoordinateUseCase
+import com.young.domain.usecase.local.LocalStationCoordinateUseCase
 import com.young.presentation.R
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.consts.Event

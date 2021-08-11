@@ -1,14 +1,11 @@
 package com.young.data_remote.di
 
+import com.young.data_remote.api.PublicDataOpenApiService
 import com.young.data_remote.api.PublicDataPortalApiService
 import com.young.data_remote.api.SeoulApiService
 import com.young.data_remote.api.TrailPorTalService
 import com.young.data_remote.repository.*
-import com.young.domain.repository.informationdetail.remote.RemoteDetailInformationRepository
-import com.young.domain.repository.information.remote.RemoteFullRouteInformationRepository
-import com.young.domain.repository.information.remote.RemoteLocationRepository
-import com.young.domain.repository.informationdetail.remote.RemoteSubWayTelRepository
-import com.young.domain.repository.informationdetail.remote.RemoteTrailTimeTableRepository
+import com.young.domain.repository.remote.*
 import com.young.domain.repository.subwayfacilities.RemoteSubWayFacilitiesRepository
 import dagger.Module
 import dagger.Provides
@@ -38,16 +35,16 @@ class RepositoryModule {
     @Reusable
     fun provideSubWayTelRepository(
         service: SeoulApiService,
-        publicDataPortalApiService: PublicDataPortalApiService
-    ) : RemoteSubWayTelRepository =
-        RemoteSubWayTelRepositoryImpl(service ,publicDataPortalApiService)
+        publicDataPortalApiService: PublicDataOpenApiService
+    ) : RemoteStationTelRepository =
+        RemoteStationTelRepositoryImpl(service ,publicDataPortalApiService)
 
     @Provides
     @Reusable
     fun provideTimeTableRepository(
         service : TrailPorTalService
-    ) : RemoteTrailTimeTableRepository =
-        RemoteTrailTimeTableRepositoryImpl(service)
+    ) : RemoteStationTimeTableRepository =
+        RemoteStationTimeTableRepositoryImpl(service)
 
     @Provides
     @Reusable

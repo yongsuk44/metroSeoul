@@ -1,7 +1,5 @@
 package com.young.data.model
 
-import java.util.*
-
 data class LocalSubwayFacilitiesPage(
     val currentCount: Int,
     val data: List<LocalSubwayFacilities>,

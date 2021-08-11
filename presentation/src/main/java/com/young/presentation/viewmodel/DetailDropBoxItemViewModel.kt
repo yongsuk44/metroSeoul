@@ -4,8 +4,8 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.young.domain.usecase.info.basic.remote.RemoteFullRouteInformationUseCase
-import com.young.domain.usecase.info.detail.platformentrance.PlatformEntranceUseCase
+import com.young.domain.usecase.remote.PlatformEntranceUseCase
+import com.young.domain.usecase.remote.RemoteFullRouteInformationUseCase
 import com.young.presentation.R
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.consts.ResourceProvider
