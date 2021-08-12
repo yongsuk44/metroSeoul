@@ -27,6 +27,9 @@ object DomainToUiMapper {
     suspend fun DomainTrailTimeTable.DomainToUi() : UiTrailTimeTable? {
         if (body.isNullOrEmpty()) return null
         else {
+            val upTime = body!!.groupBy { it.orgStinCd }
+            val downTime = body!!.groupBy { it.tmnStinCd }
+
             val bodyObject = body!!.map {
                 com.young.presentation.model.TimeTableBody(
                     arvTm = it.arvTm,
@@ -48,7 +51,7 @@ object DomainToUiMapper {
                 .map {
                     val min = it.first().toString()
                     val max = it.last().toString()
-                    UiTrailTimeTable(bodyObject , min , max)
+                    UiTrailTimeTable(bodyObject , bodyObject , min , max)
                 }.first()
         }
     }

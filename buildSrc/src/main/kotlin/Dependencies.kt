@@ -68,6 +68,8 @@ object Mockito {
         "org.mockito:mockito-inline:${Versions.mockito}"
     const val mockitoKotlin =
         "com.nhaarman:mockito-kotlin:${Versions.mockitoKotlin}"
+
+    const val mockWebServer = "com.squareup.okhttp3:mockwebserver:${Versions.mockWebserver}"
 }
 
 object AndroidLibraries {
@@ -240,6 +242,7 @@ object LibraryList {
         add(Mockito.mockitoCore)
         add(Mockito.mockitoInline)
         add(Mockito.mockitoKotlin)
+        add(Mockito.mockWebServer)
     }
 }
 

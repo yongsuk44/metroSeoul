@@ -5,6 +5,13 @@ data class DomainTrailTimeTable(
     val header: Header
 )
 
+data class TestTimeTable(
+    val body: List<TimeTableBody>,
+    val body2: List<TimeTableBody>,
+    val firstTime : String ,
+    val lastTime : String
+)
+
 data class Header(
     val resultCnt: Int,
     val resultCode: String,
@@ -26,6 +33,8 @@ data class TimeTableBody(
     val dayNm: String,
     val dptTm: String,
     val lnCd: String,
+    val orgStinCd: String,
+    val tmnStinCd: String,
     val railOprIsttCd: String,
     val stinCd: String,
     val trnNo: String

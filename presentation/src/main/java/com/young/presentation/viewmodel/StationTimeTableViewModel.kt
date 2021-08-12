@@ -24,7 +24,8 @@ interface StationTimeTableFunction {
 
 class StationTimeTableViewModel @ViewModelInject constructor(
     private val provider: ResourceProvider,
-    private val timeTableUseCase: RemoteTimeTableUseCase
+    private val timeTableUseCase: RemoteTimeTableUseCase ,
+
 ) : BaseViewModel(), StationTimeTableFunction {
 
     private val _weekTimeTable = MutableLiveData<UiTrailTimeTable>()

@@ -25,6 +25,7 @@ dependencies {
     implementationList(LibraryList.HiltLibraries)
     kaptList(LibraryList.HiltLibraryKapt)
 
+    androidTestImplementation("org.mockito:mockito-android:3.10.0")
     testImplementationList(LibraryList.mockitoLibrary)
     testImplementationList(LibraryList.TestLibrary)
     testImplementation(Libraries.coroutineTest)

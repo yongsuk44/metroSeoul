@@ -4,6 +4,7 @@ import com.young.data_remote.api.PublicDataOpenApiService
 import com.young.data_remote.api.PublicDataPortalApiService
 import com.young.data_remote.api.SeoulApiService
 import com.young.data_remote.api.TrailPorTalService
+import com.young.data_remote.datasource.RemoteStationTimeDataSource
 import com.young.data_remote.repository.*
 import com.young.domain.repository.remote.*
 import com.young.domain.repository.subwayfacilities.RemoteSubWayFacilitiesRepository
@@ -42,8 +43,8 @@ class RepositoryModule {
     @Provides
     @Reusable
     fun provideTimeTableRepository(
-        service : TrailPorTalService
-    ) : RemoteStationTimeTableRepository =
+        service: TrailPorTalService
+    ) : RemoteStationTimeDataSource =
         RemoteStationTimeTableRepositoryImpl(service)
 
     @Provides

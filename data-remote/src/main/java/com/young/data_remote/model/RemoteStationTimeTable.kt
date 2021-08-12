@@ -27,8 +27,8 @@ data class TimeTableBody(
     val dptTm: String,
     val lnCd: String,
     val orgStinCd: String,
+    val tmnStinCd: String,
     val railOprIsttCd: String,
     val stinCd: String,
-    val tmnStinCd: String,
     val trnNo: String
 )

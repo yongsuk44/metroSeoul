@@ -18,6 +18,7 @@ object Versions {
     const val retrofitGson = "2.4.0"
     const val gson = "2.8.5"
     const val okHttp = "4.9.0"
+    const val mockWebserver = "4.9.1"
 
     const val mockWebServer = "4.2.1"
     const val truthVersion = "1.0"
@@ -73,7 +74,7 @@ object Versions {
     const val androidxJunit = "1.1.1"
     const val junit = "4.13"
     const val junitPlatformRunner = "1.0.2"
-    const val mockito = "2.27.0"
+    const val mockito = "3.10.0"
     const val mockitoKotlin = "1.5.0"
 
     const val googleLocationService = "18.0.0"
