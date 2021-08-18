@@ -11,9 +11,13 @@ import com.young.data_remote.model.Row
 import com.young.data_remote.model.SearchInfoBySubwayNameService
 import com.young.data_remote.model.StationItem
 import com.young.data_remote.model.TelHeader
-import com.young.data_remote.model.TimeTableBody
 import com.young.domain.mapper.BaseMapper
 import com.young.domain.model.*
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.transform
+import java.lang.NullPointerException
 
 object RemoteToDomainMapper {
 
@@ -67,9 +71,9 @@ object RemoteToDomainMapper {
     }
 
     fun RemoteAllStationCodes.RemoteToDomain() : DomainAllStationCodes {
-        val rowMapper = BaseMapper<Row , com.young.domain.model.Row>()
-        val resultMapper = BaseMapper<RESULT , com.young.domain.model.RESULT>()
-        val serviceMapper = BaseMapper<SearchInfoBySubwayNameService , com.young.domain.model.SearchInfoBySubwayNameService>().apply {
+        val rowMapper = BaseMapper<Row, com.young.domain.model.Row>()
+        val resultMapper = BaseMapper<RESULT, com.young.domain.model.RESULT>()
+        val serviceMapper = BaseMapper<SearchInfoBySubwayNameService, com.young.domain.model.SearchInfoBySubwayNameService>().apply {
             register("RESULT" ,resultMapper)
             register("row" , BaseMapper.setList(rowMapper))
         }
@@ -81,18 +85,40 @@ object RemoteToDomainMapper {
         return mainMapper(this)
     }
 
-    fun RemoteStationTimeTable.RemoteToDomain() : DomainTrailTimeTable {
-        val timeTableMapper =
-            BaseMapper(RemoteStationTimeTable::class, DomainTrailTimeTable::class)
-        val headerMapper = BaseMapper(Header::class, com.young.domain.model.Header::class)
-        val timeTableBody =
-            BaseMapper(TimeTableBody::class, com.young.domain.model.TimeTableBody::class)
+    fun getLocalTime(time: String): String = StringBuilder().append(time)
+        .insert(time.length-4, ":")
+        .insert(time.length-1, ":")
+        .toString()
 
-        timeTableMapper.apply {
-            register("header", headerMapper)
-            register("body", BaseMapper.setList(timeTableBody))
-        }.run {
-            return this(this@RemoteToDomain)
+    suspend fun RemoteStationTimeTable.RemoteToDomain(upDown : String) : DomainStationTimeTable {
+        if (body.isNullOrEmpty()) throw NullPointerException("Public APi Service 지하철 시간표를 가져오는 중 Body에 데이터가 없음 확인 필")
+        else {
+            val group = body.groupBy { it.orgStinCd < it.tmnStinCd }
+
+            return flowOf(group.getValue(upDown == "1"))
+                .transform {
+                    it.map { getLocalTime(it.arvTm) }
+                        .run {
+                            emit(filter { it.substring(0..1).toInt() > 2 } + filter { it.substring(0..1).toInt() <= 2 })
+                        }
+                }.transform {
+                    emit(
+                        DomainStationTimeTable(it , it.first() , it.last() )
+                    )
+                }.first()
+        }
+    }
+
+    suspend fun RemoteStationSeoulTimeTable.RemoteToDomain() : DomainStationTimeTable? {
+        if (this.SearchSTNTimeTableByIDService == null) return null
+        else {
+            return flowOf(SearchSTNTimeTableByIDService.row)
+                .transform {
+                    val list = it.map { it.ARRIVETIME }
+                    emit(
+                        DomainStationTimeTable(list , list.first() , list.last())
+                    )
+                }.first()
         }
     }
 }

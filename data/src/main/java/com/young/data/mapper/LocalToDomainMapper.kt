@@ -1,16 +1,22 @@
 package com.young.data.mapper
 
 import com.young.data.model.FullRouteInformation
+import com.young.data.model.LocalAllStationCodes
 import com.young.data.model.LocalStationNameAndMapXY
 import com.young.data.model.LocalTrailCodeAndLineCode
-import com.young.domain.model.AllRouteInformation
-import com.young.domain.model.DomainStationNameAndMapXY
-import com.young.domain.model.DomainTrailCodeAndLineCode
+import com.young.domain.model.*
 import kotlin.math.cos
 import kotlin.math.sin
 
 object LocalToDomainMapper {
-
+    fun Row.DomainToLocal() = with(::LocalAllStationCodes) {
+        LocalAllStationCodes(
+            FR_CODE = FR_CODE,
+            LINE_NUM = LINE_NUM,
+            STATION_CD = STATION_CD,
+            STATION_NM = STATION_NM
+        )
+    }
 
     fun AllRouteInformation.DomainToLocal() = with(::FullRouteInformation) {
         FullRouteInformation(

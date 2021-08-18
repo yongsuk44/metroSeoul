@@ -23,6 +23,7 @@
 
     <string name="transition_station_name">station %s</string>
     <string name="transition_station_line_number">lineNumber %s</string>
+    <string name="transition_station_layout">layout %s</string>
 
     <string name="view_station_first_time">첫차</string>
     <string name="view_station_last_time">막차</string>

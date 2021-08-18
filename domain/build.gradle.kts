@@ -22,8 +22,11 @@ dependencies {
     implementation(project(Modules.base))
     implementationList(LibraryList.RetrofitLibraries)
     implementation(AndroidLibraries.kotlinReflection)
-    testImplementation(Libraries.coroutineAndroid)
-    testImplementation(Libraries.coroutineTest)
     implementationList(LibraryList.HiltLibraries)
     kaptList(LibraryList.HiltLibraryKapt)
+
+    testImplementation(Libraries.coroutineAndroid)
+    testImplementationList(LibraryList.mockitoLibrary)
+    testImplementation(Libraries.coroutineTest)
+    testImplementationList(LibraryList.AndroidTestLibrary)
 }

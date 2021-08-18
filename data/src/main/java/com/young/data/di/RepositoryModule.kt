@@ -1,12 +1,11 @@
 package com.young.data.di
 
+import com.young.data.dao.AllStationCodeDao
 import com.young.data.dao.FullRouteInformationDao
 import com.young.data.dao.LocationDao
 import com.young.data.dao.SubWayFacilitiesDao
-import com.young.data.repository.LocalFullRouteInformationRepositoryImpl
-import com.young.data.repository.LocalLocationRepositoryImpl
-import com.young.data.repository.LocalStationCoordinatesRepositoryImpl
-import com.young.data.repository.LocalSubWayFacilitiesRepositoryImpl
+import com.young.data.repository.*
+import com.young.domain.repository.location.LocalAllStationCodesRepository
 import com.young.domain.repository.location.LocalFullRouteInformationRepository
 import com.young.domain.repository.location.LocalLocationRepository
 import com.young.domain.repository.location.LocalStationCoordinatesRepository
@@ -44,5 +43,11 @@ class RepositoryModule {
     fun provideLocalStationCoordinatesRepository(
         dao: LocationDao
     ) : LocalStationCoordinatesRepository = LocalStationCoordinatesRepositoryImpl(dao)
+
+    @Provides
+    @Reusable
+    fun provideAllStationCodesRepository(
+        dao: AllStationCodeDao
+    ) : LocalAllStationCodesRepository = LocalAllStationCodesRepositoryImpl(dao)
 
 }

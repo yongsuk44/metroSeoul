@@ -6,5 +6,4 @@ import kotlinx.coroutines.flow.Flow
 
 interface RemoteStationTelRepository {
     suspend fun getStationTelData(publicDataKey: String , stationCode: String) : Flow<DomainStationTelNumber>
-    suspend fun getAllStationCode(seoulKey: String) : Flow<DomainAllStationCodes>
 }

@@ -3,6 +3,7 @@ package com.young.data.di
 import android.app.Application
 import androidx.room.Room
 import com.young.data.AppDataBase
+import com.young.data.dao.AllStationCodeDao
 import com.young.data.dao.FullRouteInformationDao
 import com.young.data.dao.LocationDao
 import com.young.data.dao.SubWayFacilitiesDao
@@ -38,5 +39,10 @@ class LocalModule {
     @Singleton
     fun provideLocationDao(database : AppDataBase) : LocationDao =
         database.locationDao()
+
+    @Provides
+    @Singleton
+    fun provideAllCodesDao(database : AppDataBase) : AllStationCodeDao =
+        database.allStationCodeDao()
 
 }

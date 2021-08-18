@@ -2,6 +2,7 @@ package com.young.metro.ui
 
 import android.location.Geocoder
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
@@ -63,6 +64,7 @@ class LocationListFragment : BaseFragment<FragmentLocationListBinding, LocationV
         viewModel.stationClick.observe(viewLifecycleOwner , EventObserver {
             val holderBinding = viewDataBinding.rvLocationNearStation.findViewHolderForLayoutPosition(viewModel.selectPosition.value ?: 0)?.itemView ?: return@EventObserver
             val extras = FragmentNavigatorExtras(
+                holderBinding.findViewById<ConstraintLayout>(R.id.lo_item_location_near_station).toTransitionGroup(),
                 holderBinding.findViewById<RecyclerView>(R.id.rv_item_location_near_line_logo).toTransitionGroup(),
                 holderBinding.findViewById<TextView>(R.id.tv_item_location_near_station_name).toTransitionGroup()
             )

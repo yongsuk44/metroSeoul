@@ -11,16 +11,8 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class RemoteStationTelRepositoryImpl @Inject constructor(
-    private val service: SeoulApiService,
     private val publicDataPortalApiService: PublicDataOpenApiService
 ) : RemoteStationTelRepository {
-    override suspend fun getAllStationCode(seoulKey: String): Flow<DomainAllStationCodes> = flow {
-        emit(
-            service.getStationNameToAllStationCodes(seoulKey)
-            .RemoteToDomain()
-        )
-    }
-
     override suspend fun getStationTelData(publicDataKey: String , stationCode: String) : Flow<DomainStationTelNumber> = flow {
         emit(
             publicDataPortalApiService.getAllRouteInformationData(publicDataKey , 1 , 10 , "json" , stationCode)

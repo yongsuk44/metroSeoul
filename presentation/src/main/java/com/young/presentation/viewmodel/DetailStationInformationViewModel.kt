@@ -4,6 +4,7 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.young.domain.usecase.local.LocalAllStationCodeUseCase
 import com.young.domain.usecase.local.LocalGetStationDataUseCase
 import com.young.domain.usecase.remote.RemoteStationTelUseCase
 import com.young.presentation.R
@@ -18,22 +19,20 @@ import com.young.presentation.modelfunction.DetailStationInformationViewFunction
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
+import java.lang.NullPointerException
 
 @FlowPreview
 @ExperimentalCoroutinesApi
 class DetailStationInformationViewModel @ViewModelInject constructor(
     private val provider: ResourceProvider,
     private val remoteTelUseCase: RemoteStationTelUseCase,
+    private val localAllStationCodeUseCase: LocalAllStationCodeUseCase,
     private val stationDataUseCase: LocalGetStationDataUseCase
 ) : BaseViewModel(), DetailStationInformationViewFunction {
 
     private val _selectStationLineListData = MutableLiveData<List<IndexAllRouteInformation>>()
     val selectStationLineListData: LiveData<List<IndexAllRouteInformation>>
         get() = _selectStationLineListData
-
-    private val _allStationCodes = MutableLiveData<List<Row>>()
-    val allStationCodes : LiveData<List<Row>>
-        get() = _allStationCodes
 
     private val _selectStationLineData = MutableLiveData<IndexAllRouteInformation>()
     val selectStationLineData: LiveData<IndexAllRouteInformation>
@@ -69,33 +68,12 @@ class DetailStationInformationViewModel @ViewModelInject constructor(
         }
     }
 
-    override fun getAllStationCodes() {
-        viewModelScope.launch(handler) {
-            remoteTelUseCase.getAllStationCode(provider.getString(R.string.seoulKey))
-                .flowOn(Dispatchers.IO)
-                .map {
-                    it.SearchInfoBySubwayNameService.row.map {
-                        it.DomainToUi()
-                    }
-                }.onCompletion {
-                    onLinePositionClick(0)
-                }
-                .collect {
-                    _allStationCodes.value = it
-                }
-        }
-    }
-
     override fun getStationCodeToTelData(stationCode : String) {
         viewModelScope.launch(Dispatchers.IO) {
-            flowOf(allStationCodes.value)
-                .map {
-                    it?.find {
-                        it.FR_CODE == stationCode
-                    } ?: throw NullPointerException("$stationCode : 지하철역 코드를 찾지 못함")
-                }
+            localAllStationCodeUseCase.findStationCode(stationCode)
                 .flatMapConcat {
-                    remoteTelUseCase.getStationTelData(provider.getString(R.string.key), it.STATION_CD)
+                    if (it == null) throw NullPointerException("Station Code를 찾지 못함")
+                    else remoteTelUseCase.getStationTelData(provider.getString(R.string.key), it.STATION_CD)
                 }
                 .transform {
                     emit(it.response.body.items)

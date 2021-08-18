@@ -11,7 +11,6 @@ dependencies {
     implementationList(LibraryList.appLibraries)
     api(AndroidLibraries.paging)
 
-    testImplementationList(LibraryList.TestLibrary)
     testImplementation(Libraries.coroutineAndroid)
     testImplementation(Libraries.coroutineTest)
 }

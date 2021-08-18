@@ -1,13 +1,7 @@
 package com.young.domain.model
 
-data class DomainTrailTimeTable(
-    val body: List<TimeTableBody>?,
-    val header: Header
-)
-
-data class TestTimeTable(
-    val body: List<TimeTableBody>,
-    val body2: List<TimeTableBody>,
+data class DomainStationTimeTable(
+    val body: List<String>,
     val firstTime : String ,
     val lastTime : String
 )
@@ -29,13 +23,7 @@ data class Header(
  */
 data class TimeTableBody(
     val arvTm: String,
-    val dayCd: String,
-    val dayNm: String,
-    val dptTm: String,
     val lnCd: String,
-    val orgStinCd: String,
-    val tmnStinCd: String,
     val railOprIsttCd: String,
-    val stinCd: String,
-    val trnNo: String
+    val stinCd: String
 )

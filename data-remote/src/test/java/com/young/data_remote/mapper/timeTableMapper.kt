@@ -1,12 +1,10 @@
 package com.young.data_remote.mapper
 
+import com.young.data_remote.model.RemoteStationSeoulTimeTable
 import com.young.data_remote.model.RemoteStationTimeTable
-import com.young.domain.model.TestTimeTable
+import com.young.domain.model.DomainStationTimeTable
 import com.young.domain.model.TimeTableBody
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.transform
+import kotlinx.coroutines.flow.*
 
 object timeTableMapper {
 
@@ -15,41 +13,34 @@ object timeTableMapper {
         .insert(time.length-1, ":")
         .toString()
 
-    suspend fun RemoteStationTimeTable.RemoteToDomain() : TestTimeTable? {
+    suspend fun RemoteStationTimeTable.RemoteToDomain(upDown : String) : DomainStationTimeTable? {
         if (body.isNullOrEmpty()) return null
         else {
             val group = body!!.groupBy { it.orgStinCd < it.tmnStinCd }
-            val upTable = group.getValue(true).groupBy { it.orgStinCd }
-            val downTable = group.getValue(false).groupBy { it.orgStinCd }
 
-            val bodyObject = body!!.map {
-                TimeTableBody(
-                    arvTm = it.arvTm,
-                    lnCd = it.lnCd,
-                    railOprIsttCd = it.railOprIsttCd,
-                    stinCd = it.stinCd ,
-                    tmnStinCd = it.tmnStinCd ,
-                    orgStinCd = it.orgStinCd,
-                    trnNo = it.trnNo ,
-                    dptTm =it.dptTm ,
-                    dayCd =it.dayCd ,
-                    dayNm =it.dayNm
-                )
-            }
-
-            return flowOf(bodyObject)
+            return flowOf(group.getValue(upDown == "1"))
                 .transform {
-                    it.map {
-                        getLocalTime(it.arvTm)
-                    }.run {
-                        emit(filter { it.substring(0..1).toInt() > 1 })
-                        emit(filter { it.substring(0..1).toInt() <= 1 })
-                    }
-                }
-                .map {
-                    val min = it.first().toString()
-                    val max = it.last().toString()
-                    TestTimeTable(bodyObject , bodyObject , min , max)
+                    it.map { getLocalTime(it.arvTm) }
+                        .run {
+                            emit(filter { it.substring(0..1).toInt() > 2 } + filter { it.substring(0..1).toInt() <= 2 })
+                        }
+                }.transform {
+                    emit(
+                        DomainStationTimeTable(it , it.first() , it.last() )
+                    )
+                }.first()
+        }
+    }
+
+    suspend fun RemoteStationSeoulTimeTable.RemoteToDomain() : DomainStationTimeTable? {
+        if (this.SearchSTNTimeTableByIDService == null) return null
+        else {
+            return flowOf(SearchSTNTimeTableByIDService!!.row)
+                .transform {
+                    val list = it.map { it.ARRIVETIME }
+                    emit(
+                        DomainStationTimeTable(list , list.first() , list.last())
+                    )
                 }.first()
         }
     }

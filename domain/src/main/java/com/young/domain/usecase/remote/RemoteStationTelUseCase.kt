@@ -9,7 +9,6 @@ import javax.inject.Inject
 
 interface RemoteStationTelBaseUseCase {
     suspend fun getStationTelData(publicDataKey: String , stationCode: String) : Flow<DomainStationTelNumber>
-    suspend fun getAllStationCode(seoulKey: String) : Flow<DomainAllStationCodes>
 }
 
 class RemoteStationTelUseCase @Inject constructor(
@@ -18,8 +17,5 @@ class RemoteStationTelUseCase @Inject constructor(
 
     override suspend fun getStationTelData(publicDataKey: String , stationCode: String) : Flow<DomainStationTelNumber> =
         remote.getStationTelData(publicDataKey, stationCode)
-
-    override suspend fun getAllStationCode(seoulKey: String): Flow<DomainAllStationCodes> =
-        remote.getAllStationCode(seoulKey)
 
 }

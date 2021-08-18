@@ -54,11 +54,12 @@ object AndroidX {
         "androidx.paging:paging-common:${Versions.paging}"
     const val roomTest =
         "androidx.room:room-testing:${Versions.room}"
+
+    const val robolectric = "org.robolectric:robolectric:4.5-alpha-3"
 }
 
-object JUnit {
-    const val junit = "junit:junit:${Versions.junit}"
-    const val junitPlatformRunner = "org.junit.platform:junit-platform-runner:${Versions.junitPlatformRunner}"
+object AndroidTestImplementationList {
+
 }
 
 object Mockito {
@@ -220,14 +221,6 @@ object LibraryList {
         add(Libraries.glideCompiler)
     }
 
-    val TestLibrary = arrayListOf<String>().apply {
-        add(JUnit.junit)
-        add(JUnit.junitPlatformRunner)
-        add(AndroidX.coreTesting)
-        add(AndroidX.pagingTesting)
-        add(AndroidX.roomTest)
-    }
-
     val AndroidTestLibrary = arrayListOf<String>().apply {
         add(AndroidX.core)
         add(AndroidX.coreKtx)
@@ -236,6 +229,10 @@ object LibraryList {
         add(AndroidX.espressoCore)
         add(AndroidX.espressoContrib)
         add(AndroidX.junit)
+        add(AndroidX.coreTesting)
+        add(AndroidX.pagingTesting)
+        add(AndroidX.roomTest)
+        add(AndroidX.robolectric)
     }
 
     val mockitoLibrary = arrayListOf<String>().apply {

@@ -1,18 +1,18 @@
 package com.young.data_remote.repository
 
+import com.young.data_remote.api.SeoulApiService
 import com.young.data_remote.api.TrailPorTalService
 import com.young.data_remote.mapper.RemoteToDomainMapper.RemoteToDomain
 import com.young.domain.model.DomainAllRouteInformation
+import com.young.domain.model.DomainAllStationCodes
 import com.young.domain.model.DomainConvenienceInformation
 import com.young.domain.repository.remote.RemoteFullRouteInformationRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 class RemoteFullRouteInformationRepositoryImpl @Inject constructor(
+    private val seoulApiService: SeoulApiService,
     private val service: TrailPorTalService
 ) : RemoteFullRouteInformationRepository {
     override suspend fun getFullRouteInformation(
@@ -53,4 +53,11 @@ class RemoteFullRouteInformationRepositoryImpl @Inject constructor(
             .map {
                 it.RemoteToDomain()
             }.flowOn(Dispatchers.IO)
+
+    override suspend fun getAllStationCode(seoulKey: String): Flow<DomainAllStationCodes> = flow {
+        emit(
+            seoulApiService.getStationNameToAllStationCodes(seoulKey)
+                .RemoteToDomain()
+        )
+    }
 }

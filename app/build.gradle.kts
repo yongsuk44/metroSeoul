@@ -111,6 +111,6 @@ dependencies {
     implementationList(LibraryList.HiltLibraries)
     kaptList(LibraryList.HiltLibraryKapt)
 
-    testImplementationList(LibraryList.TestLibrary)
     testImplementation(Libraries.coroutineTest)
+    androidTestImplementationList(LibraryList.AndroidTestLibrary)
 }

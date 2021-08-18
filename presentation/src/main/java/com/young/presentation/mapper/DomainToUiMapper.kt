@@ -18,44 +18,6 @@ object DomainToUiMapper {
         return BaseMapper<Row , com.young.presentation.model.Row>().run { this(this@DomainToUi) }
     }
 
-    fun getLocalTime(time: String): String = StringBuilder().append(time)
-        .insert(time.length-4, ":")
-        .insert(time.length-1, ":")
-        .toString()
-
-
-    suspend fun DomainTrailTimeTable.DomainToUi() : UiTrailTimeTable? {
-        if (body.isNullOrEmpty()) return null
-        else {
-            val upTime = body!!.groupBy { it.orgStinCd }
-            val downTime = body!!.groupBy { it.tmnStinCd }
-
-            val bodyObject = body!!.map {
-                com.young.presentation.model.TimeTableBody(
-                    arvTm = it.arvTm,
-                    lnCd = it.lnCd,
-                    railOprIsttCd = it.railOprIsttCd,
-                    stinCd = it.stinCd
-                )
-            }
-
-            return flowOf(bodyObject)
-                .transform {
-                    it.map {
-                        getLocalTime(it.arvTm)
-                    }.run {
-                        emit(filter { it.substring(0..1).toInt() > 1 })
-                        emit(filter { it.substring(0..1).toInt() <= 1 })
-                    }
-                }
-                .map {
-                    val min = it.first().toString()
-                    val max = it.last().toString()
-                    UiTrailTimeTable(bodyObject , bodyObject , min , max)
-                }.first()
-        }
-    }
-
     fun AllRouteInformation.DomainToUi(): com.young.presentation.model.IndexAllRouteInformation {
 
         val bodyMapper = BaseMapper(

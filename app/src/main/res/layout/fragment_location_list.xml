@@ -91,6 +91,7 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             app:lottie_repeatCount="10"
+            app:lottie_autoPlay="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/gl_loading_top"

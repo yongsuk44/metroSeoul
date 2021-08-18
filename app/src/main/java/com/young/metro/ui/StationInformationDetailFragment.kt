@@ -40,9 +40,10 @@ class StationInformationDetailFragment :
         viewDataBinding.rvDetailInformationStationLogo.adapter = lineLogoAdapter
         viewDataBinding.stationName = args.stationName
 
-        viewModel.getAllStationCodes()
         viewModel.getStationData(args.stinCodes.toList())
 
+        waitForTransition(viewDataBinding.incTimetable.loStationTimetable)
+        waitForTransition(viewDataBinding.loDetailInformation)
         waitForTransition(viewDataBinding.rvDetailInformationStationLogo)
         waitForTransition(viewDataBinding.tvDetailInformationStationName)
     }
@@ -58,10 +59,6 @@ class StationInformationDetailFragment :
 
         viewModel.selectLineCodePositionChange.observe(viewLifecycleOwner) {
             lineLogoAdapter.notifyDataSetChanged()
-        }
-
-        viewModel.allStationCodes.observe(viewLifecycleOwner) {
-
         }
 
         viewModel.selectStationLineData.observe(viewLifecycleOwner) {

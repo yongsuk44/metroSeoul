@@ -79,6 +79,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, FullRouteInformationViewM
         viewDataBinding.permissionVm = permissionViewModel
         requestPermission.launch(locationPermissionList)
         getRequestLocationData()
+        viewModel.insertAllStationCodes()
         viewModel.loadFullRouteInformation()
     }
 

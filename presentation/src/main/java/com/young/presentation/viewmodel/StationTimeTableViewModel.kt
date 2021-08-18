@@ -4,6 +4,8 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.young.domain.usecase.local.LocalAllStationCodeUseCase
+import com.young.domain.usecase.remote.RemoteTimeTableBaseUseCase
 import com.young.domain.usecase.remote.RemoteTimeTableUseCase
 import com.young.presentation.R
 import com.young.presentation.consts.BaseViewModel
@@ -19,14 +21,19 @@ import timber.log.Timber
 import java.time.LocalTime
 
 interface StationTimeTableFunction {
-    fun getStationTimeTable(indexAllRouteInformation: IndexAllRouteInformation)
+    fun getStationTimeTable(indexAllRouteInformation: IndexAllRouteInformation , dayCode : String)
+    fun changeDayCode(data : String)
 }
 
 class StationTimeTableViewModel @ViewModelInject constructor(
     private val provider: ResourceProvider,
     private val timeTableUseCase: RemoteTimeTableUseCase ,
-
+    private val localAllStationCodeUseCase: LocalAllStationCodeUseCase
 ) : BaseViewModel(), StationTimeTableFunction {
+
+    private val _dayCodeChangeData = MutableLiveData<String>()
+    val dayCodeChangeData : LiveData<String>
+        get() = _dayCodeChangeData
 
     private val _weekTimeTable = MutableLiveData<UiTrailTimeTable>()
     val weekTimeTable: LiveData<UiTrailTimeTable>
@@ -40,18 +47,32 @@ class StationTimeTableViewModel @ViewModelInject constructor(
     val sunTimeTable: LiveData<UiTrailTimeTable>
         get() = _sunTimeTable
 
-    override fun getStationTimeTable(indexAllRouteInformation: IndexAllRouteInformation) {
+    fun call(indexAllRouteInformation: IndexAllRouteInformation) {
+        viewModelScope.launch {
+            localAllStationCodeUseCase.findStationCode("S22")
+                .map {
+                    if (it == null) getStationTimeTable(indexAllRouteInformation , dayCodeChangeData.value ?: "1")
+                    else
+                }
+        }
+    }
+
+    override fun getStationTimeTable(indexAllRouteInformation: IndexAllRouteInformation , dayCode : String) {
         viewModelScope.launch(handler) {
-            val weekFlow = generateStationTimeTableFlow("8" , indexAllRouteInformation)
-            val satFlow = generateStationTimeTableFlow("7" , indexAllRouteInformation)
-            val sunFlow = generateStationTimeTableFlow("9" , indexAllRouteInformation)
+            val upFlow = generateStationTimeTableFlow(dayCode , indexAllRouteInformation, "1")
+            val downFlow = generateStationTimeTableFlow(dayCode , indexAllRouteInformation , "2")
 
-            combine(weekFlow, satFlow, sunFlow) { week, sat, sun ->
+            combineTransform(upFlow,downFlow) { up , down ->
 
-                listOf(
-                    week.DomainToUi() ,
-                    sat.DomainToUi() ?: sun.DomainToUi() ,
-                    sun.DomainToUi()
+                emit(
+                    UiTrailTimeTable(
+                        up.body ,
+                        down.body,
+                        up.firstTime ,
+                        up.lastTime,
+                        down.firstTime,
+                        down.lastTime
+                    )
                 )
             }
                 .flowOn(Dispatchers.IO)
@@ -62,14 +83,15 @@ class StationTimeTableViewModel @ViewModelInject constructor(
                     setLoadingValue(false)
                 }
                 .collect {
-                    _weekTimeTable.value = it.first()
-                    _satTimeTable.value = it[1]
-                    _sunTimeTable.value = it.last()
+
                 }
         }
     }
 
-    suspend fun generateStationTimeTableFlow(dayCode : String , data : IndexAllRouteInformation) =
-        timeTableUseCase.getStationTimetables(provider.getString(R.string.trailKey), data.railOprIsttCd, dayCode, data.lnCd, data.stinCd)
+    suspend fun generateStationTimeTableFlow(dayCode : String , data : IndexAllRouteInformation , upDown : String) =
+        timeTableUseCase.getStationTimetables(provider.getString(R.string.trailKey), data.railOprIsttCd, dayCode, data.lnCd, data.stinCd, upDown)
 
+    override fun changeDayCode(data: String) {
+        _dayCodeChangeData.value = data
+    }
 }

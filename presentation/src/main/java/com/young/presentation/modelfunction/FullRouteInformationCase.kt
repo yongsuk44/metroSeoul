@@ -6,7 +6,7 @@ interface FullRouteInformationCase {
     fun loadFullRouteInformation()
     suspend fun getFullRouteInformation(key: String)
     suspend fun getLocalFullRouteInformation()
-
+    fun insertAllStationCodes()
     fun onSearchEditViewClick(value : Boolean)
     fun onStationClick(item : ListRouteInformation , position : Int)
     fun onSearchEditViewClear()

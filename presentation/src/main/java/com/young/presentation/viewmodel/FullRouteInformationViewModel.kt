@@ -4,6 +4,7 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.young.domain.usecase.local.LocalAllStationCodeUseCase
 import com.young.domain.usecase.local.LocalGetFullRouteInformationUseCase
 import com.young.domain.usecase.local.LocalInsertFullRouteInformationUseCase
 import com.young.domain.usecase.remote.RemoteFullRouteInformationUseCase
@@ -25,6 +26,7 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
     private val allInformationUseCase: RemoteFullRouteInformationUseCase,
     private val localInsertUseCase: LocalInsertFullRouteInformationUseCase,
     private val localGetUseCase: LocalGetFullRouteInformationUseCase,
+    private val localAllStationCodeUseCase: LocalAllStationCodeUseCase,
     private val resourceProvider: ResourceProvider
 ) : BaseViewModel(), FullRouteInformationCase {
 
@@ -91,6 +93,19 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
             }.collect {
                 _fullRouteInformation.value = it
             }
+    }
+
+    override fun insertAllStationCodes() {
+        viewModelScope.launch {
+            allInformationUseCase.getAllStationCode(resourceProvider.getString(R.string.seoulKey))
+                .flowOn(Dispatchers.IO)
+                .flatMapConcat {
+                    flowOf(localAllStationCodeUseCase.insert(it))
+                }
+                .flowOn(Dispatchers.IO)
+                .collect()
+        }
+
     }
 
     override fun onSearchEditViewClick(value: Boolean) {

@@ -41,6 +41,6 @@ dependencies {
     implementation(googleCloudeService.googleService)
 
     testImplementationList(LibraryList.mockitoLibrary)
-    testImplementationList(LibraryList.TestLibrary)
     testImplementation(Libraries.coroutineTest)
+    testImplementationList(LibraryList.AndroidTestLibrary)
 }

@@ -35,24 +35,25 @@ class RepositoryModule {
     @Provides
     @Reusable
     fun provideSubWayTelRepository(
-        service: SeoulApiService,
         publicDataPortalApiService: PublicDataOpenApiService
     ) : RemoteStationTelRepository =
-        RemoteStationTelRepositoryImpl(service ,publicDataPortalApiService)
+        RemoteStationTelRepositoryImpl(publicDataPortalApiService)
 
     @Provides
     @Reusable
     fun provideTimeTableRepository(
-        service: TrailPorTalService
+        service: TrailPorTalService ,
+        seoulApi : SeoulApiService
     ) : RemoteStationTimeDataSource =
-        RemoteStationTimeTableRepositoryImpl(service)
+        RemoteStationTimeTableRepositoryImpl(service , seoulApi)
 
     @Provides
     @Reusable
     fun provideAllRouteInformationRepository(
+        seoul: SeoulApiService,
         service : TrailPorTalService
     ) : RemoteFullRouteInformationRepository =
-        RemoteFullRouteInformationRepositoryImpl(service)
+        RemoteFullRouteInformationRepositoryImpl(seoul , service)
 
     @Provides
     @Reusable

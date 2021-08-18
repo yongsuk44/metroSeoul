@@ -58,7 +58,7 @@ object Versions {
 
     const val camera = "1.0.0-beta04"
     const val exoPlayer = "2.14.1"
-    const val fragmentVersion = "1.3.0-alpha02"
+    const val fragmentVersion = "1.4.0-alpha03"
     const val viewPager = "1.0.0"
 
     const val coroutinesTest = "1.4.2"

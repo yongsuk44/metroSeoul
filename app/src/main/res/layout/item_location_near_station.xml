@@ -15,15 +15,14 @@
         <variable
             name="adapter"
             type="com.young.metro.adapter.LineLogoAdapter" />
+
         <variable
             name="position"
             type="Integer" />
     </data>
 
-    <com.young.metro.ui.custom.CustomConstraintLayout
+    <com.young.metro.ui.custom.CustomConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/lo_item_location_near_station"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:onClick="@{() -> vm.onStationClick(data , position) }"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -32,8 +31,10 @@
         android:layout_marginBottom="5dp"
         android:background="@color/white"
         android:elevation="@dimen/defaultViewShadow"
+        android:onClick="@{() -> vm.onStationClick(data , position) }"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
+        android:transitionName="@{@string/transition_station_layout(data.stationName)}"
         android:translationY="@dimen/defaultViewShadowTansY"
         app:cornerRadius="10dp"
         app:customStrokeColor="@color/black"
@@ -44,10 +45,10 @@
             onListAdapterSetting="@{adapter}"
             android:layout_width="0dp"
             android:layout_height="20dp"
-            android:overScrollMode="never"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:orientation="horizontal"
+            android:overScrollMode="never"
             android:transitionName="@{@string/transition_station_line_number(data.stationName)}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="@id/tv_item_location_near_station_name"
@@ -60,8 +61,8 @@
             android:id="@+id/tv_item_location_near_station_name"
             style="@style/BlackTextViewMediumSize15"
             android:layout_marginTop="15dp"
-            android:transitionName="@{@string/transition_station_name(data.stationName)}"
             android:text="@{data.stationName}"
+            android:transitionName="@{@string/transition_station_name(data.stationName)}"
             app:layout_constraintBottom_toTopOf="@id/tv_item_location_near_station_distance"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -1,5 +1,6 @@
 package com.young.domain.di
 
+import com.young.domain.repository.location.LocalAllStationCodesRepository
 import com.young.domain.repository.location.LocalFullRouteInformationRepository
 import com.young.domain.repository.location.LocalLocationRepository
 import com.young.domain.repository.location.LocalStationCoordinatesRepository
@@ -10,10 +11,7 @@ import com.young.domain.repository.remote.RemoteStationTimeTableRepository
 import com.young.domain.repository.subwayfacilities.LocalSubWayFacilitiesRepository
 import com.young.domain.repository.subwayfacilities.RemoteSubWayFacilitiesRepository
 import com.young.domain.usecase.info.location.GetLocationUseCase
-import com.young.domain.usecase.local.LocalGetFullRouteInformationUseCase
-import com.young.domain.usecase.local.LocalGetStationDataUseCase
-import com.young.domain.usecase.local.LocalInsertFullRouteInformationUseCase
-import com.young.domain.usecase.local.LocalStationCoordinateUseCase
+import com.young.domain.usecase.local.*
 import com.young.domain.usecase.remote.*
 import com.young.domain.usecase.subwayfacilities.local.GetSizeTableDataUseCase
 import com.young.domain.usecase.subwayfacilities.local.InsertSubWayFacilitiesDataUseCase
@@ -65,7 +63,7 @@ object DomainSubWayFacilitiesModule {
     @Reusable
     fun provideGetTimeTable(
         remote: RemoteStationTimeTableRepository
-    ): RemoteTimeTableUseCase = RemoteGetTimeTableUseCaseImpl(remote)
+    ): RemoteTimeTableBaseUseCase = RemoteTimeTableUseCase(remote)
 
 
     @Provides
@@ -109,5 +107,11 @@ object DomainSubWayFacilitiesModule {
     fun provideGetLocalStationData(
         local: LocalFullRouteInformationRepository
     ) = LocalGetStationDataUseCase(local)
+
+    @Provides
+    @Reusable
+    fun provideLocalAllStationCodes(
+        local: LocalAllStationCodesRepository
+    ) = LocalAllStationCodeUseCase(local)
 
 }

@@ -10,9 +10,21 @@ android{
     compileSdkVersion(AppConfig.compileSdk)
     buildToolsVersion(AppConfig.buildToolsVersion)
 
+    defaultConfig {
+        minSdkVersion(AppConfig.minSdk)
+        maxSdkVersion(AppConfig.targetSdk)
+        targetSdkVersion(AppConfig.targetSdk)
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
     kotlinOptions {
         jvmTarget = Versions.jvmTarget
         languageVersion = Versions.kotlinLanguageVersion
+    }
+
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
     }
 }
 
@@ -28,5 +40,6 @@ dependencies {
     api(AndroidLibraries.roomRuntime)
     implementation(AndroidLibraries.roomKtx)
     annotationProcessor(AndroidLibraries.roomKapt)
-    testImplementationList(LibraryList.TestLibrary)
+    androidTestImplementationList(LibraryList.AndroidTestLibrary)
+    testImplementationList(LibraryList.AndroidTestLibrary)
 }

@@ -1,10 +1,12 @@
 package com.young.presentation.model
 
 data class UiTrailTimeTable(
-    val body: List<TimeTableBody>,
-    val body2: List<TimeTableBody>,
-    val firstTime : String ,
-    val lastTime : String
+    val up: List<String>,
+    val down: List<String>,
+    val upFirstTime : String ,
+    val upLastTime : String ,
+    val downFirstTime : String ,
+    val downlastTime : String
 )
 
 data class Header(
