@@ -13,4 +13,8 @@ dependencies {
 
     testImplementation(Libraries.coroutineAndroid)
     testImplementation(Libraries.coroutineTest)
+
+    testImplementationList(LibraryList.mockitoLibrary)
+    testImplementation(Libraries.coroutineTest)
+    testImplementationList(LibraryList.AndroidTestLibrary)
 }

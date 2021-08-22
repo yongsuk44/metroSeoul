@@ -8,7 +8,24 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.recyclerview.widget.RecyclerView
 import com.young.metro.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.time.LocalTime
+import kotlin.math.abs
+
+fun RecyclerView.recyclerViewScrollPosition(scope : LifecycleCoroutineScope, position : Int) {
+    if (position <= 0) return
+    else {
+        scope.launch(Dispatchers.Main) {
+            delay(600)
+            scrollToPosition(position)
+        }
+    }
+}
 
 fun Fragment.waitForTransition(view : View) {
     postponeEnterTransition()

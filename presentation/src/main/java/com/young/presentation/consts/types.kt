@@ -101,6 +101,10 @@ enum class STATION_LINE(val lnCd : String) {
     abstract fun getLineLogo() : Int
 }
 
+enum class DayType(val seoul : String , val public: String) {
+    WEEK("1","8") , SAT("2" , "7") , SUN("3","9");
+}
+
 fun getApiPath(lincode : String): String? = when (lincode) {
     "I1" -> "15041410"
     "1" -> "15041414"

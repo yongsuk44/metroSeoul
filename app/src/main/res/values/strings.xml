@@ -25,11 +25,13 @@
     <string name="transition_station_line_number">lineNumber %s</string>
     <string name="transition_station_layout">layout %s</string>
 
+    <string name="view_station_up_time_title">상행</string>
+    <string name="view_station_down_time_title">하행</string>
     <string name="view_station_first_time">첫차</string>
     <string name="view_station_last_time">막차</string>
     <string name="view_week_day">평일</string>
     <string name="view_sat_day">토요일</string>
-    <string name="view_sun_day">일요일</string>
+    <string name="view_sun_day">일요일 및 공휴일</string>
 
 
     <string name="key">Rmc8JdIku25QhnYp5H98FqAySAFM%2F73Zil7qnZDM%2Fwla0LBK4dQqu1qqogV3iTyGzG31CVzT3Grg5UQxoGzPiA%3D%3D</string>

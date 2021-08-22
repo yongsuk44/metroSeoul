@@ -19,7 +19,7 @@ class RemoteStationTimeDataSourceImpl @Inject constructor(
         updown: String
     ): Flow<DomainStationTimeTable> =
         dataSource.getRemoteStationTimeTable(key, railCode, dayCd, lineCode, stationCode ,updown).map {
-            it.RemoteToDomain()
+            it.RemoteToDomain(updown)
         }
 
     override suspend fun getSeoulStationTimeTable(

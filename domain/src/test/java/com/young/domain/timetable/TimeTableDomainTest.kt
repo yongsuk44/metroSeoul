@@ -146,7 +146,7 @@ class TimeTableDomainTest {
 
     suspend fun stubStationPublicTimeTableNull(data : DomainStationTimeTable) {
         whenever(remoteStationTimeTableRepository.getStationTimetables("key" , "rail" , "day" , "line" ,"scd" , "updowncode"))
-            .thenReturn(flowOf(null))
+            .thenReturn(null)
     }
 
     suspend fun stubStationSeoulTimeTable(data : DomainStationTimeTable) {

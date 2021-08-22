@@ -1,7 +1,13 @@
 package com.young.presentation
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
+import com.young.presentation.consts.CustomTransformationDataMap
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -19,11 +25,22 @@ class ExampleUnitTest {
     @get:Rule
     val rule = TestCoroutineRule()
 
+    lateinit var testLiveData : MutableLiveData<String>
+    lateinit var testData : LiveData<Int>
+
+    @Before
+    fun setUp() {
+        testLiveData.value = "2345"
+
+        testData = CustomTransformationDataMap(testLiveData) {
+            it.toInt() - 100
+        }
+    }
+
     @Test
     fun test() {
-        rule.launch {
-
+        runBlocking {
+            println(testData.getAwaitValue())
         }
-
     }
 }

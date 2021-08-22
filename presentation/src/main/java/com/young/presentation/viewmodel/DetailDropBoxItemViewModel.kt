@@ -19,7 +19,7 @@ import timber.log.Timber
 interface DetailDropBoxFunction {
     fun getConvenienceInformation(lineCode: String, trailCode: String, stationCode: String)
 
-    fun getPlatformAtTheEntranceData(railCode: String, lineCd : String, stinCode: String)
+    fun getPlatformEntranceData(railCode: String, lineCd : String, stinCode: String)
 }
 
 class DetailDropBoxItemViewModel @ViewModelInject constructor(
@@ -32,9 +32,9 @@ class DetailDropBoxItemViewModel @ViewModelInject constructor(
     val convenienceInformation: LiveData<UiConvenienceInformation>
         get() = _convenienceInformation
 
-    override fun getPlatformAtTheEntranceData(railCode: String,lineCd : String, stinCode: String){
+    override fun getPlatformEntranceData(railCode: String,lineCd : String, stinCode: String){
         viewModelScope.launch(handler) {
-            platformEntranceUseCase.getPlatformAtTheEntranceData(provider.getString(R.string.trailKey), railCode, lineCd , stinCode)
+            platformEntranceUseCase.getPlatformEntranceData(provider.getString(R.string.trailKey), railCode, lineCd , stinCode)
                 .map {
                     it.DomainToUi()
                 }

@@ -41,7 +41,7 @@ interface TrailPorTalService {
     ) : RemoteLocationTrailData
 
     @GET("vulnerableUserInfo/stationMovement")
-    suspend fun getPlatformAtTheEntranceData(
+    suspend fun getPlatformEntranceData(
         @Query("serviceKey", encoded = true) key: String,
         @Query("format") format: String,
         @Query("railOprIsttCd") trailCode: String,

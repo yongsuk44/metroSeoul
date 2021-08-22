@@ -6,17 +6,17 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 interface PlatFormEntranceBaseUseCase {
-    suspend fun getPlatformAtTheEntranceData(key : String , railCode : String ,lineCd : String, stinCode : String) : Flow<DomainPlatformEntrance>
+    suspend fun getPlatformEntranceData(key : String , railCode : String ,lineCd : String, stinCode : String) : Flow<DomainPlatformEntrance>
 }
 class PlatformEntranceUseCase @Inject constructor(
     val remote : RemoteDetailInformationRepository
 ) : PlatFormEntranceBaseUseCase {
-    override suspend fun getPlatformAtTheEntranceData(
+    override suspend fun getPlatformEntranceData(
         key: String,
         railCode: String,
         lineCd : String,
         stinCode: String
     ): Flow<DomainPlatformEntrance> =
-        remote.getPlatformAtTheEntranceData(key, railCode, lineCd, stinCode)
+        remote.getPlatformEntranceData(key, railCode, lineCd, stinCode)
 
 }

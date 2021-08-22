@@ -64,6 +64,7 @@ class DetailStationInformationViewModel @ViewModelInject constructor(
                 .flowOn(Dispatchers.IO)
                 .collect {
                     _selectStationLineListData.value = it
+                    onLinePositionClick(0)
                 }
         }
     }
@@ -76,13 +77,13 @@ class DetailStationInformationViewModel @ViewModelInject constructor(
                     else remoteTelUseCase.getStationTelData(provider.getString(R.string.key), it.STATION_CD)
                 }
                 .transform {
-                    emit(it.response.body.items)
+                    emit(it.response.body?.items)
                 }.catch {
                     _stationTelNumber.postValue("1544-7788")
                     Timber.e(it)
                 }.collect {
                     withContext(Dispatchers.Main) {
-                        _stationTelNumber.value = it.first().phoneNumber
+                        _stationTelNumber.value = it?.first()?.phoneNumber ?: "1544-7788"
                         setLoadingValue(false)
                     }
                 }

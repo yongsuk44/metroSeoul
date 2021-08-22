@@ -1,11 +1,9 @@
 package com.young.presentation.consts
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import kotlinx.coroutines.CoroutineExceptionHandler
 import timber.log.Timber
+import java.lang.NullPointerException
 
 open class BaseViewModel : ViewModel() {
 
@@ -15,26 +13,34 @@ open class BaseViewModel : ViewModel() {
     }
 
     private val _loading = MutableLiveData<Boolean>(true)
-    val loading : LiveData<Boolean>
+    val loading: LiveData<Boolean>
         get() = _loading
 
     private val _toastMsg = MutableLiveData<String>()
-    val toastMsg : LiveData<String>
+    val toastMsg: LiveData<String>
         get() = _toastMsg
 
-    fun setLoadingValue(check : Boolean) {
+    fun setLoadingValue(check: Boolean) {
         _loading.value = check
     }
 
-    fun setToastMsg(value : String) {
+    fun setToastMsg(value: String) {
         _toastMsg.value = value
     }
 }
 
-open class Event<out T>(private val content : T) {
+fun <X, Y> CustomTransformationDataMap(liveData: LiveData<X>, block: (X) -> Y): LiveData<Y> {
+    return Transformations.map(liveData) {
+        val returnData = block(it)
+        Timber.d("CustomTransformation After Data : $returnData")
+        returnData
+    }
+}
+
+open class Event<out T>(private val content: T) {
     private var hasHandler = false
 
-    fun getContentIfNotHandler() : T? =
+    fun getContentIfNotHandler(): T? =
         if (hasHandler) null
         else {
             hasHandler = true
@@ -42,7 +48,7 @@ open class Event<out T>(private val content : T) {
         }
 }
 
-class EventObserver<T>(private val onEventUnhandledContent : (T) -> Unit) : Observer<Event<T>> {
+class EventObserver<T>(private val onEventUnhandledContent: (T) -> Unit) : Observer<Event<T>> {
     override fun onChanged(t: Event<T>?) {
         t?.getContentIfNotHandler()?.let {
             onEventUnhandledContent(it)

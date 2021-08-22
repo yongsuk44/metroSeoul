@@ -1,5 +1,6 @@
 package com.young.base
 
+import androidx.lifecycle.MutableLiveData
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -9,8 +10,10 @@ import org.junit.Test
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 class ExampleUnitTest {
+    val testLiveData = MutableLiveData<String>("dadasd")
+
     @Test
     fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+
     }
 }

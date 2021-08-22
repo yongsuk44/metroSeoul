@@ -4,10 +4,12 @@ import com.young.data_remote.TestCoroutineRule
 import com.young.data_remote.datasource.RemoteStationTimeDataSourceImpl
 import com.young.data_remote.enqueueResponse
 import com.young.data_remote.generate.RetrofitFactory
-import com.young.data_remote.mapper.timeTableMapper.RemoteToDomain
+import com.young.data_remote.mapper.RemoteToDomainMapper.RemoteToDomain
 import com.young.data_remote.repository.RemoteStationTimeTableRepositoryImpl
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
@@ -16,6 +18,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
+import java.time.LocalTime
+import kotlin.math.abs
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
@@ -84,8 +88,10 @@ class TrailTimeTableImplTest {
             repository.getRemoteStationTimeTable("test","S5", "8", "8", "822" , "1")
                 .map {
                     it.RemoteToDomain("1")
+                }.map {
+                    it.body.nowTimeNearList()
                 }.collect {
-                    it
+                    println(it)
                 }
         }
     }
@@ -97,6 +103,20 @@ class TrailTimeTableImplTest {
         runBlocking {
             val call = datasource.getStationTimetables("test","S5", "8", "8", "822", "1").single()
             call
+        }
+    }
+
+
+    fun List<String>.nowTimeNearList() : Int {
+        val min = 1000
+        val target = LocalTime.now().toSecondOfDay()
+
+        find { s ->
+            val dd = LocalTime.parse(s).toSecondOfDay() - target
+            println("$s : ${abs(dd)}")
+            abs(min) > abs(dd)
+        }.run {
+            return this@nowTimeNearList.indexOf(this)
         }
     }
 }
