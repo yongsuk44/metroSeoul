@@ -32,12 +32,10 @@ class TrailTimeTableImplTest {
     lateinit var api: TrailPorTalService
     lateinit var seoulApiService: SeoulApiService
 
-    @get:Rule
-    val rule: TestCoroutineRule = TestCoroutineRule()
-
     @Before
     fun setUp() {
         mockWebServer.start()
+
         api = RetrofitFactory.RetrofitGenerate(mockWebServer).create(TrailPorTalService::class.java)
         seoulApiService = RetrofitFactory.RetrofitGenerate(mockWebServer).create(SeoulApiService::class.java)
 
@@ -88,8 +86,6 @@ class TrailTimeTableImplTest {
             repository.getRemoteStationTimeTable("test","S5", "8", "8", "822" , "1")
                 .map {
                     it.RemoteToDomain("1")
-                }.map {
-                    it.body.nowTimeNearList()
                 }.collect {
                     println(it)
                 }
@@ -103,20 +99,6 @@ class TrailTimeTableImplTest {
         runBlocking {
             val call = datasource.getStationTimetables("test","S5", "8", "8", "822", "1").single()
             call
-        }
-    }
-
-
-    fun List<String>.nowTimeNearList() : Int {
-        val min = 1000
-        val target = LocalTime.now().toSecondOfDay()
-
-        find { s ->
-            val dd = LocalTime.parse(s).toSecondOfDay() - target
-            println("$s : ${abs(dd)}")
-            abs(min) > abs(dd)
-        }.run {
-            return this@nowTimeNearList.indexOf(this)
         }
     }
 }

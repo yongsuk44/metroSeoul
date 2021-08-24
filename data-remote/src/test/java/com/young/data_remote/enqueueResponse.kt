@@ -8,7 +8,7 @@ import java.nio.charset.StandardCharsets
 import java.util.*
 
 internal fun MockWebServer.enqueueResponse(fileName: String, code: Int) {
-    val inputStream = javaClass.classLoader?.getResourceAsStream("$fileName")
+    val inputStream = javaClass.classLoader?.getResourceAsStream(fileName)
 
     val source = inputStream?.let { inputStream.source().buffer() }
     source?.let {
@@ -18,10 +18,4 @@ internal fun MockWebServer.enqueueResponse(fileName: String, code: Int) {
                 .setBody(source.readString(StandardCharsets.UTF_8))
         )
     }
-}
-
-internal fun getJsonFile(loader: ClassLoader?, fileName : String) : String {
-    val inputStream = loader?.getResourceAsStream("$fileName")
-    val source = inputStream?.let { inputStream.source().buffer() }
-    return source?.readString(StandardCharsets.UTF_8) ?: ""
 }
