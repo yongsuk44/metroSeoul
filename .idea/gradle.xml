@@ -13,14 +13,13 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/base" />
             <option value="$PROJECT_DIR$/buildSrc" />
-            <option value="$PROJECT_DIR$/data" />
+            <option value="$PROJECT_DIR$/cache" />
             <option value="$PROJECT_DIR$/data-remote" />
             <option value="$PROJECT_DIR$/domain" />
             <option value="$PROJECT_DIR$/presentation" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
-        <option name="useQualifiedModuleNames" value="true" />
       </GradleProjectSettings>
     </option>
   </component>

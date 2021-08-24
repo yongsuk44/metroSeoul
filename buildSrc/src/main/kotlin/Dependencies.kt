@@ -2,7 +2,7 @@ import org.gradle.api.artifacts.dsl.DependencyHandler
 
 object Modules {
     const val app = ":app"
-    const val data = ":data"
+    const val cache = ":cache"
     const val dataremote = ":data-remote"
     const val domain = ":domain"
     const val presentation = ":presentation"

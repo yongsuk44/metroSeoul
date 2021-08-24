@@ -94,7 +94,7 @@ dependencies {
     implementation(project(Modules.domain))
     implementation(project(Modules.dataremote))
     implementation(project(Modules.presentation))
-    implementation(project(Modules.data))
+    implementation(project(Modules.cache))
 
     implementation(platform(googleCloudeService.googleBom))
     implementationList(LibraryList.firebaseLibrary)
