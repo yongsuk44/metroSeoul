@@ -1,11 +1,11 @@
 package com.young.domain.model
 
 data class DomainPlatformEntrance(
-    val body: List<PlatformEntranceBody>?,
+    val body: List<DomainPlatformEntranceBody>?,
     val header: Header
 )
 
-data class PlatformEntranceBody(
+data class DomainPlatformEntranceBody(
     val edMovePath: String,
     val elvtSttCd: String?,
     val elvtTpCd: String?,

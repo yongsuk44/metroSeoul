@@ -4,16 +4,12 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.young.domain.usecase.local.LocalAllStationCodeUseCase
-import com.young.domain.usecase.local.LocalGetStationDataUseCase
-import com.young.domain.usecase.remote.RemoteStationTelUseCase
+import com.young.domain.usecase.cache.CacheAllStationCodeUseCase
+import com.young.domain.usecase.cache.CacheGetStationDataUseCase
 import com.young.presentation.R
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.consts.ResourceProvider
-import com.young.presentation.mapper.DomainToUiMapper.DomainToUi
 import com.young.presentation.model.IndexAllRouteInformation
-import com.young.presentation.model.Row
-import com.young.presentation.model.StationItem
 import com.young.presentation.model.UiSubWayTel
 import com.young.presentation.modelfunction.DetailStationInformationViewFunction
 import kotlinx.coroutines.*
@@ -26,8 +22,8 @@ import java.lang.NullPointerException
 class DetailStationInformationViewModel @ViewModelInject constructor(
     private val provider: ResourceProvider,
     private val remoteTelUseCase: RemoteStationTelUseCase,
-    private val localAllStationCodeUseCase: LocalAllStationCodeUseCase,
-    private val stationDataUseCase: LocalGetStationDataUseCase
+    private val localAllStationCodeUseCase: CacheAllStationCodeUseCase,
+    private val stationDataUseCase: CacheGetStationDataUseCase
 ) : BaseViewModel(), DetailStationInformationViewFunction {
 
     private val _selectStationLineListData = MutableLiveData<List<IndexAllRouteInformation>>()

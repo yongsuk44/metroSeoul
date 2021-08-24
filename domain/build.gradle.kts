@@ -20,6 +20,7 @@ android {
 
 dependencies {
     implementation(project(Modules.base))
+
     implementationList(LibraryList.RetrofitLibraries)
     implementation(AndroidLibraries.kotlinReflection)
     implementationList(LibraryList.HiltLibraries)

@@ -1,21 +1,21 @@
 package com.young.domain.model
 
 data class DomainAllStationCodes(
-    val SearchInfoBySubwayNameService: SearchInfoBySubwayNameService
+    val SearchInfoBySubwayNameService: DomainSearchInfoBySubwayNameService
 )
 
-data class SearchInfoBySubwayNameService(
-    val RESULT: RESULT,
+data class DomainSearchInfoBySubwayNameService(
+    val RESULT: DomainRESULT,
     val list_total_count: Int,
-    val row: List<Row>
+    val row: List<DomainRow>
 )
 
-data class RESULT(
+data class DomainRESULT(
     val CODE: String,
     val MESSAGE: String
 )
 
-data class Row(
+data class DomainRow(
     val FR_CODE: String,
     val LINE_NUM: String,
     val STATION_CD: String,

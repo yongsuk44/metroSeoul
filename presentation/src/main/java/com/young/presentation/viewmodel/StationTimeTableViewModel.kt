@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import com.young.domain.model.Row
-import com.young.domain.usecase.local.LocalAllStationCodeUseCase
+import com.young.domain.usecase.cache.CacheAllStationCodeUseCase
 import com.young.domain.usecase.remote.RemoteTimeTableBaseUseCase
 import com.young.domain.usecase.remote.RemoteTimeTableUseCase
 import com.young.presentation.R
@@ -33,7 +33,7 @@ interface StationTimeTableFunction {
 class StationTimeTableViewModel @ViewModelInject constructor(
     private val provider: ResourceProvider,
     private val timeTableUseCase: RemoteTimeTableUseCase ,
-    private val localAllStationCodeUseCase: LocalAllStationCodeUseCase
+    private val localAllStationCodeUseCase: CacheAllStationCodeUseCase
 ) : BaseViewModel(), StationTimeTableFunction {
 
     private val _dayCodeChangeData = MutableLiveData<DayType>()

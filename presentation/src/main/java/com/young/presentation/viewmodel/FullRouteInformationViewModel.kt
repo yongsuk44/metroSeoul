@@ -4,9 +4,9 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.young.domain.usecase.local.LocalAllStationCodeUseCase
-import com.young.domain.usecase.local.LocalGetFullRouteInformationUseCase
-import com.young.domain.usecase.local.LocalInsertFullRouteInformationUseCase
+import com.young.domain.usecase.cache.CacheAllStationCodeUseCase
+import com.young.domain.usecase.cache.LocalGetFullRouteInformationUseCase
+import com.young.domain.usecase.cache.LocalInsertFullRouteInformationUseCase
 import com.young.domain.usecase.remote.RemoteFullRouteInformationUseCase
 import com.young.presentation.R
 import com.young.presentation.consts.BaseViewModel

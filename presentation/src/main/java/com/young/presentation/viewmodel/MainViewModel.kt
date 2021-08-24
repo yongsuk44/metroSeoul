@@ -6,9 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.young.domain.mapper.BaseMapper
 import com.young.domain.model.DomainSubwayFacilities
-import com.young.domain.usecase.subwayfacilities.local.GetSizeTableDataUseCase
-import com.young.domain.usecase.subwayfacilities.local.InsertSubWayFacilitiesDataUseCase
-import com.young.domain.usecase.subwayfacilities.local.LocalGetSubWayFacilitiesDataUseCase
+import com.young.domain.usecase.subwayfacilities.cache.GetSizeTableDataUseCase
+import com.young.domain.usecase.subwayfacilities.cache.InsertSubWayFacilitiesDataUseCase
+import com.young.domain.usecase.subwayfacilities.cache.CacheGetSubWayFacilitiesDataUseCase
 import com.young.domain.usecase.subwayfacilities.remote.RemoteGetSubWayFacilitiesDataUseCase
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.model.UiSubwayFacilities
@@ -21,7 +21,7 @@ import timber.log.Timber
 
 interface MainViewFunction {
     fun loadSubWayFacilitiesData(key : String)
-    suspend fun getLocalAllSubWayFacilitiesData()
+    suspend fun getCacheAllSubWayFacilitiesData()
     suspend fun getRemoteSubWayFacilitiesData(key : String)
 }
 
@@ -29,7 +29,7 @@ class MainViewModel @ViewModelInject constructor(
     private val getSubWayFacilitiesDataUseCase: RemoteGetSubWayFacilitiesDataUseCase,
     private val insertSubWayFacilitiesDataUseCase: InsertSubWayFacilitiesDataUseCase,
     private val getSubWayTableSizeUseCase : GetSizeTableDataUseCase,
-    private val getAllDataUseCase: LocalGetSubWayFacilitiesDataUseCase
+    private val getAllDataUseCase: CacheGetSubWayFacilitiesDataUseCase
 ) : BaseViewModel(), MainViewFunction {
 
     private val _subWayFacilitiesData = MutableLiveData<List<UiSubwayFacilities>>()
@@ -39,13 +39,13 @@ class MainViewModel @ViewModelInject constructor(
     override fun loadSubWayFacilitiesData(key: String) {
         viewModelScope.launch(handler) {
             if (getSubWayTableSizeUseCase.invoke(Unit) == 0) { getRemoteSubWayFacilitiesData(key) }
-            else { getLocalAllSubWayFacilitiesData() }
+            else { getCacheAllSubWayFacilitiesData() }
         }
     }
 
     val mapper = BaseMapper(DomainSubwayFacilities::class, UiSubwayFacilities::class)
 
-    override suspend fun getLocalAllSubWayFacilitiesData() {
+    override suspend fun getCacheAllSubWayFacilitiesData() {
         getAllDataUseCase(Unit)
             .map {
                 BaseMapper.setList(mapper).run { this(it) }

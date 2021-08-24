@@ -3,7 +3,7 @@ package com.young.domain.repository.subwayfacilities
 import com.young.domain.model.DomainSubwayFacilities
 import kotlinx.coroutines.flow.Flow
 
-interface LocalSubWayFacilitiesRepository {
+interface CacheSubWayFacilitiesRepository {
 
     suspend fun insertSubWayFacilitiesDataAll(items: List<DomainSubwayFacilities>)
 
@@ -15,5 +15,5 @@ interface LocalSubWayFacilitiesRepository {
 
     suspend fun getDataSize() : Int
 
-    suspend fun getLocalAllData() : Flow<List<DomainSubwayFacilities>>
+    suspend fun getCacheAllData() : Flow<List<DomainSubwayFacilities>>
 }

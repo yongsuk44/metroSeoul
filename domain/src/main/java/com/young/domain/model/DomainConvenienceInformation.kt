@@ -1,11 +1,11 @@
 package com.young.domain.model
 
 data class DomainConvenienceInformation(
-    val body: List<ConvenienceInformationBody>,
+    val body: List<DomainConvenienceInformationBody>,
     val header: Header
 )
 
-data class ConvenienceInformationBody(
+data class DomainConvenienceInformationBody(
     val dtlLoc: String,
     val grndDvCd: String,
     val gubun: String,

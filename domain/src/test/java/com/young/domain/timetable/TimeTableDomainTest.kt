@@ -9,9 +9,9 @@ import com.young.domain.factory.timetableFactory.generateRowData
 import com.young.domain.factory.timetableFactory.generateSeoulDomainStationTimeTable
 import com.young.domain.model.DomainStationTimeTable
 import com.young.domain.model.Row
-import com.young.domain.repository.location.LocalAllStationCodesRepository
+import com.young.domain.repository.location.CacheAllStationCodesRepository
 import com.young.domain.repository.remote.RemoteStationTimeTableRepository
-import com.young.domain.usecase.local.LocalAllStationCodeUseCase
+import com.young.domain.usecase.cache.CacheAllStationCodeUseCase
 import com.young.domain.usecase.remote.RemoteTimeTableUseCase
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flatMapConcat
@@ -30,17 +30,17 @@ import org.mockito.Mockito.mock
 class TimeTableDomainTest {
 
     private lateinit var remoteStationTimeTableUseCaseImpl: RemoteTimeTableUseCase
-    private lateinit var localAllStationCodeUseCase: LocalAllStationCodeUseCase
+    private lateinit var CacheAllStationCodeUseCase: CacheAllStationCodeUseCase
 
     private lateinit var remoteStationTimeTableRepository: RemoteStationTimeTableRepository
-    private lateinit var localAllStationCodesRepository: LocalAllStationCodesRepository
+    private lateinit var CacheAllStationCodesRepository: CacheAllStationCodesRepository
 
     @Before
     fun setUp() {
-        localAllStationCodesRepository = mock(FakeFindStationCodeRepository::class.java)
+        CacheAllStationCodesRepository = mock(FakeFindStationCodeRepository::class.java)
         remoteStationTimeTableRepository = mock(FakeStationTimeTableRepository::class.java)
 
-        localAllStationCodeUseCase = LocalAllStationCodeUseCase(localAllStationCodesRepository)
+        CacheAllStationCodeUseCase = CacheAllStationCodeUseCase(CacheAllStationCodesRepository)
         remoteStationTimeTableUseCaseImpl = RemoteTimeTableUseCase(remoteStationTimeTableRepository)
     }
 
@@ -51,7 +51,7 @@ class TimeTableDomainTest {
             stubFindStationCode(generateRowData())
 
             // when
-            val item = localAllStationCodeUseCase.findStationCode("code")
+            val item = CacheAllStationCodeUseCase.findStationCode("code")
 
             // then
             Assert.assertNotNull(item)
@@ -66,7 +66,7 @@ class TimeTableDomainTest {
             stubFindStationCode(generateItem)
 
             // when
-            val item = localAllStationCodeUseCase.findStationCode("code").single()
+            val item = CacheAllStationCodeUseCase.findStationCode("code").single()
 
             // then
             assertThat(item , CoreMatchers.equalTo(generateItem))
@@ -96,7 +96,7 @@ class TimeTableDomainTest {
             stubStationPublicTimeTable(generatePublicDomainStationTimeTable())
 
             // when
-            val item = localAllStationCodeUseCase.findStationCode("code")
+            val item = CacheAllStationCodeUseCase.findStationCode("code")
 
             // then
             item.flatMapConcat {
@@ -117,7 +117,7 @@ class TimeTableDomainTest {
             stubStationPublicTimeTable(generatePublicDomainStationTimeTable())
 
             // when
-            val item = localAllStationCodeUseCase.findStationCode("code")
+            val item = CacheAllStationCodeUseCase.findStationCode("code")
 
             // then
             item.flatMapConcat {
@@ -130,12 +130,12 @@ class TimeTableDomainTest {
     }
 
     suspend fun stubFindStationCode(row : Row) {
-        whenever(localAllStationCodesRepository.findStationCode("code"))
+        whenever(CacheAllStationCodesRepository.findStationCode("code"))
             .thenReturn(flowOf(row))
     }
 
     suspend fun stubFindStationCodeNull(row : Row) {
-        whenever(localAllStationCodesRepository.findStationCode("code"))
+        whenever(CacheAllStationCodesRepository.findStationCode("code"))
             .thenReturn(flowOf(null))
     }
 

@@ -1,16 +1,16 @@
-package com.young.domain.usecase.subwayfacilities.local
+package com.young.domain.usecase.subwayfacilities.Cache
 
 import com.young.domain.model.DomainSubwayFacilities
-import com.young.domain.repository.subwayfacilities.LocalSubWayFacilitiesRepository
-import com.young.domain.usecase.BaseUseCase
+import com.young.domain.repository.subwayfacilities.CacheSubWayFacilitiesRepository
+import com.young.domain.usecase.base.BaseUseCase
 import javax.inject.Inject
 
-typealias InsertSubWayFacilitiesDataBaseUseCase = BaseUseCase<List<DomainSubwayFacilities>,Unit>
+typealias InsertSubWayFacilitiesDataBaseUseCase = BaseUseCase<List<DomainSubwayFacilities>, Unit>
 
 class InsertSubWayFacilitiesDataUseCase @Inject constructor(
-    private val local : LocalSubWayFacilitiesRepository
+    private val Cache : CacheSubWayFacilitiesRepository
 ) : InsertSubWayFacilitiesDataBaseUseCase {
 
     override suspend operator fun invoke(param : List<DomainSubwayFacilities>) : Unit =
-        local.insertSubWayFacilitiesDataAll(param)
+        Cache.insertSubWayFacilitiesDataAll(param)
 }

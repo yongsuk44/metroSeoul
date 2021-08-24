@@ -1,7 +1,7 @@
 package com.young.domain.model
 
-data class DomainAllRouteInformation(
-    val body: List<AllRouteInformation>,
+data class DomainFullRouteInformation(
+    val body: List<DomainFullRouteInformationBody>,
     val header: Header
 )
 
@@ -17,7 +17,7 @@ data class DomainAllRouteInformation(
  *  @param stinNm	역명
  */
 
-data class AllRouteInformation(
+data class DomainFullRouteInformationBody(
     val mreaWideCd: String?,
     val railOprIsttCd: String,
     val routCd: String,

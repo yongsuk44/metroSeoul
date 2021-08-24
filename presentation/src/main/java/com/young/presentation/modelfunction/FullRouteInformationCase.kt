@@ -5,7 +5,7 @@ import com.young.presentation.model.ListRouteInformation
 interface FullRouteInformationCase {
     fun loadFullRouteInformation()
     suspend fun getFullRouteInformation(key: String)
-    suspend fun getLocalFullRouteInformation()
+    suspend fun getCacheFullRouteInformation()
     fun insertAllStationCodes()
     fun onSearchEditViewClick(value : Boolean)
     fun onStationClick(item : ListRouteInformation , position : Int)

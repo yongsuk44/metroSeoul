@@ -8,8 +8,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson
-import com.young.domain.usecase.info.location.GetLocationUseCase
-import com.young.domain.usecase.local.LocalStationCoordinateUseCase
+import com.young.domain.usecase.location.GetLocationUseCase
+import com.young.domain.usecase.cache.CacheStationCoordinateUseCase
 import com.young.presentation.R
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.consts.Event
@@ -41,7 +41,7 @@ interface LocationViewModelFunction {
 class LocationViewModel @ViewModelInject constructor(
     private val provider : ResourceProvider,
     private val locationUseCase: GetLocationUseCase,
-    private val coordinateUseCase: LocalStationCoordinateUseCase,
+    private val coordinateUseCase: CacheStationCoordinateUseCase,
     @Assisted private val saveInstance : SavedStateHandle
 ) : BaseViewModel(), LocationViewModelFunction {
 

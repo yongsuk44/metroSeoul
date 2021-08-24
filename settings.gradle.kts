@@ -2,9 +2,10 @@ rootProject.name = "metro"
 
 include(
     ":app",
-    ":data-remote",
+    ":remote",
     ":domain",
     ":presentation",
     ":base",
+    ":data",
     ":cache"
 )

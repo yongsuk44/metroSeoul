@@ -1,16 +1,16 @@
-package com.young.domain.usecase.subwayfacilities.local
+package com.young.domain.usecase.subwayfacilities.Cache
 
 import com.young.domain.model.DomainSubwayFacilities
-import com.young.domain.repository.subwayfacilities.LocalSubWayFacilitiesRepository
-import com.young.domain.usecase.BaseUseCase
+import com.young.domain.repository.subwayfacilities.CacheSubWayFacilitiesRepository
+import com.young.domain.usecase.base.BaseUseCase
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-typealias LocalGetSubWayFacilitiesDataBaseUseCase = BaseUseCase<Unit, Flow<List<DomainSubwayFacilities>>>
+typealias CacheGetSubWayFacilitiesDataBaseUseCase = BaseUseCase<Unit, Flow<List<DomainSubwayFacilities>>>
 
-class LocalGetSubWayFacilitiesDataUseCase @Inject constructor(
-    private val local : LocalSubWayFacilitiesRepository
-) : LocalGetSubWayFacilitiesDataBaseUseCase {
+class CacheGetSubWayFacilitiesDataUseCase @Inject constructor(
+    private val Cache : CacheSubWayFacilitiesRepository
+) : CacheGetSubWayFacilitiesDataBaseUseCase {
     override suspend fun invoke(param: Unit): Flow<List<DomainSubwayFacilities>> =
-        local.getLocalAllData()
+        Cache.getCacheAllData()
 }

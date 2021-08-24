@@ -1,14 +1,14 @@
-package com.young.domain.usecase.subwayfacilities.local
+package com.young.domain.usecase.subwayfacilities.Cache
 
-import com.young.domain.repository.subwayfacilities.LocalSubWayFacilitiesRepository
-import com.young.domain.usecase.BaseUseCase
+import com.young.domain.repository.subwayfacilities.CacheSubWayFacilitiesRepository
+import com.young.domain.usecase.base.BaseUseCase
 import javax.inject.Inject
 
-typealias GetSizeTableDataBaseUseCase = BaseUseCase<Unit , Int>
+typealias GetSizeTableDataBaseUseCase = BaseUseCase<Unit, Int>
 
 class GetSizeTableDataUseCase @Inject constructor(
-    private val local : LocalSubWayFacilitiesRepository
+    private val Cache : CacheSubWayFacilitiesRepository
 ) : GetSizeTableDataBaseUseCase {
-    override suspend fun invoke(param: Unit): Int = local.getDataSize()
+    override suspend fun invoke(param: Unit): Int = Cache.getDataSize()
 
 }

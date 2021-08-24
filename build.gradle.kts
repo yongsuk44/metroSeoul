@@ -1,6 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
 
+    val kotlin_version by extra("1.5.10")
     repositories {
         google()
         mavenCentral()
@@ -12,6 +13,7 @@ buildscript {
         classpath(GradleClasspath.googleService)
         classpath(GradleClasspath.googleCrashlytics)
         classpath(GradleClasspath.safeArgs)
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
     }
 }
 

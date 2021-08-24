@@ -4,5 +4,6 @@ import com.young.domain.model.LocationData
 import kotlinx.coroutines.flow.Flow
 
 interface RemoteLocationRepository {
-    suspend fun getStationAddress(key : String , trailCode : String , lineCode : String) : Flow<List<LocationData>>
+    suspend fun getStationAddress(key : String , railCdoe : String , lineCode : String) : Flow<List<LocationData>>
+
 }

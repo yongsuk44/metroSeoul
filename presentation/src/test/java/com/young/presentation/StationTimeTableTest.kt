@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.nhaarman.mockito_kotlin.whenever
 import com.young.domain.model.DomainStationTimeTable
-import com.young.domain.usecase.local.LocalAllStationCodeUseCase
+import com.young.domain.usecase.cache.LocalAllStationCodeUseCase
 import com.young.domain.usecase.remote.RemoteTimeTableUseCase
 import com.young.presentation.consts.CustomTransformationDataMap
 import com.young.presentation.consts.ResourceProvider

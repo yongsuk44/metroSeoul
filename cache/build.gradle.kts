@@ -29,7 +29,6 @@ android{
 }
 
 dependencies {
-    implementation(project(Modules.domain))
     implementation(project(Modules.base))
 
     implementation(AndroidLibraries.kotlinReflection)
