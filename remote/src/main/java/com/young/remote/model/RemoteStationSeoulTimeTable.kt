@@ -1,7 +1,13 @@
 package com.young.remote.model
 
 data class RemoteStationSeoulTimeTable(
-    val SearchSTNTimeTableByIDService: SearchSTNTimeTableByIDService?
+    val SearchSTNTimeTableByIDService: RemoteSearchSTNTimeTableByIDService?
+)
+
+data class RemoteSearchSTNTimeTableByIDService(
+    val RESULT: TimeTableRESULT,
+    val list_total_count: Int,
+    val row: List<RemoteTimeTableRow>
 )
 
 data class TimeTableRESULT(
@@ -9,7 +15,7 @@ data class TimeTableRESULT(
     val MESSAGE: String
 )
 
-data class TimeTableRow(
+data class RemoteTimeTableRow(
     val ARRIVETIME: String,
     val BRANCH_LINE: String,
     val DESTSTATION: String,
@@ -27,10 +33,4 @@ data class TimeTableRow(
     val SUBWAYSNAME: String,
     val TRAIN_NO: String,
     val WEEK_TAG: String
-)
-
-data class SearchSTNTimeTableByIDService(
-    val RESULT: TimeTableRESULT,
-    val list_total_count: Int,
-    val row: List<TimeTableRow>
 )

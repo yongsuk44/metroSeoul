@@ -1,22 +1,37 @@
 package com.young.remote.repository
 
-import com.young.cache.datasource.remote.RemoteStationDataSource
-import com.young.cache.model.DataStationSeoulTimeTable
-import com.young.cache.model.DataStationTelNumber
-import com.young.cache.model.DataStationTimeTable
+import com.young.data.datasource.remote.RemoteStationDataSource
+import com.young.data.model.DataStationBody
+import com.young.data.model.DataStationSeoulTimeTable
+import com.young.data.model.DataStationTelNumber
+import com.young.data.model.DataStationTimeTable
 import com.young.remote.api.PublicDataOpenApiService
+import com.young.remote.api.SeoulApiService
+import com.young.remote.api.TrailPorTalService
+import com.young.remote.mapper.RemoteToDataMapper.RemoteToData
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 class RemoteStationDataRepositoryImpl @Inject constructor(
-    private val publicDataPortalApiService: PublicDataOpenApiService
+    private val publicDataPortalApiService: PublicDataOpenApiService,
+    private val service: TrailPorTalService,
+    private val seoulApi: SeoulApiService
 ) : RemoteStationDataSource {
     override suspend fun getStationTelData(
         publicDataKey: String,
         stationCode: String
-    ): Flow<DataStationTelNumber> {
-        TODO("Not yet implemented")
-    }
+    ): Flow<List<DataStationBody>> = flowOf(
+        publicDataPortalApiService.getAllRouteInformationData(
+            publicDataKey,
+            1,
+            1000,
+            "json",
+            stationCode
+        ).RemoteToData()
+    )
 
     override suspend fun getDataStationTimeTable(
         key: String,
@@ -25,16 +40,28 @@ class RemoteStationDataRepositoryImpl @Inject constructor(
         lineCode: String,
         stationCode: String,
         updown: String
-    ): Flow<DataStationTimeTable> {
-        TODO("Not yet implemented")
-    }
+    ): Flow<DataStationTimeTable> = flowOf(
+        service.getStationTimetables(
+            key = key,
+            format = "json",
+            trailCode = railCode,
+            toDayCode = dayCd,
+            lineCode = lineCode,
+            stationCode = stationCode
+        ).RemoteToData()
+    )
 
     override suspend fun getDataSeoulStationTimeTable(
         key: String,
         updown: String,
         dayCd: String,
         stationCode: String
-    ): Flow<DataStationSeoulTimeTable> {
-        TODO("Not yet implemented")
-    }
+    ): Flow<DataStationSeoulTimeTable> = flowOf(
+        seoulApi.getStationTimeTable(
+            key = key,
+            code = stationCode,
+            dayCode = dayCd,
+            updown = updown
+        ).RemoteToData()
+    )
 }

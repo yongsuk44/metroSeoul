@@ -1,7 +1,7 @@
 package com.young.remote.model
 
 data class RemoteStationTimeTable(
-    val body: List<TimeTableBody>?,
+    val body: List<RemoteTimeTableBody>?,
     val header: Header
 )
 
@@ -20,7 +20,7 @@ data class Header(
  * @param arvTm 도착 시간
  * @param dayNm 요일 명
  */
-data class TimeTableBody(
+data class RemoteTimeTableBody(
     val arvTm: String?,
     val dayCd: String,
     val dayNm: String,

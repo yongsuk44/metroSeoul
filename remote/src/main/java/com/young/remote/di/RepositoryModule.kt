@@ -1,7 +1,8 @@
 package com.young.remote.di
 
-import com.young.cache.datasource.remote.RemoteFullRouteInformationDataSource
-import com.young.cache.datasource.remote.RemoteStationDataSource
+import com.young.data.datasource.remote.RemoteFullRouteInformationDataSource
+import com.young.data.datasource.remote.RemoteLocationDataSource
+import com.young.data.datasource.remote.RemoteStationDataSource
 import com.young.remote.api.PublicDataOpenApiService
 import com.young.remote.api.PublicDataPortalApiService
 import com.young.remote.api.SeoulApiService
@@ -19,32 +20,12 @@ class RepositoryModule {
 
     @Provides
     @Reusable
-    fun provideLocationRepository(
-        service : TrailPorTalService
-    ) : RemoteLocationRepository =
-        RemoteLocationRepositoryImpl(service)
-
-    @Provides
-    @Reusable
-    fun provideSubWayFacilitiesRepository(
-        subwayFacilitiesService: PublicDataPortalApiService
-    ) : RemoteSubWayFacilitiesRepository =
-        RemoteSubWayFacilitiesRepositoryImpl(subwayFacilitiesService)
-
-    @Provides
-    @Reusable
     fun provideSubWayTelRepository(
-        publicDataPortalApiService: PublicDataOpenApiService
+        publicDataPortalApiService: PublicDataOpenApiService ,
+        service : TrailPorTalService ,
+        seoulApi: SeoulApiService
     ) : RemoteStationDataSource =
-        RemoteStationDataRepositoryImpl(publicDataPortalApiService)
-
-    @Provides
-    @Reusable
-    fun provideTimeTableRepository(
-        service: TrailPorTalService ,
-        seoulApi : SeoulApiService
-    ) : RemoteStationTimeDataSource =
-        RemoteStationTimeTableRepositoryImpl(service , seoulApi)
+        RemoteStationDataRepositoryImpl(publicDataPortalApiService,service, seoulApi)
 
     @Provides
     @Reusable
@@ -53,4 +34,11 @@ class RepositoryModule {
         service: TrailPorTalService
     ) : RemoteFullRouteInformationDataSource =
         RemoteFullRouteInformationRepositoryImpl(seoulApiService ,service)
+
+    @Provides
+    @Reusable
+    fun provideLocationRepository(
+        api : TrailPorTalService
+    ) : RemoteLocationDataSource =
+        RemoteLocationRepositoryImpl(api)
 }

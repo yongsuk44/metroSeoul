@@ -1,11 +1,11 @@
 package com.young.remote.model
 
 data class RemoteLocationTrailData(
-    val body: List<LocationData>,
+    val body: List<RemoteLocationData>,
     val header: Header
 )
 
-data class LocationData(
+data class RemoteLocationData(
     val lnCd: String,
     val lonmAdr: String?,
     val mapCordX: Double?,

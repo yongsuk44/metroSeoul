@@ -16,13 +16,16 @@ interface TrailPorTalService {
         @Query("stinCd") stationCode: String
     ): RemoteStationTimeTable
 
+    // 지하철 라인별 노선
     @GET("trainUseInfo/subwayRouteInfo")
-    suspend fun getFullRouteInformation(
+    suspend fun getStationRouteInformation(
         @Query("serviceKey", encoded = true) key: String,
         @Query("format") format: String,
-        @Query("mreaWideCd") mreaWideCd: String
+        @Query("mreaWideCd") mreaWideCd: String ,
+        @Query("lnCd") lineCode: String?
     ) : RemoteFullRouteInformation
 
+    // 편의 정보
     @GET("convenientInfo/stationCnvFacl")
     suspend fun getConvenienceInformation(
         @Query("serviceKey", encoded = true) key: String,
@@ -40,6 +43,7 @@ interface TrailPorTalService {
         @Query("lnCd") lineCode: String
     ) : RemoteLocationTrailData
 
+    // 출입구에서 승강장까지 출입 경로
     @GET("vulnerableUserInfo/stationMovement")
     suspend fun getPlatformEntranceData(
         @Query("serviceKey", encoded = true) key: String,

@@ -15,13 +15,13 @@ data class TelHeader(
     val type: String?
 )
 data class Body(
-    val items: List<StationItem>,
+    val items: List<DomainStationBody>,
     val numOfRows: String,
     val pageNo: String,
     val totalCount: String
 )
 
-data class StationItem(
+data class DomainStationBody(
     val institutionNm: String,
     val insttCode: String,
     val latitude: String,
