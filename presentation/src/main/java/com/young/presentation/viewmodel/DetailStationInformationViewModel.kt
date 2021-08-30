@@ -4,11 +4,12 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.young.domain.usecase.cache.CacheAllStationCodeUseCase
-import com.young.domain.usecase.cache.CacheGetStationDataUseCase
+import com.young.domain.usecase.AllStationCodeUseCase
+import com.young.domain.usecase.StationDataUseCase
 import com.young.presentation.R
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.consts.ResourceProvider
+import com.young.presentation.mapper.DomainToUiMapper.DomainToUi
 import com.young.presentation.model.IndexAllRouteInformation
 import com.young.presentation.model.UiSubWayTel
 import com.young.presentation.modelfunction.DetailStationInformationViewFunction
@@ -20,9 +21,8 @@ import timber.log.Timber
 @ExperimentalCoroutinesApi
 class DetailStationInformationViewModel @ViewModelInject constructor(
     private val provider: ResourceProvider,
-    private val remoteTelUseCase: RemoteStationTelUseCase,
-    private val localAllStationCodeUseCase: CacheAllStationCodeUseCase,
-    private val stationDataUseCase: CacheGetStationDataUseCase
+    private val useCase : StationDataUseCase,
+    private val allStationCodeUseCase : AllStationCodeUseCase,
 ) : BaseViewModel(), DetailStationInformationViewFunction {
 
     private val _selectStationLineListData = MutableLiveData<List<IndexAllRouteInformation>>()
@@ -51,7 +51,7 @@ class DetailStationInformationViewModel @ViewModelInject constructor(
 
     override fun getStationData(stinCodes: List<String>) {
         viewModelScope.launch(handler) {
-            stationDataUseCase(stinCodes)
+            useCase(stinCodes)
                 .flowOn(Dispatchers.IO)
                 .map {
                     it.map { it.DomainToUi() }
@@ -66,14 +66,12 @@ class DetailStationInformationViewModel @ViewModelInject constructor(
 
     override fun getStationCodeToTelData(stationCode : String) {
         viewModelScope.launch(Dispatchers.IO) {
-            localAllStationCodeUseCase.findStationCode(stationCode)
+            allStationCodeUseCase.findStationCode(stationCode)
                 .flatMapConcat {
                     if (it == null) throw NullPointerException("Station Code를 찾지 못함")
-                    else remoteTelUseCase.getStationTelData(provider.getString(R.string.key), it.STATION_CD)
+                    else useCase.getStationTelData(provider.getString(R.string.key), it.STATION_CD)
                 }
-                .transform {
-                    emit(it.response.body?.items)
-                }.catch {
+                .catch {
                     _stationTelNumber.postValue("1544-7788")
                     Timber.e(it)
                 }.collect {

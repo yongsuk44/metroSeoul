@@ -5,7 +5,7 @@ data class DataStationTelNumber(
 )
 
 data class DataResponse(
-    val body: DataBody,
+    val body: DataBody?,
     val header: DataTelHeader
 )
 
@@ -15,7 +15,7 @@ data class DataTelHeader(
     val type: String?
 )
 data class DataBody(
-    val items: List<DataStationBody>,
+    val items: List<DataStationBody>?,
     val numOfRows: String,
     val pageNo: String,
     val totalCount: String

@@ -4,11 +4,12 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.young.domain.usecase.remote.PlatformEntranceUseCase
-import com.young.domain.usecase.remote.RemoteFullRouteInformationUseCase
+import com.young.domain.usecase.FullRouteInformationUseCase
+import com.young.domain.usecase.StationDataUseCase
 import com.young.presentation.R
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.consts.ResourceProvider
+import com.young.presentation.mapper.DomainToUiMapper.DomainToUi
 import com.young.presentation.model.UiConvenienceInformation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -23,8 +24,8 @@ interface DetailDropBoxFunction {
 
 class DetailDropBoxItemViewModel @ViewModelInject constructor(
     private val provider: ResourceProvider,
-    private val allInformationUseCase: RemoteFullRouteInformationUseCase,
-    private val platformEntranceUseCase: PlatformEntranceUseCase
+    private val stationDataUseCase: StationDataUseCase,
+    private val fullRouteInformationUseCase: FullRouteInformationUseCase
 ) : BaseViewModel() ,DetailDropBoxFunction {
 
     private val _convenienceInformation = MutableLiveData<UiConvenienceInformation>()
@@ -33,7 +34,7 @@ class DetailDropBoxItemViewModel @ViewModelInject constructor(
 
     override fun getPlatformEntranceData(railCode: String,lineCd : String, stinCode: String){
         viewModelScope.launch(handler) {
-            platformEntranceUseCase.getPlatformEntranceData(provider.getString(R.string.trailKey), railCode, lineCd , stinCode)
+            fullRouteInformationUseCase.getPlatformEntranceData(provider.getString(R.string.trailKey), railCode, lineCd , stinCode)
                 .map {
                     it.DomainToUi()
                 }
@@ -56,7 +57,7 @@ class DetailDropBoxItemViewModel @ViewModelInject constructor(
 
     override fun getConvenienceInformation(lineCode: String, trailCode: String, stationCode: String) {
         viewModelScope.launch(handler) {
-            allInformationUseCase.getConvenienceInformation(provider.getString(R.string.trailKey), lineCode, trailCode, stationCode)
+            fullRouteInformationUseCase.getConvenienceInformation(provider.getString(R.string.trailKey), lineCode, trailCode, stationCode)
                 .map {
                     it.DomainToUi()
                 }

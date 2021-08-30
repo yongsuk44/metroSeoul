@@ -5,8 +5,8 @@ import com.young.domain.model.DomainTrailCodeAndLineCode
 import kotlinx.coroutines.flow.Flow
 
 interface CacheFullRouteInformationRepository {
-    suspend fun insert(param : List<DomainFullRouteInformationBody>)
-    suspend fun insertLineCodeAndTrailCode(param : List<DomainTrailCodeAndLineCode>)
+    suspend fun insert(param : List<DomainFullRouteInformationBody>) : Flow<List<Long>>
+    suspend fun insertLineCodeAndTrailCode(param : List<DomainTrailCodeAndLineCode>): Flow<List<Long>>
     suspend fun getAllData() : Flow<List<DomainFullRouteInformationBody>>
     suspend fun getDataSize() : Flow<Int>
     suspend fun getTrailCodeAllData() : Flow<List<DomainTrailCodeAndLineCode>>

@@ -20,7 +20,7 @@ class RemoteStationDataRepositoryImpl @Inject constructor(
     override suspend fun getStationTelData(
         publicDataKey: String,
         stationCode: String
-    ): Flow<List<DataStationBody>> = flowOf(
+    ): Flow<List<DataStationBody>?> = flowOf(
         publicDataPortalApiService.getAllRouteInformationData(
             publicDataKey,
             1,

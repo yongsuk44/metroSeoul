@@ -3,17 +3,17 @@ package com.young.cache.dao
 import androidx.room.*
 import com.young.cache.model.CacheFullRouteInformation
 import com.young.cache.model.CacheTrailCodeAndLineCode
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FullRouteInformationDao {
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertFullRouteInformation(items : List<CacheFullRouteInformation>)
+    suspend fun insertFullRouteInformation(items : List<CacheFullRouteInformation>) : List<Long>
 
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertLineCodeAndTrailCode(items : List<CacheTrailCodeAndLineCode>)
-
+    suspend fun insertLineCodeAndTrailCode(items : List<CacheTrailCodeAndLineCode>) : List<Long>
 
     @Query("select * from CacheTrailCodeAndLineCode")
     suspend fun getTrailCodeAllData() : List<CacheTrailCodeAndLineCode>

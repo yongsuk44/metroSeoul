@@ -15,9 +15,9 @@ class RemoteStationDataSourceImpl @Inject constructor(
     override suspend fun getStationTelData(
         publicDataKey: String,
         stationCode: String
-    ): Flow<List<DomainStationBody>> =
+    ): Flow<List<DomainStationBody>?> =
         dataSource.getStationTelData(publicDataKey, stationCode).map {
-            it.map { it.DataToDomain() }
+            it?.map { it.DataToDomain() }
         }
 
 

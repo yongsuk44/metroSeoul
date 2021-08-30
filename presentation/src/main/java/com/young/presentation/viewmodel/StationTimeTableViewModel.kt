@@ -4,9 +4,9 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.young.domain.model.Row
-import com.young.domain.usecase.cache.CacheAllStationCodeUseCase
-import com.young.domain.usecase.remote.RemoteTimeTableUseCase
+import com.young.domain.model.DomainRow
+import com.young.domain.usecase.AllStationCodeUseCase
+import com.young.domain.usecase.StationDataUseCase
 import com.young.presentation.R
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.consts.CustomTransformationDataMap
@@ -21,50 +21,51 @@ import java.time.LocalTime
 import kotlin.math.abs
 
 interface StationTimeTableFunction {
-    fun getStationTimeTable(indexAllRouteInformation: IndexAllRouteInformation? , day: DayType)
-    fun changeDayCode(data : DayType)
+    fun getStationTimeTable(indexAllRouteInformation: IndexAllRouteInformation?, day: DayType)
+    fun changeDayCode(data: DayType)
 }
 
 class StationTimeTableViewModel @ViewModelInject constructor(
     private val provider: ResourceProvider,
-    private val timeTableUseCase: RemoteTimeTableUseCase ,
-    private val localAllStationCodeUseCase: CacheAllStationCodeUseCase
+    private val stationDataUseCase: StationDataUseCase,
+    private val allStationCodeUseCase: AllStationCodeUseCase
 ) : BaseViewModel(), StationTimeTableFunction {
 
     private val _dayCodeChangeData = MutableLiveData<DayType>()
-    val dayCodeChangeData : LiveData<DayType>
+    val dayCodeChangeData: LiveData<DayType>
         get() = _dayCodeChangeData
 
     private val _timeTable = MutableLiveData<UiTrailTimeTable>()
     val timeTable: LiveData<UiTrailTimeTable>
         get() = _timeTable
 
-    val timeTableUpPosition : LiveData<Int> = CustomTransformationDataMap(_timeTable) {
+    val timeTableUpPosition: LiveData<Int> = CustomTransformationDataMap(_timeTable) {
         it.up.nowTimeNearList()
     }
 
-    val timeTableDownPosition : LiveData<Int> = CustomTransformationDataMap(_timeTable) {
+    val timeTableDownPosition: LiveData<Int> = CustomTransformationDataMap(_timeTable) {
         it.down.nowTimeNearList()
     }
 
-    override fun getStationTimeTable(indexAllRouteInformation: IndexAllRouteInformation? , day: DayType) {
+    override fun getStationTimeTable(indexAllRouteInformation: IndexAllRouteInformation?, day: DayType) {
         viewModelScope.launch(handler) {
 
             if (indexAllRouteInformation == null) return@launch
 
-            localAllStationCodeUseCase.findStationCode(indexAllRouteInformation.stinCd)
-                .flatMapConcat { row ->
-                    if (row != null) {
-                        getSeoulStationTimeTableAPI(getDayCode(day , row) , row.STATION_CD)
-                    } else {
-                        getPublicStationTimeTableAPI(getDayCode(day , row), indexAllRouteInformation)
-                    }
-                }
-                .map {
-                    if (it.up.isEmpty()) getPublicStationTimeTableAPI(day.public , indexAllRouteInformation).single()
-                    else it
-                }
+            allStationCodeUseCase.findStationCode(indexAllRouteInformation.stinCd)
                 .flowOn(Dispatchers.IO)
+                .flatMapLatest { row ->
+                    row?.let { getSeoulStationTimeTableAPI(getDayCode(day, row), row.STATION_CD) }
+                        ?: getPublicStationTimeTableAPI(getDayCode(day, row), indexAllRouteInformation)
+                }
+                .flatMapConcat {
+                    if (it.up.isEmpty()) getPublicStationTimeTableAPI(day.public, indexAllRouteInformation)
+                    else flowOf(it)
+                }
+                .flatMapConcat {
+                    if (it.up.isEmpty()) getPublicStationTimeTableAPI("9" , indexAllRouteInformation)
+                    else flowOf(it)
+                }
                 .onStart {
                     setLoadingValue(true)
                 }.onCompletion {
@@ -75,27 +76,59 @@ class StationTimeTableViewModel @ViewModelInject constructor(
         }
     }
 
-    suspend fun generateStationTimeTableFlow(dayCode : String , data : IndexAllRouteInformation , upDown : String) =
-        timeTableUseCase.getStationTimetables(provider.getString(R.string.trailKey), data.railOprIsttCd, dayCode, data.lnCd, data.stinCd, upDown)
+    suspend fun generateStationTimeTableFlow(dayCode: String, data: IndexAllRouteInformation, upDown: String) =
+        stationDataUseCase.getStationTimetables(
+            provider.getString(R.string.trailKey),
+            data.railOprIsttCd,
+            dayCode,
+            data.lnCd,
+            data.stinCd,
+            upDown
+        )
 
-    suspend fun generateSeoulStationTimeTableFlow(dayCode: String , code : String , upDown: String) =
-        timeTableUseCase.getSeoulStationTimeTable(provider.getString(R.string.seoulKey) , upDown , dayCode , code)
+    suspend fun generateSeoulStationTimeTableFlow(dayCode: String, code: String, upDown: String) =
+        stationDataUseCase.getSeoulStationTimeTable(
+            provider.getString(R.string.seoulKey),
+            upDown,
+            dayCode,
+            code
+        )
 
-    suspend fun getPublicStationTimeTableAPI(dayCode: String , indexAllRouteInformation: IndexAllRouteInformation) : Flow<UiTrailTimeTable> {
-        val upFlow = generateStationTimeTableFlow(dayCode , indexAllRouteInformation, "1")
-        val downFlow = generateStationTimeTableFlow(dayCode , indexAllRouteInformation , "2")
-
-        return combineTransform(upFlow,downFlow) { up , down ->
-            emit(UiTrailTimeTable(up.body , down.body, up.firstTime , up.lastTime, down.firstTime, down.lastTime))
+    suspend fun getPublicStationTimeTableAPI(dayCode: String, indexAllRouteInformation: IndexAllRouteInformation): Flow<UiTrailTimeTable> {
+        return (1..2).map {
+            generateStationTimeTableFlow(dayCode, indexAllRouteInformation, it.toString())
+        }.run {
+            combineTransform(this) { call ->
+                emit(
+                    UiTrailTimeTable(
+                        call.first().body,
+                        call.last().body,
+                        call.first().firstTime,
+                        call.last().firstTime,
+                        call.first().lastTime,
+                        call.last().lastTime
+                    )
+                )
+            }.flowOn(Dispatchers.IO)
         }
     }
 
-    suspend fun getSeoulStationTimeTableAPI(dayCode: String , stationCode : String) : Flow<UiTrailTimeTable> {
-        val upFlow = generateSeoulStationTimeTableFlow(dayCode , stationCode , "1" )
-        val downFlow = generateSeoulStationTimeTableFlow(dayCode , stationCode , "2" )
-
-        return combineTransform(upFlow,downFlow) { up , down ->
-            emit(UiTrailTimeTable(up.body , down.body, up.firstTime , up.lastTime, down.firstTime, down.lastTime))
+    suspend fun getSeoulStationTimeTableAPI(dayCode: String, stationCode: String): Flow<UiTrailTimeTable> {
+        return (1..2).map {
+            generateSeoulStationTimeTableFlow(dayCode, stationCode, it.toString())
+        }.run {
+            combineTransform(this) { call ->
+                emit(
+                    UiTrailTimeTable(
+                        call.first().body,
+                        call.last().body,
+                        call.first().firstTime,
+                        call.last().firstTime,
+                        call.first().lastTime,
+                        call.last().lastTime
+                    )
+                )
+            }.flowOn(Dispatchers.IO)
         }
     }
 
@@ -103,14 +136,14 @@ class StationTimeTableViewModel @ViewModelInject constructor(
         _dayCodeChangeData.value = data
     }
 
-    fun getDayCode(day : DayType , data : Row?) : String = when(day) {
+    fun getDayCode(day: DayType, data: DomainRow?): String = when (day) {
         DayType.WEEK -> if (data == null) day.public else day.seoul
         DayType.SAT -> if (data == null) day.public else day.seoul
         DayType.SUN -> if (data == null) day.public else day.seoul
     }
 
 
-    fun List<String>.nowTimeNearList() : Int {
+    fun List<String>.nowTimeNearList(): Int {
         val min = 1000
         val target = LocalTime.now().toSecondOfDay()
 

@@ -5,8 +5,8 @@ import com.young.cache.cache.model.DataTrailCodeAndLineCode
 import kotlinx.coroutines.flow.Flow
 
 interface CacheFullRouteInformationDataSource {
-    suspend fun insert(param : List<DataFullRouteInformationBody>)
-    suspend fun insertLineCodeAndTrailCode(param : List<DataTrailCodeAndLineCode>)
+    suspend fun insert(param : List<DataFullRouteInformationBody>) : Flow<List<Long>>
+    suspend fun insertLineCodeAndTrailCode(param : List<DataTrailCodeAndLineCode>): Flow<List<Long>>
     suspend fun getAllData() : Flow<List<DataFullRouteInformationBody>>
     suspend fun getDataSize() : Flow<Int>
     suspend fun getTrailCodeAllData() : Flow<List<DataTrailCodeAndLineCode>>

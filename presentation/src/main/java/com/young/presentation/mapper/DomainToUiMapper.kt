@@ -12,10 +12,10 @@ object DomainToUiMapper {
         return BaseMapper<Row , com.young.presentation.model.Row>().run { this(this@DomainToUi) }
     }
 
-    fun AllRouteInformation.DomainToUi(): com.young.presentation.model.IndexAllRouteInformation {
+    fun DomainFullRouteInformationBody.DomainToUi(): com.young.presentation.model.IndexAllRouteInformation {
 
         val bodyMapper = BaseMapper(
-            AllRouteInformation::class,
+            DomainFullRouteInformationBody::class,
             com.young.presentation.model.IndexAllRouteInformation::class
         )
 
@@ -24,7 +24,7 @@ object DomainToUiMapper {
         }
     }
 
-    fun List<AllRouteInformation>.DomainToUi(): List<com.young.presentation.model.ListRouteInformation> {
+    fun List<DomainFullRouteInformationBody>.DomainToUi(): List<com.young.presentation.model.ListRouteInformation> {
         return this.groupBy {
             it.stinNm
         }.map {

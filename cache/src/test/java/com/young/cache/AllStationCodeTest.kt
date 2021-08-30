@@ -7,11 +7,15 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.young.cache.dao.AllStationCodeDao
 import com.young.cache.factory.DataFactory.randomString
 import com.young.cache.factory.ModelFactory.generateAllStationCodes
+import com.young.cache.mapper.CacheToDataMapper.CacheToData
 import com.young.cache.model.CacheAllStationCodes
+import com.young.cache.repository.CacheAllStationCodesRepositoryImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.CoreMatchers.*
+import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.CoreMatchers.nullValue
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -24,12 +28,15 @@ class AllStationCodeTest {
 
     private lateinit var dao : AllStationCodeDao
     private lateinit var db : AppDataBase
+    private lateinit var repo : CacheAllStationCodesRepositoryImpl
 
     @Before
     fun setUp() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         db = Room.inMemoryDatabaseBuilder(context , AppDataBase::class.java).build()
         dao = db.allStationCodeDao()
+
+        repo = CacheAllStationCodesRepositoryImpl(dao)
     }
 
     @After
@@ -40,31 +47,30 @@ class AllStationCodeTest {
 
     @Test
     fun `Find StationCode Return To Boolean Data Check`() {
-        runBlocking(Dispatchers.IO) {
+        runBlocking {
             val items = listOf(generateAllStationCodes("820" , randomString() , randomString(), randomString()))
-            dao.insert(items)
 
-            val booleanData = dao.findStationCodes("820")
-            val booleanData2 = dao.findStationCodes("819")
+            repo.insert(items.map { it.CacheToData()!! }).single()
 
-            assertThat(booleanData , equalTo(items[0]))
-            assertThat(booleanData2 , nullValue())
+            val booleanData = repo.findStationCode("820").single()
+            val booleanData2 = repo.findStationCode("819").single()
+
+            assertThat(booleanData?.FR_CODE , equalTo(items.first().FR_CODE))
+            assertThat(booleanData2?.FR_CODE , nullValue())
         }
     }
 
     @Test
     fun `StationCodes Insert Test`() {
-        runBlocking(Dispatchers.IO) {
-            val items = listOf(
-                CacheAllStationCodes("" , "8" , "2811" , "복정역"),
-                CacheAllStationCodes( "123", "8" , "2811" , "복정역"),
-                CacheAllStationCodes("435" , "8" , "2811" , "복정역"),
-                CacheAllStationCodes("6546547" , "8" , "2811" , "복정역")
-            )
+        runBlocking {
+            val items = (1..4).map {
+                generateAllStationCodes(it.toString() , randomString() , randomString() , randomString())
+            }
 
-            dao.insert(items)
+            repo.insert(items.map { it.CacheToData()!! }).single()
+            val data = repo.findStationCode("1").single()
 
-            assertThat(dao.getAllStationCodeData() , equalTo(items))
+            assertThat(data?.FR_CODE , equalTo(items.first().FR_CODE))
         }
     }
 }

@@ -5,7 +5,7 @@ import com.young.domain.model.DomainStationTimeTable
 import kotlinx.coroutines.flow.Flow
 
 interface RemoteStationDataRepository {
-    suspend fun getStationTelData(publicDataKey: String , stationCode: String) : Flow<List<DomainStationBody>>
+    suspend fun getStationTelData(publicDataKey: String , stationCode: String) : Flow<List<DomainStationBody>?>
     suspend fun getStationTimetables(
         key :String ,
         railCode : String ,

@@ -5,7 +5,7 @@ data class RemoteStationTelNumber(
 )
 
 data class Response(
-    val body: Body,
+    val body: Body?,
     val header: TelHeader
 )
 

@@ -13,12 +13,12 @@ import javax.inject.Inject
 class CacheFullRouteInformationDataSourceImpl @Inject constructor(
     private val dataSource: CacheFullRouteInformationDataSource
 ) : CacheFullRouteInformationRepository {
-    override suspend fun insert(param: List<DomainFullRouteInformationBody>) =
+    override suspend fun insert(param: List<DomainFullRouteInformationBody>) : Flow<List<Long>> =
         dataSource.insert(param.map { it.DomainToData() })
 
-    override suspend fun insertLineCodeAndTrailCode(param: List<DomainTrailCodeAndLineCode>) {
+    override suspend fun insertLineCodeAndTrailCode(param: List<DomainTrailCodeAndLineCode>): Flow<List<Long>> =
         dataSource.insertLineCodeAndTrailCode(param.map { it.DomainToData() })
-    }
+
 
     override suspend fun getAllData(): Flow<List<DomainFullRouteInformationBody>> =
         dataSource.getAllData().map {

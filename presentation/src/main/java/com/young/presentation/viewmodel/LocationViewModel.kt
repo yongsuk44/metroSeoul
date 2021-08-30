@@ -8,12 +8,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson
-import com.young.domain.usecase.cache.CacheStationCoordinateUseCase
-import com.young.domain.usecase.location.GetLocationUseCase
+import com.young.domain.usecase.CoordinateUseCase
 import com.young.presentation.R
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.consts.Event
 import com.young.presentation.consts.ResourceProvider
+import com.young.presentation.mapper.DomainToUiMapper.DomainToUiDistance
 import com.young.presentation.mapper.DomainToUiMapper.UiToDomain
 import com.young.presentation.model.UiStationNameAndMapXY
 import com.young.presentation.model.UiStationNameDistance
@@ -39,8 +39,7 @@ interface LocationViewModelFunction {
 @FlowPreview
 class LocationViewModel @ViewModelInject constructor(
     private val provider : ResourceProvider,
-    private val locationUseCase: GetLocationUseCase,
-    private val coordinateUseCase: CacheStationCoordinateUseCase,
+    private val useCase : CoordinateUseCase,
     @Assisted private val saveInstance : SavedStateHandle
 ) : BaseViewModel(), LocationViewModelFunction {
 
@@ -95,7 +94,9 @@ class LocationViewModel @ViewModelInject constructor(
 
     override fun loadAddressDataSize() {
         viewModelScope.launch(handler) {
-            coordinateUseCase.getStationCoordinateDataSize().flowOn(Dispatchers.IO).take(1)
+            useCase.getStationCoordinateDataSize()
+                .flowOn(Dispatchers.IO)
+                .take(1)
                 .collect {
                     _stationCoordinateDataSize.value = it
                 }
@@ -126,12 +127,13 @@ class LocationViewModel @ViewModelInject constructor(
 
     override fun insertAllStationNameAndMapXYData(items: List<UiStationNameAndMapXY>) {
         viewModelScope.launch(handler) {
-            flowOf(coordinateUseCase.insertStationCoordinateData(
-                items.map {
-                    it.UiToDomain()
+            flowOf(items)
+                .map {
+                    it.map { it.UiToDomain() }
                 }
-            ))
-                .flowOn(Dispatchers.IO)
+                .flatMapConcat {
+                    flowOf(useCase.insertStationCoordinateData(it)).flowOn(Dispatchers.IO)
+                }
                 .collect {
                     _locationRadiusData.value = 3.0
                 }
@@ -141,8 +143,7 @@ class LocationViewModel @ViewModelInject constructor(
     override fun getLocationNearStationList(areaKm: Double) {
         viewModelScope.launch {
             if (nowLocationLatitude.value != null && nowLocationLongitude.value != null) {
-
-                coordinateUseCase.getLocationNearStationList(nowLocationLatitude.value!!, nowLocationLongitude.value!!, areaKm)
+                useCase.getLocationNearStationList(nowLocationLatitude.value!!, nowLocationLongitude.value!!, areaKm)
                     .flowOn(Dispatchers.IO)
                     .transform {
                         emit(

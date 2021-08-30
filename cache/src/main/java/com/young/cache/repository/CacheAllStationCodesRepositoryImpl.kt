@@ -1,29 +1,29 @@
 package com.young.cache.repository
 
-import com.young.cache.dao.AllStationCodeDao
+import android.os.Looper
 import com.young.cache.cache.datasource.cache.CacheAllStationCodesDataSource
+import com.young.cache.cache.model.DataRow
+import com.young.cache.dao.AllStationCodeDao
 import com.young.cache.mapper.CacheToDataMapper.CacheToData
 import com.young.cache.mapper.DataToCacheMapper.DataToCahe
-import com.young.cache.cache.model.DataAllStationCodes
-import com.young.cache.cache.model.DataRow
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 class CacheAllStationCodesRepositoryImpl @Inject constructor(
     private val dao: AllStationCodeDao
 ) : CacheAllStationCodesDataSource {
-    override suspend fun insert(items: DataAllStationCodes) {
-        dao.insert(
-            items.SearchInfoBySubwayNameService.row.map {
-                it.DataToCahe()
-            }
-        )
-    }
+
+    override suspend fun insert(items: List<DataRow>): Flow<List<Long>> =
+        flowOf(items)
+            .map { it.map { it.DataToCahe() } }
+            .map { dao.insert(it) }
+            .flowOn(Dispatchers.IO)
 
     override suspend fun findStationCode(code: String): Flow<DataRow?> =
-        flowOf(dao.findStationCodes(code)).map {
-            it.CacheToData()
-        }
+        flowOf(code)
+            .map { dao.findStationCodes(code) }
+            .map { it.CacheToData() }
+            .flowOn(Dispatchers.IO)
+
 }

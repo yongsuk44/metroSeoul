@@ -3,14 +3,13 @@ package com.young.domain.usecase
 import com.young.domain.model.*
 import com.young.domain.repository.location.CacheFullRouteInformationRepository
 import com.young.domain.repository.remote.RemoteFullRouteInformationRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 interface CacheFullRouteInformationBaseUseCase {
-    suspend fun insert(param: List<DomainFullRouteInformationBody>): Flow<Unit>
+    suspend fun insert(param: List<DomainFullRouteInformationBody>): Flow<List<Long>>
+    suspend fun insertLineCodeAndTrailCode(param : List<DomainTrailCodeAndLineCode>): Flow<List<Long>>
     suspend fun getAllData(): Flow<List<DomainFullRouteInformationBody>>
     suspend fun getDataSize(): Flow<Int>
     suspend fun getStationNameToFullRouteInformationData(name: String): Flow<DomainFullRouteInformationBody>
@@ -38,16 +37,12 @@ class FullRouteInformationUseCase @Inject constructor(
     private val remote: RemoteFullRouteInformationRepository,
     private val cache: CacheFullRouteInformationRepository
 ) : RemoteFullRouteInformationBaseUseCase, CacheFullRouteInformationBaseUseCase {
-    override suspend fun insert(param: List<DomainFullRouteInformationBody>): Flow<Unit> = flow {
-        val lineCodeAndTrailCodeList = param.map {
-            DomainTrailCodeAndLineCode(it.railOprIsttCd , it.lnCd)
-        }.distinctBy {
-            it.lnCd to it.railOprIsttCd
-        }
+    override suspend fun insert(param: List<DomainFullRouteInformationBody>): Flow<List<Long>> =
+        cache.insert(param)
 
-        emit(cache.insert(param))
-        emit(cache.insertLineCodeAndTrailCode(lineCodeAndTrailCodeList))
-    }.flowOn(Dispatchers.IO)
+    override suspend fun insertLineCodeAndTrailCode(param: List<DomainTrailCodeAndLineCode>): Flow<List<Long>> =
+        cache.insertLineCodeAndTrailCode(param)
+
 
     override suspend fun getAllData(): Flow<List<DomainFullRouteInformationBody>> =
         cache.getAllData()

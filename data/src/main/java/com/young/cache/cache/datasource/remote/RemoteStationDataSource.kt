@@ -6,7 +6,7 @@ import com.young.cache.cache.model.DataStationTimeTable
 import kotlinx.coroutines.flow.Flow
 
 interface RemoteStationDataSource {
-    suspend fun getStationTelData(publicDataKey: String , stationCode: String) : Flow<List<DataStationBody>>
+    suspend fun getStationTelData(publicDataKey: String , stationCode: String) : Flow<List<DataStationBody>?>
     suspend fun getDataStationTimeTable(
         key: String,
         railCode: String,

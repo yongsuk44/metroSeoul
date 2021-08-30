@@ -7,9 +7,14 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.young.cache.dao.FullRouteInformationDao
 import com.young.cache.factory.DataFactory.randomString
 import com.young.cache.factory.ModelFactory
-import com.young.cache.factory.runBlockIOTest
+import com.young.cache.mapper.CacheToDataMapper.CacheToData
+import com.young.cache.repository.CacheFullRouteInformationRepositoryImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.core.Is.`is`
 import org.hamcrest.core.IsNot
@@ -18,6 +23,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
+import java.time.LocalTime
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
@@ -25,12 +31,15 @@ class FullRouteInformationTest {
 
     private lateinit var dao: FullRouteInformationDao
     private lateinit var db: AppDataBase
+    private lateinit var repo: CacheFullRouteInformationRepositoryImpl
 
     @Before
     fun setUp() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         db = Room.inMemoryDatabaseBuilder(context, AppDataBase::class.java).build()
         dao = db.fullRouteInformationDao()
+
+        repo = CacheFullRouteInformationRepositoryImpl(dao)
     }
 
     @After
@@ -41,22 +50,32 @@ class FullRouteInformationTest {
 
     @Test
     fun `insert FullRouteInformation Data Success`() {
-        runBlockIOTest {
-            val items = listOf(
-                ModelFactory.generateFullRouteInformation(randomString() , randomString() ,randomString() ,randomString() , randomString() ,randomString()),
-                ModelFactory.generateFullRouteInformation(randomString() , randomString() ,randomString() ,randomString() , randomString() ,randomString()),
-                ModelFactory.generateFullRouteInformation(randomString() , randomString() ,randomString() ,randomString() , randomString() ,randomString())
-            )
-            dao.insertFullRouteInformation(items)
-            val allData = dao.getAllData()
+        runBlocking {
+            val items = (0..2).map {
+                ModelFactory.generateFullRouteInformation(
+                    randomString(),
+                    randomString(),
+                    randomString(),
+                    randomString(),
+                    randomString(),
+                    randomString()
+                )
+            }
+
+            val call = LocalTime.now().toNanoOfDay()
+            repo.insert(items.map { it.CacheToData() }).single()
+            val time = LocalTime.now().minusNanos(call)
+            println(time)
+
+            val allData = repo.getAllData().single()
 
             assertThat(
-                allData.first().cacheTrailCodeAndLineCode.railOprIsttCd ,
+                allData.first().railOprIsttCd,
                 `is`(items.first().cacheTrailCodeAndLineCode.railOprIsttCd)
             )
 
             assertThat(
-                allData.first().cacheTrailCodeAndLineCode.lnCd ,
+                allData.first().lnCd,
                 `is`(items.first().cacheTrailCodeAndLineCode.lnCd)
             )
         }
@@ -64,54 +83,68 @@ class FullRouteInformationTest {
 
     @Test
     fun `insert LineCodeAndStationCode Data Success`() {
-        runBlocking(Dispatchers.IO) {
+        runBlocking {
             val items = listOf(
-                ModelFactory.generateTrailCodeAndLineCode(randomString() , randomString()) ,
-                ModelFactory.generateTrailCodeAndLineCode(randomString() , randomString()),
-                ModelFactory.generateTrailCodeAndLineCode(randomString() , randomString()),
-                ModelFactory.generateTrailCodeAndLineCode(randomString() , randomString())
+                ModelFactory.generateTrailCodeAndLineCode(randomString(), randomString()),
+                ModelFactory.generateTrailCodeAndLineCode(randomString(), randomString()),
+                ModelFactory.generateTrailCodeAndLineCode(randomString(), randomString()),
+                ModelFactory.generateTrailCodeAndLineCode(randomString(), randomString())
             )
 
-            dao.insertLineCodeAndTrailCode(items)
-            val allData = dao.getTrailCodeAllData()
+            repo.insertLineCodeAndTrailCode(items.map { it.CacheToData() }).single()
+
+            val allData = repo.getTrailCodeAllData().single()
 
             val assertAllData = allData.map { it.lnCd to it.railOprIsttCd }
             val assertInsertData = items.map { it.lnCd to it.railOprIsttCd }
 
-            assertThat(assertAllData , `is`(assertInsertData))
+            assertThat(assertAllData, `is`(assertInsertData))
         }
     }
 
     @Test
     fun `select stationName To FullRouteInformation Data`() {
-        runBlockIOTest {
-            val items = listOf(
-                ModelFactory.generateFullRouteInformation(randomString() , "테스트역1" ,randomString() ,randomString() , randomString() ,randomString()),
-                ModelFactory.generateFullRouteInformation(randomString() , "테스트역2" ,randomString() ,randomString() , randomString() ,randomString()),
-                ModelFactory.generateFullRouteInformation(randomString() , "테스트역1" ,randomString() ,randomString() , randomString() ,randomString())
-            )
-            dao.insertFullRouteInformation(items)
-            val selectData = dao.getStationNameToFullRouteInformationData("테스트역1")
+        runBlocking {
+            val items = (1..4).map {
+                ModelFactory.generateFullRouteInformation(
+                    randomString(),
+                    "테스트역$it",
+                    randomString(),
+                    randomString(),
+                    randomString(),
+                    randomString()
+                )
+            }
 
-            assertThat(selectData.stinCd , `is`(items[0].stinCd))
+            repo.insert(items.map { it.CacheToData() }).single()
+
+            val selectData = repo.getStationNameToFullRouteInformationData("테스트역1").single()
+
+            assertThat(selectData.stinCd, `is`(items[0].stinCd))
         }
     }
 
     @Test
     fun `select stationCode To FullRouteInformation Data`() {
-        runBlockIOTest {
-            val selectCodeList = listOf("코드 1번" , "코드 2번")
-            val items = listOf(
-                ModelFactory.generateFullRouteInformation("코드 1번" ,  randomString(),randomString() ,randomString() , randomString() ,randomString()),
-                ModelFactory.generateFullRouteInformation("코드 2번" , randomString() ,randomString() ,randomString() , randomString() ,randomString()),
-                ModelFactory.generateFullRouteInformation("코드 3번" , randomString() ,randomString() ,randomString() , randomString() ,randomString())
-            )
+        runBlocking {
+            val selectCodeList = listOf("코드 1번", "코드 2번")
+            val items = (1..3).map {
+                ModelFactory.generateFullRouteInformation(
+                    "코드 ${it}번",
+                    randomString(),
+                    randomString(),
+                    randomString(),
+                    randomString(),
+                    randomString()
+                )
+            }
 
-            dao.insertFullRouteInformation(items)
-            val selectData = dao.getStationData(selectCodeList)
+            repo.insert(items.map { it.CacheToData() }).single()
 
-            assertThat(selectData.last().stinCd , IsNot.not(items.last().stinCd))
-            assertThat(selectData.first().stinCd , `is`(items.first().stinCd))
+            val selectData = repo.getStationData(selectCodeList).single()
+
+            assertThat(selectData.last().stinCd, IsNot.not(items.last().stinCd))
+            assertThat(selectData.first().stinCd, `is`(items.first().stinCd))
         }
     }
 }

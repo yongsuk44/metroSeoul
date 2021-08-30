@@ -38,7 +38,9 @@ class ExampleUnitTest {
     @Test
     fun test() {
         runBlocking {
-            println(testData.getAwaitValue())
+            (0..2).map {
+                println(it)
+            }
         }
     }
 }

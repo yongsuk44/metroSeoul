@@ -1,6 +1,5 @@
 package com.young.domain.usecase
 
-import com.young.domain.model.DomainFullRouteInformation
 import com.young.domain.model.DomainFullRouteInformationBody
 import com.young.domain.model.DomainStationBody
 import com.young.domain.model.DomainStationTimeTable
@@ -16,7 +15,7 @@ interface RemoteStationTelBaseUseCase {
     suspend fun getStationTelData(
         publicDataKey: String,
         stationCode: String
-    ): Flow<List<DomainStationBody>>
+    ): Flow<List<DomainStationBody>?>
 
     suspend fun getStationTimetables(
         key: String,
@@ -36,7 +35,7 @@ interface RemoteStationTelBaseUseCase {
 }
 
 class StationDataUseCase @Inject constructor(
-    val cache: CacheFullRouteInformationRepository,
+    private val cache: CacheFullRouteInformationRepository,
     private val remote: RemoteStationDataRepository
 ) : StationDataBaseUseCase, RemoteStationTelBaseUseCase {
     override suspend fun invoke(param: List<String>): Flow<List<DomainFullRouteInformationBody>> =
@@ -45,7 +44,7 @@ class StationDataUseCase @Inject constructor(
     override suspend fun getStationTelData(
         publicDataKey: String,
         stationCode: String
-    ): Flow<List<DomainStationBody>> =
+    ): Flow<List<DomainStationBody>?> =
         remote.getStationTelData(publicDataKey, stationCode)
 
     override suspend fun getStationTimetables(

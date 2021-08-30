@@ -113,10 +113,11 @@ object RemoteToDataMapper {
         }
     }
 
-    fun RemoteStationTelNumber.RemoteToData() : List<DataStationBody> {
+    fun RemoteStationTelNumber.RemoteToData() : List<DataStationBody>? {
         val bodyMapper = BaseMapper<RemoteStationBody , DataStationBody>()
         return BaseMapper.setList(bodyMapper).run {
-            this(this@RemoteToData.response.body.items)
+            if (response.body == null) return null
+            else this(this@RemoteToData.response.body.items)
         }
     }
 }
