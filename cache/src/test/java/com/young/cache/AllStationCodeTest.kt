@@ -8,11 +8,9 @@ import com.young.cache.dao.AllStationCodeDao
 import com.young.cache.factory.DataFactory.randomString
 import com.young.cache.factory.ModelFactory.generateAllStationCodes
 import com.young.cache.mapper.CacheToDataMapper.CacheToData
-import com.young.cache.model.CacheAllStationCodes
 import com.young.cache.repository.CacheAllStationCodesRepositoryImpl
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.nullValue

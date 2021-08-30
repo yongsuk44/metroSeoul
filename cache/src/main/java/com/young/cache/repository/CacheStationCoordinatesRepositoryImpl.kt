@@ -1,8 +1,10 @@
 package com.young.cache.repository
 
-import com.young.cache.cache.model.DataStationNameAndMapXY
+import com.young.data.model.DataStationNameAndMapXY
 import com.young.cache.dao.LocationDao
 import com.young.cache.mapper.CacheToDataMapper.CacheToData
+import com.young.cache.mapper.DataToCacheMapper.DataToCache
+import com.young.data.datasource.cache.CacheStationCoordinatesDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -12,7 +14,7 @@ import kotlin.math.sin
 
 class CacheStationCoordinatesRepositoryImpl @Inject constructor(
     private val dao: LocationDao
-) : com.young.data.datasource.cache.CacheStationCoordinatesDataSource {
+) : CacheStationCoordinatesDataSource {
     override suspend fun insertStationCoordinateData(items: List<DataStationNameAndMapXY>) =
         dao.insertStationCoordinatesData(
             items.map {

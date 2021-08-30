@@ -6,15 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.young.domain.mapper.BaseMapper
 import com.young.domain.model.DomainSubwayFacilities
-import com.young.domain.usecase.subwayfacilities.remote.RemoteGetSubWayFacilitiesDataUseCase
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.model.UiSubwayFacilities
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 interface MainViewFunction {
     fun loadSubWayFacilitiesData(key : String)

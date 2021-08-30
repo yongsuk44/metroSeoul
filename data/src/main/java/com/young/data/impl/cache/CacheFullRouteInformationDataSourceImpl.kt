@@ -1,7 +1,7 @@
 package com.young.data.impl.cache
 
-import com.young.cache.cache.mapper.DataToDomainMapper.DataToDomain
-import com.young.cache.cache.mapper.DomainToDataMapper.DomainToData
+import com.young.data.mapper.DataToDomainMapper.DataToDomain
+import com.young.data.mapper.DomainToDataMapper.DomainToData
 import com.young.domain.model.DomainFullRouteInformationBody
 import com.young.domain.model.DomainTrailCodeAndLineCode
 import com.young.domain.repository.location.CacheFullRouteInformationRepository

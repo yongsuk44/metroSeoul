@@ -1,6 +1,6 @@
 package com.young.data.datasource.cache
 
-import com.young.cache.cache.model.DataRow
+import com.young.data.model.DataRow
 import kotlinx.coroutines.flow.Flow
 
 interface CacheAllStationCodesDataSource {

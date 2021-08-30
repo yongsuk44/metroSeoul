@@ -1,6 +1,6 @@
 package com.young.data.impl.remote
 
-import com.young.cache.cache.mapper.DataToDomainMapper.DataToDomain
+import com.young.data.mapper.DataToDomainMapper.DataToDomain
 import com.young.domain.model.DomainStationBody
 import com.young.domain.model.DomainStationTimeTable
 import com.young.domain.repository.remote.RemoteStationDataRepository

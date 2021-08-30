@@ -4,7 +4,6 @@ import com.young.domain.model.*
 import com.young.domain.repository.location.CacheFullRouteInformationRepository
 import com.young.domain.repository.remote.RemoteFullRouteInformationRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 interface CacheFullRouteInformationBaseUseCase {

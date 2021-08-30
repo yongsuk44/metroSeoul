@@ -1,6 +1,6 @@
 package com.young.data.datasource.cache
 
-import com.young.cache.cache.model.DataStationNameAndMapXY
+import com.young.data.model.DataStationNameAndMapXY
 import kotlinx.coroutines.flow.Flow
 
 interface CacheStationCoordinatesDataSource {

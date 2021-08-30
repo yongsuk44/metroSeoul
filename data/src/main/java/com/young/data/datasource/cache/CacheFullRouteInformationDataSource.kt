@@ -1,7 +1,7 @@
 package com.young.data.datasource.cache
 
-import com.young.cache.cache.model.DataFullRouteInformationBody
-import com.young.cache.cache.model.DataTrailCodeAndLineCode
+import com.young.data.model.DataFullRouteInformationBody
+import com.young.data.model.DataTrailCodeAndLineCode
 import kotlinx.coroutines.flow.Flow
 
 interface CacheFullRouteInformationDataSource {

@@ -1,7 +1,7 @@
 package com.young.cache.mapper
 
 import com.young.base.BaseMapper
-import com.young.cache.cache.model.*
+import com.young.data.model.*
 import com.young.cache.model.CacheAllStationCodes
 import com.young.cache.model.CacheFullRouteInformation
 import com.young.cache.model.CacheStationNameAndMapXY

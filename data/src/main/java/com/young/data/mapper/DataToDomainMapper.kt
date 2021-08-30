@@ -1,7 +1,11 @@
 package com.young.data.mapper
 
-import com.young.cache.cache.model.*
+import com.young.base.BaseMapper
+import com.young.data.model.*
 import com.young.domain.model.*
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.transform
 
 object DataToDomainMapper {
     fun DataLocationTrailData.DataToDomain() : DomainLocationTrailData {

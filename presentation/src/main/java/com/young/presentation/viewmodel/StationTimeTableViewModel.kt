@@ -21,6 +21,7 @@ import java.time.LocalTime
 import kotlin.math.abs
 
 interface StationTimeTableFunction {
+    fun findAllStationCode(stationCode : String) : Flow<DomainRow?>
     fun getStationTimeTable(indexAllRouteInformation: IndexAllRouteInformation?, day: DayType)
     fun changeDayCode(data: DayType)
 }
@@ -47,13 +48,17 @@ class StationTimeTableViewModel @ViewModelInject constructor(
         it.down.nowTimeNearList()
     }
 
+    override fun findAllStationCode(stationCode: String) : Flow<DomainRow?> =
+        flow {
+            emit(allStationCodeUseCase.findStationCode(stationCode).single())
+        }
+
     override fun getStationTimeTable(indexAllRouteInformation: IndexAllRouteInformation?, day: DayType) {
         viewModelScope.launch(handler) {
 
             if (indexAllRouteInformation == null) return@launch
 
-            allStationCodeUseCase.findStationCode(indexAllRouteInformation.stinCd)
-                .flowOn(Dispatchers.IO)
+            findAllStationCode(indexAllRouteInformation.stinCd)
                 .flatMapLatest { row ->
                     row?.let { getSeoulStationTimeTableAPI(getDayCode(day, row), row.STATION_CD) }
                         ?: getPublicStationTimeTableAPI(getDayCode(day, row), indexAllRouteInformation)

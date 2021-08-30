@@ -1,6 +1,6 @@
 package com.young.data.mapper
 
-import com.young.cache.cache.model.*
+import com.young.data.model.*
 import com.young.domain.mapper.BaseMapper
 import com.young.domain.model.*
 
