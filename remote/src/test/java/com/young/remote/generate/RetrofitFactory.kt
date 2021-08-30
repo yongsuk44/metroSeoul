@@ -2,7 +2,6 @@ package com.young.remote.generate
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.nhaarman.mockito_kotlin.mock
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockWebServer
 import retrofit2.Retrofit

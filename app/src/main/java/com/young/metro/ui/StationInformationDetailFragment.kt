@@ -21,7 +21,6 @@ import com.young.presentation.viewmodel.StationTimeTableViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 @FlowPreview

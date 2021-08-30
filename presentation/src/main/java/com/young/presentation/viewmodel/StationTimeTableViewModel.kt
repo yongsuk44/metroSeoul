@@ -3,25 +3,20 @@ package com.young.presentation.viewmodel
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import com.young.domain.model.Row
 import com.young.domain.usecase.cache.CacheAllStationCodeUseCase
-import com.young.domain.usecase.remote.RemoteTimeTableBaseUseCase
 import com.young.domain.usecase.remote.RemoteTimeTableUseCase
 import com.young.presentation.R
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.consts.CustomTransformationDataMap
 import com.young.presentation.consts.DayType
 import com.young.presentation.consts.ResourceProvider
-import com.young.presentation.mapper.DomainToUiMapper.DomainToUi
 import com.young.presentation.model.IndexAllRouteInformation
 import com.young.presentation.model.UiTrailTimeTable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import timber.log.Timber
 import java.time.LocalTime
 import kotlin.math.abs
 

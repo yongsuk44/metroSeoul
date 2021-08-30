@@ -1,11 +1,11 @@
 package com.young.domain.model
 
 data class DomainLocationTrailData(
-    val body: List<LocationData>,
+    val body: List<DomainLocationData>,
     val header: Header
 )
 
-data class LocationData(
+data class DomainLocationData(
     val lnCd: String,
     val lonmAdr: String?,
     val mapCordX: Double?,

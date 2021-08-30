@@ -1,7 +1,6 @@
 package com.young.domain.repository.remote
 
 import com.young.domain.model.DomainStationBody
-import com.young.domain.model.DomainStationTelNumber
 import com.young.domain.model.DomainStationTimeTable
 import kotlinx.coroutines.flow.Flow
 

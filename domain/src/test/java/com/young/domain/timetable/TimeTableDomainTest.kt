@@ -1,6 +1,5 @@
 package com.young.domain.timetable
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.nhaarman.mockito_kotlin.whenever
@@ -13,15 +12,11 @@ import com.young.domain.repository.location.CacheAllStationCodesRepository
 import com.young.domain.repository.remote.RemoteStationTimeTableRepository
 import com.young.domain.usecase.cache.CacheAllStationCodeUseCase
 import com.young.domain.usecase.remote.RemoteTimeTableUseCase
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers
 import org.junit.Assert
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock

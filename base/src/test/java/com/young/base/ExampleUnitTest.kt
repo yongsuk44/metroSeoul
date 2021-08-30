@@ -1,7 +1,6 @@
 package com.young.base
 
 import androidx.lifecycle.MutableLiveData
-import org.junit.Assert.assertEquals
 import org.junit.Test
 
 /**

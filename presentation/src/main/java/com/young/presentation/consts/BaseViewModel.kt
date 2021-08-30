@@ -3,7 +3,6 @@ package com.young.presentation.consts
 import androidx.lifecycle.*
 import kotlinx.coroutines.CoroutineExceptionHandler
 import timber.log.Timber
-import java.lang.NullPointerException
 
 open class BaseViewModel : ViewModel() {
 

@@ -1,8 +1,7 @@
 package com.young.remote.mapper
 
 import com.young.base.BaseMapper
-import com.young.data.model.*
-import com.young.remote.mapper.RemoteToDataMapper.RemoteToData
+import com.young.cache.cache.model.*
 import com.young.remote.model.*
 
 object RemoteToDataMapper {
@@ -22,7 +21,7 @@ object RemoteToDataMapper {
     fun RemoteStationSeoulTimeTable.RemoteToData() : DataStationSeoulTimeTable {
         val mapper = BaseMapper<RemoteStationSeoulTimeTable , DataStationSeoulTimeTable>()
         val search = BaseMapper<RemoteSearchSTNTimeTableByIDService , DataSearchSTNTimeTableByIDService>()
-        val result = BaseMapper<com.young.remote.model.TimeTableRESULT, com.young.data.model.TimeTableRESULT>()
+        val result = BaseMapper<com.young.remote.model.TimeTableRESULT, com.young.cache.cache.model.TimeTableRESULT>()
         val body = BaseMapper<RemoteTimeTableRow , DataTimeTableRow>()
 
         search.apply {

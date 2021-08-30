@@ -3,7 +3,6 @@ package com.young.metro.viewbinding
 import androidx.databinding.BindingAdapter
 import com.young.metro.R
 import com.young.metro.ui.custom.CircleTextView
-import com.young.presentation.consts.DayType
 
 @BindingAdapter("timeTableDayBoxCheckBackground")
 fun setTimeTableDayBoxCheckBackground(view : CircleTextView , check : Boolean) {

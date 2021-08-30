@@ -3,14 +3,8 @@ package com.young.presentation.mapper
 import android.location.Location
 import com.young.domain.mapper.BaseMapper
 import com.young.domain.model.*
-import com.young.domain.model.ConvenienceInformationBody
-import com.young.domain.model.PlatformEntranceBody
-import com.young.domain.model.Row
 import com.young.presentation.model.*
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 
 object DomainToUiMapper {
 

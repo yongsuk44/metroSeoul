@@ -1,10 +1,10 @@
 package com.young.remote.repository
 
-import com.young.data.datasource.remote.RemoteFullRouteInformationDataSource
-import com.young.data.model.DataConvenienceInformation
-import com.young.data.model.DataFullRouteInformation
-import com.young.data.model.DataPlatformEntrance
-import com.young.data.model.DataRow
+import com.young.cache.cache.datasource.remote.RemoteFullRouteInformationDataSource
+import com.young.cache.cache.model.DataConvenienceInformation
+import com.young.cache.cache.model.DataFullRouteInformation
+import com.young.cache.cache.model.DataPlatformEntrance
+import com.young.cache.cache.model.DataRow
 import com.young.remote.api.SeoulApiService
 import com.young.remote.api.TrailPorTalService
 import com.young.remote.mapper.RemoteToDataMapper.RemoteToData

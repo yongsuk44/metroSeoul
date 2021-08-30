@@ -1,7 +1,7 @@
 package com.young.remote.repository
 
-import com.young.data.datasource.remote.RemoteLocationDataSource
-import com.young.data.model.DataLocationTrailData
+import com.young.cache.cache.datasource.remote.RemoteLocationDataSource
+import com.young.cache.cache.model.DataLocationTrailData
 import com.young.remote.api.TrailPorTalService
 import com.young.remote.mapper.RemoteToDataMapper.RemoteData
 import kotlinx.coroutines.flow.Flow

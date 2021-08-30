@@ -1,7 +1,5 @@
 package com.young.presentation
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.nhaarman.mockito_kotlin.whenever
@@ -12,13 +10,10 @@ import com.young.presentation.consts.CustomTransformationDataMap
 import com.young.presentation.consts.ResourceProvider
 import com.young.presentation.model.UiTrailTimeTable
 import com.young.presentation.viewmodel.StationTimeTableViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito

@@ -14,8 +14,6 @@ import com.young.metro.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.time.LocalTime
-import kotlin.math.abs
 
 fun RecyclerView.recyclerViewScrollPosition(scope : LifecycleCoroutineScope, position : Int) {
     if (position <= 0) return

@@ -6,9 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.young.domain.mapper.BaseMapper
 import com.young.domain.model.DomainSubwayFacilities
+import com.young.domain.usecase.subwayfacilities.cache.CacheGetSubWayFacilitiesDataUseCase
 import com.young.domain.usecase.subwayfacilities.cache.GetSizeTableDataUseCase
 import com.young.domain.usecase.subwayfacilities.cache.InsertSubWayFacilitiesDataUseCase
-import com.young.domain.usecase.subwayfacilities.cache.CacheGetSubWayFacilitiesDataUseCase
 import com.young.domain.usecase.subwayfacilities.remote.RemoteGetSubWayFacilitiesDataUseCase
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.model.UiSubwayFacilities

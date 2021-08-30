@@ -4,7 +4,6 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.young.domain.usecase.cache.CacheAllStationCodeUseCase
 import com.young.domain.usecase.cache.LocalGetFullRouteInformationUseCase
 import com.young.domain.usecase.cache.LocalInsertFullRouteInformationUseCase
 import com.young.domain.usecase.remote.RemoteFullRouteInformationUseCase
@@ -12,7 +11,6 @@ import com.young.presentation.R
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.consts.Event
 import com.young.presentation.consts.ResourceProvider
-import com.young.presentation.mapper.DomainToUiMapper.DomainToUi
 import com.young.presentation.model.ListRouteInformation
 import com.young.presentation.modelfunction.FullRouteInformationCase
 import kotlinx.coroutines.Dispatchers

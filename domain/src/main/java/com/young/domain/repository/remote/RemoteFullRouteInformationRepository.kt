@@ -1,6 +1,9 @@
 package com.young.domain.repository.remote
 
-import com.young.domain.model.*
+import com.young.domain.model.DomainConvenienceInformation
+import com.young.domain.model.DomainFullRouteInformationBody
+import com.young.domain.model.DomainPlatformEntrance
+import com.young.domain.model.DomainRow
 import kotlinx.coroutines.flow.Flow
 
 interface RemoteFullRouteInformationRepository {

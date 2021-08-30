@@ -1,13 +1,14 @@
 package com.young.remote.di
 
-import com.young.data.datasource.remote.RemoteFullRouteInformationDataSource
-import com.young.data.datasource.remote.RemoteLocationDataSource
-import com.young.data.datasource.remote.RemoteStationDataSource
+import com.young.cache.cache.datasource.remote.RemoteFullRouteInformationDataSource
+import com.young.cache.cache.datasource.remote.RemoteLocationDataSource
+import com.young.cache.cache.datasource.remote.RemoteStationDataSource
 import com.young.remote.api.PublicDataOpenApiService
-import com.young.remote.api.PublicDataPortalApiService
 import com.young.remote.api.SeoulApiService
 import com.young.remote.api.TrailPorTalService
-import com.young.remote.repository.*
+import com.young.remote.repository.RemoteFullRouteInformationRepositoryImpl
+import com.young.remote.repository.RemoteLocationRepositoryImpl
+import com.young.remote.repository.RemoteStationDataRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable

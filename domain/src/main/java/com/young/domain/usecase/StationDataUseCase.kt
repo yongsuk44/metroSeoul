@@ -1,8 +1,8 @@
 package com.young.domain.usecase
 
 import com.young.domain.model.DomainFullRouteInformation
+import com.young.domain.model.DomainFullRouteInformationBody
 import com.young.domain.model.DomainStationBody
-import com.young.domain.model.DomainStationTelNumber
 import com.young.domain.model.DomainStationTimeTable
 import com.young.domain.repository.location.CacheFullRouteInformationRepository
 import com.young.domain.repository.remote.RemoteStationDataRepository
@@ -10,7 +10,7 @@ import com.young.domain.usecase.base.BaseUseCase
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-typealias StationDataBaseUseCase = BaseUseCase<List<String>, Flow<List<DomainFullRouteInformation>>>
+typealias StationDataBaseUseCase = BaseUseCase<List<String>, Flow<List<DomainFullRouteInformationBody>>>
 
 interface RemoteStationTelBaseUseCase {
     suspend fun getStationTelData(
@@ -39,7 +39,7 @@ class StationDataUseCase @Inject constructor(
     val cache: CacheFullRouteInformationRepository,
     private val remote: RemoteStationDataRepository
 ) : StationDataBaseUseCase, RemoteStationTelBaseUseCase {
-    override suspend fun invoke(param: List<String>): Flow<List<DomainFullRouteInformation>> =
+    override suspend fun invoke(param: List<String>): Flow<List<DomainFullRouteInformationBody>> =
         cache.getStationData(param)
 
     override suspend fun getStationTelData(

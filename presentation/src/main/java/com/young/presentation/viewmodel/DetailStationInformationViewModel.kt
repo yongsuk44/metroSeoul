@@ -15,7 +15,6 @@ import com.young.presentation.modelfunction.DetailStationInformationViewFunction
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
-import java.lang.NullPointerException
 
 @FlowPreview
 @ExperimentalCoroutinesApi

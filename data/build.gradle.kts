@@ -30,8 +30,6 @@ android{
 
 dependencies {
     implementation(project(Modules.base))
-//    implementation(project(Modules.cache))
-//    implementation(project(Modules.Data))
     implementation(project(Modules.domain))
 
     implementation(AndroidLibraries.kotlinReflection)

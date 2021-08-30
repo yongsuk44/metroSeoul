@@ -8,13 +8,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson
-import com.young.domain.usecase.location.GetLocationUseCase
 import com.young.domain.usecase.cache.CacheStationCoordinateUseCase
+import com.young.domain.usecase.location.GetLocationUseCase
 import com.young.presentation.R
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.consts.Event
 import com.young.presentation.consts.ResourceProvider
-import com.young.presentation.mapper.DomainToUiMapper.DomainToUiDistance
 import com.young.presentation.mapper.DomainToUiMapper.UiToDomain
 import com.young.presentation.model.UiStationNameAndMapXY
 import com.young.presentation.model.UiStationNameDistance

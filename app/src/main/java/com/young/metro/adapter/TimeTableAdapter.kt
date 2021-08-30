@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.young.metro.R
 import com.young.metro.SimpleStringDiffCallBack
 import com.young.metro.base.BaseViewHolder

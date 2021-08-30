@@ -2,7 +2,6 @@ package com.young.remote.api
 
 import com.young.remote.TestCoroutineRule
 import com.young.remote.enqueueResponse
-import com.young.remote.generate.DataFactory
 import com.young.remote.generate.DataFactory.getRandomString
 import com.young.remote.generate.RetrofitFactory
 import com.young.remote.repository.RemoteFullRouteInformationRepositoryImpl

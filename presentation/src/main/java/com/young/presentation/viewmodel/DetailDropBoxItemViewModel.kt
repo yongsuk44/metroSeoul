@@ -9,7 +9,6 @@ import com.young.domain.usecase.remote.RemoteFullRouteInformationUseCase
 import com.young.presentation.R
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.consts.ResourceProvider
-import com.young.presentation.mapper.DomainToUiMapper.DomainToUi
 import com.young.presentation.model.UiConvenienceInformation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
