@@ -1,6 +1,5 @@
 package com.young.remote.repository
 
-import com.young.cache.cache.datasource.remote.RemoteFullRouteInformationDataSource
 import com.young.cache.cache.model.DataConvenienceInformation
 import com.young.cache.cache.model.DataFullRouteInformation
 import com.young.cache.cache.model.DataPlatformEntrance
@@ -15,7 +14,7 @@ import javax.inject.Inject
 class RemoteFullRouteInformationRepositoryImpl @Inject constructor(
     private val seoulApiService: SeoulApiService,
     private val service: TrailPorTalService
-) : RemoteFullRouteInformationDataSource {
+) : com.young.data.datasource.remote.RemoteFullRouteInformationDataSource {
     override suspend fun getPlatformEntranceData(
         key: String,
         railCode: String,

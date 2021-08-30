@@ -1,8 +1,5 @@
 package com.young.remote.di
 
-import com.young.cache.cache.datasource.remote.RemoteFullRouteInformationDataSource
-import com.young.cache.cache.datasource.remote.RemoteLocationDataSource
-import com.young.cache.cache.datasource.remote.RemoteStationDataSource
 import com.young.remote.api.PublicDataOpenApiService
 import com.young.remote.api.SeoulApiService
 import com.young.remote.api.TrailPorTalService
@@ -25,7 +22,7 @@ class RepositoryModule {
         publicDataPortalApiService: PublicDataOpenApiService ,
         service : TrailPorTalService ,
         seoulApi: SeoulApiService
-    ) : RemoteStationDataSource =
+    ) : com.young.data.datasource.remote.RemoteStationDataSource =
         RemoteStationDataRepositoryImpl(publicDataPortalApiService,service, seoulApi)
 
     @Provides
@@ -33,13 +30,13 @@ class RepositoryModule {
     fun provideDetailInformationRepository(
         seoulApiService: SeoulApiService,
         service: TrailPorTalService
-    ) : RemoteFullRouteInformationDataSource =
+    ) : com.young.data.datasource.remote.RemoteFullRouteInformationDataSource =
         RemoteFullRouteInformationRepositoryImpl(seoulApiService ,service)
 
     @Provides
     @Reusable
     fun provideLocationRepository(
         api : TrailPorTalService
-    ) : RemoteLocationDataSource =
+    ) : com.young.data.datasource.remote.RemoteLocationDataSource =
         RemoteLocationRepositoryImpl(api)
 }

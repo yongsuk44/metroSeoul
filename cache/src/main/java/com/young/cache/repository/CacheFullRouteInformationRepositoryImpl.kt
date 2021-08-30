@@ -1,12 +1,9 @@
 package com.young.cache.repository
 
-import android.os.Looper
-import com.young.cache.cache.datasource.cache.CacheFullRouteInformationDataSource
 import com.young.cache.cache.model.DataFullRouteInformationBody
 import com.young.cache.cache.model.DataTrailCodeAndLineCode
 import com.young.cache.dao.FullRouteInformationDao
 import com.young.cache.mapper.CacheToDataMapper.CacheToData
-import com.young.cache.mapper.DataToCacheMapper.DataToCache
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -16,7 +13,7 @@ import javax.inject.Inject
 
 class CacheFullRouteInformationRepositoryImpl @Inject constructor(
     private val dao: FullRouteInformationDao
-) : CacheFullRouteInformationDataSource {
+) : com.young.data.datasource.cache.CacheFullRouteInformationDataSource {
     override suspend fun insert(param: List<DataFullRouteInformationBody>) : Flow<List<Long>> =
         flowOf(param)
             .map { it.map { it.DataToCache() } }

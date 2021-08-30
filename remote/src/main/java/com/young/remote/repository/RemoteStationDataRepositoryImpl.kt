@@ -1,6 +1,5 @@
 package com.young.remote.repository
 
-import com.young.cache.cache.datasource.remote.RemoteStationDataSource
 import com.young.cache.cache.model.DataStationBody
 import com.young.cache.cache.model.DataStationSeoulTimeTable
 import com.young.cache.cache.model.DataStationTimeTable
@@ -16,7 +15,7 @@ class RemoteStationDataRepositoryImpl @Inject constructor(
     private val publicDataPortalApiService: PublicDataOpenApiService,
     private val service: TrailPorTalService,
     private val seoulApi: SeoulApiService
-) : RemoteStationDataSource {
+) : com.young.data.datasource.remote.RemoteStationDataSource {
     override suspend fun getStationTelData(
         publicDataKey: String,
         stationCode: String

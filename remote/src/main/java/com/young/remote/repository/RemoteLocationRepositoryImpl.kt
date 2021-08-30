@@ -1,6 +1,5 @@
 package com.young.remote.repository
 
-import com.young.cache.cache.datasource.remote.RemoteLocationDataSource
 import com.young.cache.cache.model.DataLocationTrailData
 import com.young.remote.api.TrailPorTalService
 import com.young.remote.mapper.RemoteToDataMapper.RemoteData
@@ -10,7 +9,7 @@ import javax.inject.Inject
 
 class RemoteLocationRepositoryImpl @Inject constructor(
     private val service: TrailPorTalService
-) : RemoteLocationDataSource {
+) : com.young.data.datasource.remote.RemoteLocationDataSource {
     override suspend fun getStationAddress(
         key: String,
         trailCode: String,
