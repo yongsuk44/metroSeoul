@@ -4,7 +4,7 @@ import com.young.domain.model.DomainStationNameAndMapXY
 import kotlinx.coroutines.flow.Flow
 
 interface CacheStationCoordinatesRepository {
-    suspend fun insertStationCoordinateData(items : List<DomainStationNameAndMapXY>)
+    suspend fun insertStationCoordinateData(items : List<DomainStationNameAndMapXY>) : Flow<List<Long>>
     suspend fun getStationCoordinateAllData() : Flow<List<DomainStationNameAndMapXY>>
     suspend fun getStationCoordinateDataSize() : Flow<Int>
 

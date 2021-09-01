@@ -8,7 +8,7 @@ interface LocationDao {
 
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertStationCoordinatesData(items : List<CacheStationNameAndMapXY>)
+    suspend fun insertStationCoordinatesData(items : List<CacheStationNameAndMapXY>) : List<Long>
 
     @Query("select * from CacheStationNameAndMapXY")
     suspend fun getStationCoordinateAllData() : List<CacheStationNameAndMapXY>

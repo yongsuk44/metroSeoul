@@ -11,16 +11,20 @@ import com.young.metro.R
 import com.young.metro.adapter.LineLogoSelectAdapter
 import com.young.metro.adapter.TimeTableAdapter
 import com.young.metro.base.BaseFragment
+import com.young.metro.base.showToast
 import com.young.metro.databinding.FragmentStationInformationDetailBinding
+import com.young.metro.util.nowTimeNearList
 import com.young.metro.util.recyclerViewScrollPosition
 import com.young.metro.util.waitForTransition
 import com.young.presentation.consts.DayType
 import com.young.presentation.viewmodel.DetailDropBoxItemViewModel
 import com.young.presentation.viewmodel.DetailStationInformationViewModel
+import com.young.presentation.viewmodel.SealedTimeTableData
 import com.young.presentation.viewmodel.StationTimeTableViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 @FlowPreview
@@ -83,16 +87,32 @@ class StationInformationDetailFragment :
         }
 
         stationTimeTableViewModel.timeTable.observe(viewLifecycleOwner) {
-            upTimeTableAdapter.submitList(it.up)
-            downTimeTableAdapter.submitList(it.down)
-        }
+            when(it) {
+                is SealedTimeTableData.Success -> {
+                    viewDataBinding.incTimetable.timeTableData = it.data
+                    upTimeTableAdapter.submitList(it.data?.up)
+                    downTimeTableAdapter.submitList(it.data?.down)
 
-        stationTimeTableViewModel.timeTableUpPosition.observe(viewLifecycleOwner) { position ->
-            viewDataBinding.incTimetable.rvStationTimetableUpList.recyclerViewScrollPosition(lifecycleScope , position)
-        }
+                    viewDataBinding.incTimetable.rvStationTimetableUpList.recyclerViewScrollPosition(
+                        lifecycleScope ,
+                        it.data?.up?.nowTimeNearList() ?: 0
+                    )
 
-        stationTimeTableViewModel.timeTableDownPosition.observe(viewLifecycleOwner) {
-            viewDataBinding.incTimetable.rvStationTimetableDownList.recyclerViewScrollPosition(lifecycleScope , it)
+                    viewDataBinding.incTimetable.rvStationTimetableDownList.recyclerViewScrollPosition(
+                        lifecycleScope,
+                        it.data?.down?.nowTimeNearList() ?: 0
+                    )
+                }
+
+                is SealedTimeTableData.Failed -> {
+                    Timber.e(it.exception)
+                    showToast("해당역에 대한 정보를 가져오지 못하였습니다.다시 시도해주세요.")
+                }
+
+                is SealedTimeTableData.Loading -> {
+                    viewDataBinding.incTimetable.timeTableLoading = it.loading
+                }
+            }
         }
     }
 }

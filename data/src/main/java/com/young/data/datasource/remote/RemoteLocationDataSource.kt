@@ -1,6 +1,6 @@
 package com.young.data.datasource.remote
 
-import com.young.cache.cache.model.DataLocationTrailData
+import com.young.data.model.DataLocationTrailData
 import kotlinx.coroutines.flow.Flow
 
 interface RemoteLocationDataSource {

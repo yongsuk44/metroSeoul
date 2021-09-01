@@ -1,10 +1,10 @@
 package com.young.data.di
 
-import com.young.cache.cache.impl.cache.CacheFullRouteInformationDataSourceImpl
-import com.young.cache.cache.impl.cache.CacheStationCoordinatesDataSourceImpl
-import com.young.cache.cache.impl.remote.RemoteFullRouteInformationDataSourceImpl
-import com.young.cache.cache.impl.remote.RemoteLocationDataSourceImpl
-import com.young.cache.cache.impl.remote.RemoteStationDataSourceImpl
+import com.young.data.impl.cache.CacheFullRouteInformationDataSourceImpl
+import com.young.data.impl.cache.CacheStationCoordinatesDataSourceImpl
+import com.young.data.impl.remote.RemoteFullRouteInformationDataSourceImpl
+import com.young.data.impl.remote.RemoteLocationDataSourceImpl
+import com.young.data.impl.remote.RemoteStationDataSourceImpl
 import com.young.domain.repository.location.CacheAllStationCodesRepository
 import com.young.domain.repository.location.CacheFullRouteInformationRepository
 import com.young.domain.repository.location.CacheStationCoordinatesRepository

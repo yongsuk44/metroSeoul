@@ -1,7 +1,7 @@
 package com.young.data.impl.cache
 
-import com.young.cache.cache.mapper.DataToDomainMapper.DataToDomain
-import com.young.cache.cache.mapper.DomainToDataMapper.DomainToData
+import com.young.data.mapper.DataToDomainMapper.DataToDomain
+import com.young.data.mapper.DomainToDataMapper.DomainToData
 import com.young.domain.model.DomainStationNameAndMapXY
 import com.young.domain.repository.location.CacheStationCoordinatesRepository
 import kotlinx.coroutines.flow.Flow
@@ -11,7 +11,7 @@ import javax.inject.Inject
 class CacheStationCoordinatesDataSourceImpl @Inject constructor(
     private val dataSource: com.young.data.datasource.cache.CacheStationCoordinatesDataSource
 ) : CacheStationCoordinatesRepository {
-    override suspend fun insertStationCoordinateData(items: List<DomainStationNameAndMapXY>) =
+    override suspend fun insertStationCoordinateData(items: List<DomainStationNameAndMapXY>) : Flow<List<Long>> =
         dataSource.insertStationCoordinateData(items.map { it.DomainToData() })
 
     override suspend fun getStationCoordinateAllData(): Flow<List<DomainStationNameAndMapXY>> =

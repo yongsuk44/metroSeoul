@@ -1,7 +1,11 @@
 package com.young.data.mapper
 
-import com.young.cache.cache.model.*
+import com.young.base.BaseMapper
+import com.young.data.model.*
 import com.young.domain.model.*
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.transform
 
 object DataToDomainMapper {
     fun DataLocationTrailData.DataToDomain() : DomainLocationTrailData {
@@ -101,8 +105,8 @@ object DataToDomainMapper {
         .insert(time.length - 1, ":")
         .toString()
 
-    suspend fun DataStationTimeTable.DataToDomain(upDown: String): DomainStationTimeTable {
-        return if (body.isNullOrEmpty()) DomainStationTimeTable(listOf(), "", "")
+    suspend fun DataStationTimeTable.DataToDomain(upDown: String): DomainStationTimeTable? {
+        return if (body.isNullOrEmpty()) null
         else {
             val group = body.groupBy { it.orgStinCd < it.tmnStinCd }
 
@@ -128,8 +132,8 @@ object DataToDomainMapper {
         }
     }
 
-    suspend fun DataStationSeoulTimeTable.DataToDomain(): DomainStationTimeTable {
-        return if (SearchSTNTimeTableByIDService == null) DomainStationTimeTable(listOf(), "", "")
+    suspend fun DataStationSeoulTimeTable.DataToDomain(): DomainStationTimeTable? {
+        return if (SearchSTNTimeTableByIDService == null) null
         else {
             flowOf(SearchSTNTimeTableByIDService.row)
                 .transform {

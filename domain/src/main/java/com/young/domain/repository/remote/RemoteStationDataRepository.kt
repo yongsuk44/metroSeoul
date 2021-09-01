@@ -13,12 +13,12 @@ interface RemoteStationDataRepository {
         lineCode : String ,
         stationCode : String,
         updown: String
-    ) : Flow<DomainStationTimeTable>
+    ) : Flow<DomainStationTimeTable?>
 
     suspend fun getSeoulStationTimeTable(
         key: String,
         updown : String,
         dayCd: String,
         stationCode: String
-    ): Flow<DomainStationTimeTable>
+    ): Flow<DomainStationTimeTable?>
 }

@@ -7,9 +7,10 @@
 
         <import type="com.young.presentation.consts.DayType" />
 
-        <variable
-            name="vm"
-            type="com.young.presentation.viewmodel.StationTimeTableViewModel" />
+        <variable name="vm" type="com.young.presentation.viewmodel.StationTimeTableViewModel" />
+
+        <variable name="timeTableLoading" type="Boolean" />
+        <variable name="timeTableData" type="com.young.presentation.model.UiTrailTimeTable" />
     </data>
 
     <com.young.metro.ui.custom.CustomConstraintLayout
@@ -135,7 +136,7 @@
             android:id="@+id/tv_station_timetable_up_first_time"
             style="@style/BlackTextViewMediumSize13"
             android:layout_margin="10dp"
-            android:text="@{vm.timeTable.upFirstTime}"
+            android:text="@{timeTableData.upFirstTime}"
             app:layout_constraintBottom_toBottomOf="@id/iv_station_up_timetable_bg"
             app:layout_constraintEnd_toEndOf="@id/tv_station_timetable_up_first_time_title"
             app:layout_constraintStart_toStartOf="@id/tv_station_timetable_up_first_time_title"
@@ -145,7 +146,7 @@
             android:id="@+id/tv_station_timetable_up_last_time"
             style="@style/BlackTextViewMediumSize13"
             android:layout_margin="10dp"
-            android:text="@{vm.timeTable.upLastTime}"
+            android:text="@{timeTableData.upLastTime}"
             app:layout_constraintBottom_toBottomOf="@id/iv_station_up_timetable_bg"
             app:layout_constraintEnd_toEndOf="@id/tv_station_timetable_up_last_time_title"
             app:layout_constraintStart_toStartOf="@id/tv_station_timetable_up_last_time_title"
@@ -182,7 +183,7 @@
             android:id="@+id/tv_station_timetable_down_first_time"
             style="@style/BlackTextViewMediumSize13"
             android:layout_margin="10dp"
-            android:text="@{vm.timeTable.downFirstTime}"
+            android:text="@{timeTableData.downFirstTime}"
             app:layout_constraintBottom_toBottomOf="@id/iv_station_down_timetable_bg"
             app:layout_constraintEnd_toEndOf="@id/tv_station_timetable_down_first_time_title"
             app:layout_constraintStart_toStartOf="@id/tv_station_timetable_down_first_time_title"
@@ -192,7 +193,7 @@
             android:id="@+id/tv_station_timetable_down_last_time"
             style="@style/BlackTextViewMediumSize13"
             android:layout_margin="10dp"
-            android:text="@{vm.timeTable.downlastTime}"
+            android:text="@{timeTableData.downlastTime}"
             app:layout_constraintBottom_toBottomOf="@id/iv_station_down_timetable_bg"
             app:layout_constraintEnd_toEndOf="@id/tv_station_timetable_down_last_time_title"
             app:layout_constraintStart_toStartOf="@id/tv_station_timetable_down_last_time_title"
@@ -255,7 +256,7 @@
         <ProgressBar
             android:id="@+id/pb_up_time_title"
             style="@style/BaseProgressBar"
-            setDataCheckVisible="@{vm.loading}"
+            setDataCheckVisible="@{timeTableLoading}"
             android:layout_margin="40dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -263,7 +264,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_station_timetable_sat_day" />
 
         <androidx.constraintlayout.widget.Group
-            setDataCheckVisible="@{!vm.loading}"
+            setDataCheckVisible="@{!timeTableLoading}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:constraint_referenced_ids="tv_station_timetable_down_time_title,tv_station_timetable_up_time_title,tv_station_timetable_up_last_time,tv_station_timetable_down_last_time,tv_station_timetable_down_first_time,tv_station_timetable_up_first_time,iv_station_up_timetable_list_bg, iv_station_down_timetable_list_bg, tv_station_timetable_down_first_time_title , tv_station_timetable_up_first_time_title , tv_station_timetable_down_last_time_title , tv_station_timetable_up_last_time_title" />

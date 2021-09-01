@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 interface CacheCoordinateBaseUseCase {
-    suspend fun insertStationCoordinateData(items : List<DomainStationNameAndMapXY>)
+    suspend fun insertStationCoordinateData(items : List<DomainStationNameAndMapXY>) : Flow<List<Long>>
     suspend fun getStationCoordinateAllData() : Flow<List<DomainStationNameAndMapXY>>
     suspend fun getStationCoordinateDataSize() : Flow<Int>
     suspend fun getLocationNearStationList(lastX : Double , lastY :Double , km : Double) : Flow<List<DomainStationNameAndMapXY>>
@@ -15,9 +15,9 @@ interface CacheCoordinateBaseUseCase {
 class CoordinateUseCase @Inject constructor(
     private val cache : CacheStationCoordinatesRepository
 ) : CacheCoordinateBaseUseCase {
-    override suspend fun insertStationCoordinateData(items: List<DomainStationNameAndMapXY>) {
+    override suspend fun insertStationCoordinateData(items: List<DomainStationNameAndMapXY>) : Flow<List<Long>> =
         cache.insertStationCoordinateData(items)
-    }
+
     override suspend fun getStationCoordinateAllData(): Flow<List<DomainStationNameAndMapXY>> =
         cache.getStationCoordinateAllData()
 

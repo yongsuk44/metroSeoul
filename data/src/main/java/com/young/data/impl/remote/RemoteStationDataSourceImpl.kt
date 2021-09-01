@@ -1,6 +1,6 @@
 package com.young.data.impl.remote
 
-import com.young.cache.cache.mapper.DataToDomainMapper.DataToDomain
+import com.young.data.mapper.DataToDomainMapper.DataToDomain
 import com.young.domain.model.DomainStationBody
 import com.young.domain.model.DomainStationTimeTable
 import com.young.domain.repository.remote.RemoteStationDataRepository
@@ -27,7 +27,7 @@ class RemoteStationDataSourceImpl @Inject constructor(
         lineCode: String,
         stationCode: String,
         updown: String
-    ): Flow<DomainStationTimeTable> =
+    ): Flow<DomainStationTimeTable?> =
         dataSource.getDataStationTimeTable(key, railCode, dayCd, lineCode, stationCode ,updown).map {
             it.DataToDomain(updown)
         }
@@ -37,7 +37,7 @@ class RemoteStationDataSourceImpl @Inject constructor(
         updown: String,
         dayCd: String,
         stationCode: String
-    ): Flow<DomainStationTimeTable> =
+    ): Flow<DomainStationTimeTable?> =
         dataSource.getDataSeoulStationTimeTable(key, updown, dayCd, stationCode).map {
             it.DataToDomain()
         }

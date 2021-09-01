@@ -1,14 +1,16 @@
 package com.young.remote.repository
 
-import com.young.cache.cache.model.DataStationBody
-import com.young.cache.cache.model.DataStationSeoulTimeTable
-import com.young.cache.cache.model.DataStationTimeTable
+import com.young.data.model.DataStationBody
+import com.young.data.model.DataStationSeoulTimeTable
+import com.young.data.model.DataStationTimeTable
 import com.young.remote.api.PublicDataOpenApiService
 import com.young.remote.api.SeoulApiService
 import com.young.remote.api.TrailPorTalService
 import com.young.remote.mapper.RemoteToDataMapper.RemoteToData
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class RemoteStationDataRepositoryImpl @Inject constructor(
@@ -27,7 +29,7 @@ class RemoteStationDataRepositoryImpl @Inject constructor(
             "json",
             stationCode
         ).RemoteToData()
-    )
+    ).flowOn(Dispatchers.IO)
 
     override suspend fun getDataStationTimeTable(
         key: String,
@@ -45,7 +47,7 @@ class RemoteStationDataRepositoryImpl @Inject constructor(
             lineCode = lineCode,
             stationCode = stationCode
         ).RemoteToData()
-    )
+    ).flowOn(Dispatchers.IO)
 
     override suspend fun getDataSeoulStationTimeTable(
         key: String,
@@ -59,5 +61,5 @@ class RemoteStationDataRepositoryImpl @Inject constructor(
             dayCode = dayCd,
             updown = updown
         ).RemoteToData()
-    )
+    ).flowOn(Dispatchers.IO)
 }

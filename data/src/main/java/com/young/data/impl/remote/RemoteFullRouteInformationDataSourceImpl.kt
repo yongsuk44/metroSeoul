@@ -1,6 +1,6 @@
 package com.young.data.impl.remote
 
-import com.young.cache.cache.mapper.DataToDomainMapper.DataToDomain
+import com.young.data.mapper.DataToDomainMapper.DataToDomain
 import com.young.domain.model.DomainConvenienceInformation
 import com.young.domain.model.DomainFullRouteInformationBody
 import com.young.domain.model.DomainPlatformEntrance
