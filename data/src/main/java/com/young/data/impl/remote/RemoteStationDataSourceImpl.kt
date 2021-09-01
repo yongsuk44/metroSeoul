@@ -27,7 +27,7 @@ class RemoteStationDataSourceImpl @Inject constructor(
         lineCode: String,
         stationCode: String,
         updown: String
-    ): Flow<DomainStationTimeTable> =
+    ): Flow<DomainStationTimeTable?> =
         dataSource.getDataStationTimeTable(key, railCode, dayCd, lineCode, stationCode ,updown).map {
             it.DataToDomain(updown)
         }
@@ -37,7 +37,7 @@ class RemoteStationDataSourceImpl @Inject constructor(
         updown: String,
         dayCd: String,
         stationCode: String
-    ): Flow<DomainStationTimeTable> =
+    ): Flow<DomainStationTimeTable?> =
         dataSource.getDataSeoulStationTimeTable(key, updown, dayCd, stationCode).map {
             it.DataToDomain()
         }

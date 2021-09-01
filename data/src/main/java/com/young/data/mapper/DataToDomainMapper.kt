@@ -105,8 +105,8 @@ object DataToDomainMapper {
         .insert(time.length - 1, ":")
         .toString()
 
-    suspend fun DataStationTimeTable.DataToDomain(upDown: String): DomainStationTimeTable {
-        return if (body.isNullOrEmpty()) DomainStationTimeTable(listOf(), "", "")
+    suspend fun DataStationTimeTable.DataToDomain(upDown: String): DomainStationTimeTable? {
+        return if (body.isNullOrEmpty()) null
         else {
             val group = body.groupBy { it.orgStinCd < it.tmnStinCd }
 
@@ -132,8 +132,8 @@ object DataToDomainMapper {
         }
     }
 
-    suspend fun DataStationSeoulTimeTable.DataToDomain(): DomainStationTimeTable {
-        return if (SearchSTNTimeTableByIDService == null) DomainStationTimeTable(listOf(), "", "")
+    suspend fun DataStationSeoulTimeTable.DataToDomain(): DomainStationTimeTable? {
+        return if (SearchSTNTimeTableByIDService == null) null
         else {
             flowOf(SearchSTNTimeTableByIDService.row)
                 .transform {

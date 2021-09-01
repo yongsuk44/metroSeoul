@@ -16,7 +16,6 @@ class AllStationCodeUseCase @Inject constructor(
     override suspend fun insert(items: List<DomainRow>) : Flow<List<Long>> =
         cache.insert(items)
 
-
     override suspend fun findStationCode(code : String): Flow<DomainRow?> =
         cache.findStationCode(code)
 }

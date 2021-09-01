@@ -9,6 +9,7 @@ import com.young.cache.factory.DataFactory.randomString
 import com.young.cache.factory.ModelFactory
 import com.young.cache.mapper.CacheToDataMapper.CacheToData
 import com.young.cache.repository.CacheFullRouteInformationRepositoryImpl
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.runBlocking
@@ -35,7 +36,7 @@ class FullRouteInformationTest {
         db = Room.inMemoryDatabaseBuilder(context, AppDataBase::class.java).build()
         dao = db.fullRouteInformationDao()
 
-        repo = CacheFullRouteInformationRepositoryImpl(dao)
+        repo = CacheFullRouteInformationRepositoryImpl(dao , Dispatchers.IO)
     }
 
     @After

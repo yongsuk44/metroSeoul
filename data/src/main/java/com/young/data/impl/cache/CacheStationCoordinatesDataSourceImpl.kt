@@ -11,7 +11,7 @@ import javax.inject.Inject
 class CacheStationCoordinatesDataSourceImpl @Inject constructor(
     private val dataSource: com.young.data.datasource.cache.CacheStationCoordinatesDataSource
 ) : CacheStationCoordinatesRepository {
-    override suspend fun insertStationCoordinateData(items: List<DomainStationNameAndMapXY>) =
+    override suspend fun insertStationCoordinateData(items: List<DomainStationNameAndMapXY>) : Flow<List<Long>> =
         dataSource.insertStationCoordinateData(items.map { it.DomainToData() })
 
     override suspend fun getStationCoordinateAllData(): Flow<List<DomainStationNameAndMapXY>> =
