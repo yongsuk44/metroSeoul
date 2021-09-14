@@ -13,7 +13,8 @@ import com.young.presentation.R
 import com.young.presentation.consts.*
 import com.young.presentation.mapper.FlowMapper.domainStationTimeTableCombine
 import com.young.presentation.model.IndexAllRouteInformation
-import com.young.presentation.model.UiTrailTimeTable
+import com.young.presentation.model.UiStationTimeTable
+import com.young.presentation.modelfunction.StationTimeTableFunction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
@@ -22,14 +23,8 @@ import timber.log.Timber
 import java.time.LocalTime
 import kotlin.math.abs
 
-interface StationTimeTableFunction {
-    suspend fun findAllStationCode(stationCode: String): Flow<DomainRow?>
-    fun getStationTimeTable(indexAllRouteInformation: IndexAllRouteInformation?, day: DayType)
-    fun changeDayCode(data: DayType)
-}
-
 sealed class SealedTimeTableData {
-    data class Success(val data: UiTrailTimeTable?) : SealedTimeTableData()
+    data class Success(val data: UiStationTimeTable?) : SealedTimeTableData()
     data class Failed(val exception: Throwable) : SealedTimeTableData()
     data class Loading(val loading: Boolean) : SealedTimeTableData()
 }
@@ -68,15 +63,24 @@ class StationTimeTableViewModel @ViewModelInject constructor(
                 }.flatMapConcat { indexData ->
                     findAllStationCode(indexData.stinCd)
                         .flatMapConcat {
-                            getSeoulStationTimeTable(
-                                getDayCode(day, it),
+                            findCodeTrueSeoulTimeTableFalsePortalTimeTable(
+                                it?.let { seoulKey } ?: portalKey,
                                 it,
+                                getDayCode(day, it),
                                 indexData
                             )
                         }
-                        .flatMapConcat { getDataNullToPublicTimeTable(it, day.public, indexData) }
                         .flatMapConcat {
-                            getDataNullToPublicTimeTable(
+                            emptyTimeTableToPortalTimeTableCall(
+                                portalKey,
+                                it,
+                                day.public,
+                                indexData
+                            )
+                        }
+                        .flatMapConcat {
+                            emptyTimeTableToPortalTimeTableCall(
+                                portalKey,
                                 it,
                                 DayType.SUN.public,
                                 indexData
@@ -97,56 +101,52 @@ class StationTimeTableViewModel @ViewModelInject constructor(
     override suspend fun findAllStationCode(stationCode: String): Flow<DomainRow?> =
         allStationCodeUseCase.findStationCode(stationCode)
 
-    suspend fun getSeoulStationTimeTable(
+    override suspend fun findCodeTrueSeoulTimeTableFalsePortalTimeTable(
+        key: String,
+        data: DomainRow?,
         dayCode: String,
-        row: DomainRow?,
-        indexAllRouteInformation: IndexAllRouteInformation
-    ) = row?.let { generateSeoulStationTimeTableAPI(seoulKey,dayCode, row.STATION_CD) }
-        ?: generatePublicStationTimeTableAPI(portalKey,dayCode, indexAllRouteInformation)
+        indexData: IndexAllRouteInformation
+    ): Flow<UiStationTimeTable?> =
+        data?.let { combineSeoulStationTimeTableAPI(key, dayCode, data.STATION_CD) }
+            ?: combinePublicStationTimeTableAPI(key, dayCode, indexData)
 
-    suspend fun getDataNullToPublicTimeTable(
-        data: UiTrailTimeTable?,
+    override suspend fun emptyTimeTableToPortalTimeTableCall(
+        key: String,
+        data: UiStationTimeTable?,
         dayCode: String,
-        indexAllRouteInformation: IndexAllRouteInformation
-    ): Flow<UiTrailTimeTable?> =
-        data?.let {
-            generatePublicStationTimeTableAPI(
-                portalKey,
-                dayCode,
-                indexAllRouteInformation
-            )
-        }
-            ?: flowOf(data)
+        indexData: IndexAllRouteInformation
+    ): Flow<UiStationTimeTable?> =
+        data?.let { flowOf(data) } ?: combinePublicStationTimeTableAPI(key, dayCode, indexData)
 
-    suspend fun generatePublicStationTimeTableAPI(
-        key : String,
+    override suspend fun combinePublicStationTimeTableAPI(
+        key: String,
         dayCode: String,
         data: IndexAllRouteInformation
-    ): Flow<UiTrailTimeTable?> =
+    ): Flow<UiStationTimeTable?> =
         (1..2).map {
-        stationDataUseCase.getStationTimetables(
-            key,
-            data.railOprIsttCd,
-            dayCode,
-            data.lnCd,
-            data.stinCd,
-            it.toString()
-        )
-    }.domainStationTimeTableCombine()
+            stationDataUseCase.getStationTimetables(
+                key,
+                data.railOprIsttCd,
+                dayCode,
+                data.lnCd,
+                data.stinCd,
+                it.toString()
+            )
+        }.domainStationTimeTableCombine()
 
-    suspend fun generateSeoulStationTimeTableAPI(
-        key : String,
+    override suspend fun combineSeoulStationTimeTableAPI(
+        key: String,
         dayCode: String,
         stationCode: String
-    ): Flow<UiTrailTimeTable?> =
+    ): Flow<UiStationTimeTable?> =
         (1..2).map {
-        stationDataUseCase.getSeoulStationTimeTable(
-            key,
-            it.toString(),
-            dayCode,
-            stationCode
-        )
-    }.domainStationTimeTableCombine()
+            stationDataUseCase.getSeoulStationTimeTable(
+                key,
+                it.toString(),
+                dayCode,
+                stationCode
+            )
+        }.domainStationTimeTableCombine()
 
     override fun changeDayCode(data: DayType) {
         _dayCodeChangeData.value = data

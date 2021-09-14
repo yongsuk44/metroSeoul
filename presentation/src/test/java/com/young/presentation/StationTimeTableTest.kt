@@ -11,6 +11,7 @@ import com.young.domain.model.DomainStationTimeTable
 import com.young.domain.usecase.AllStationCodeUseCase
 import com.young.domain.usecase.StationDataUseCase
 import com.young.presentation.consts.CustomTransformationDataMap
+import com.young.presentation.consts.DayType
 import com.young.presentation.consts.ResourceProvider
 import com.young.presentation.factory.DataFactory
 import com.young.presentation.factory.DataFactory.randomString
@@ -20,7 +21,8 @@ import com.young.presentation.factory.ModelFactory.generateFlowListDomainStation
 import com.young.presentation.factory.ModelFactory.generateIndexAllRouteInformation
 import com.young.presentation.factory.ModelFactory.generateUiStationTimeTable
 import com.young.presentation.mapper.FlowMapper.domainStationTimeTableCombine
-import com.young.presentation.model.UiTrailTimeTable
+import com.young.presentation.model.IndexAllRouteInformation
+import com.young.presentation.model.UiStationTimeTable
 import com.young.presentation.viewmodel.StationTimeTableViewModel
 import junit.framework.Assert.assertNull
 import junit.framework.Assert.assertTrue
@@ -52,13 +54,13 @@ class StationTimeTableViewModelTest {
     private lateinit var allStationCodeUseCase: AllStationCodeUseCase
     private lateinit var provider: ResourceProvider
 
-    val test = MutableLiveData<UiTrailTimeTable>()
+    val test = MutableLiveData<UiStationTimeTable>()
 
-    val code = randomString()
-    val key = randomString()
-    val dayCd = randomString()
-    val railCode = randomString()
-    val lineCode: String = randomString()
+    val code = "code"
+    val key = "key"
+    val dayCd = "dayCD"
+    val railCode = "railCode"
+    val lineCode: String = "lineCode"
 
     @Before
     fun setUp() {
@@ -96,73 +98,128 @@ class StationTimeTableViewModelTest {
     }
 
     @Test
-    fun `generateSeoulStationTimeTableAPI() AND generatePublicStationTimeTableAPI() is Response Data Success Test`() {
+    fun `combineSeoulStationTimeTableAPI() AND combinePublicStationTimeTableAPI() is Response Data Success Test`() {
         runBlocking {
 
-            (1..2).forEach {
-                stubSeoulStationTimeTableUseCase(generateDomainStationTimeTable("seoul") , key, it.toString(),dayCd , code)
-                stubPublicStationTimeTableUseCase(generateDomainStationTimeTable("public"),key,railCode,dayCd,lineCode,code,it.toString())
-            }
+            stubTimeTableUseCase()
 
-            val useCaseSeoulData = (1..2).map { stationDataUseCase.getSeoulStationTimeTable(key,it.toString(),dayCd,code) }
+            val useCaseSeoulData = (1..2).map {
+                stationDataUseCase.getSeoulStationTimeTable(
+                    key,
+                    it.toString(),
+                    dayCd,
+                    code
+                )
+            }
                 .domainStationTimeTableCombine().singleOrNull()
 
-            val useCasePorTalData = (1..2).map { stationDataUseCase.getStationTimetables(key,railCode,dayCd,lineCode,code,it.toString()) }
+            val useCasePorTalData = (1..2).map {
+                stationDataUseCase.getStationTimetables(
+                    key,
+                    railCode,
+                    dayCd,
+                    lineCode,
+                    code,
+                    it.toString()
+                )
+            }
                 .domainStationTimeTableCombine().singleOrNull()
 
-            val viewModelSeoulData = viewModel.generateSeoulStationTimeTableAPI(key,dayCd, code).singleOrNull()
-            val viewModelPorTalData = viewModel.generatePublicStationTimeTableAPI(key,dayCd,generateIndexAllRouteInformation(railCode,lineCode,code)).singleOrNull()
+            val indexData = generateIndexAllRouteInformation(railCode, lineCode, code)
 
-            assertThat(viewModelSeoulData ,`is`(useCaseSeoulData))
-            assertThat(viewModelPorTalData ,`is`(useCasePorTalData))
+            val viewModelSeoulData = viewModel.combineSeoulStationTimeTableAPI(key, dayCd, code).singleOrNull()
+            val viewModelPorTalData = viewModel.combinePublicStationTimeTableAPI(key, dayCd, indexData).singleOrNull()
+
+            assertThat(viewModelSeoulData, `is`(useCaseSeoulData))
+            assertThat(viewModelPorTalData, `is`(useCasePorTalData))
         }
     }
 
     @Test
-    fun `generatePublicStationTimeTableAPI() is Response Data Success Test`() {
+    fun `findCodeTrueSeoulTimeTableFalsePortalTimeTable() is Null or NotNull Data Test`() {
         runBlocking {
 
-            (1..2).forEach {
+            stubTimeTableUseCase()
 
-            }
+            val domainRow = generateDomainRow(code)
+            val domainNullRow = null
+            val index = generateIndexAllRouteInformation(railCode, lineCode, code)
+
+            val viewModelSeoulData = viewModel.findCodeTrueSeoulTimeTableFalsePortalTimeTable(key , domainRow , dayCd , index).singleOrNull()
+            val viewModelPorTalData = viewModel.findCodeTrueSeoulTimeTableFalsePortalTimeTable(key , domainNullRow , dayCd , index).singleOrNull()
+
+            assertTrue(viewModelSeoulData?.up?.first()?.contains("seoul") ?: false)
+            assertTrue(viewModelPorTalData?.up?.first()?.contains("public") ?: false)
         }
     }
 
     @Test
-    fun `getSeoulStationTimeTable() is Response Data Null Test`() {
+    fun `emptyTimeTableToPortalTimeTableCall() SeoulTimeTable is Null or NotNull Data Test`() {
         runBlocking {
 
-            stubFindStationCodeNull(generateDomainRow(), code)
-            (1..2).forEach {
-                stubSeoulStationTimeTableUseCase(generateDomainStationTimeTable("seoul") , key, it.toString(),dayCd, code)
-                stubPublicStationTimeTableUseCase(generateDomainStationTimeTable("public") ,key,railCode,dayCd,lineCode,code,it.toString())
-            }
+            stubTimeTableUseCase()
 
-            val allStationCodeDataRow = viewModel.findAllStationCode(code).singleOrNull()
-            val findCodeData = viewModel.getSeoulStationTimeTable(randomString(),allStationCodeDataRow, generateIndexAllRouteInformation()).singleOrNull()
+            val uiStationTimeTable = generateUiStationTimeTable("seoul")
+            val uiStationTimeTableNull = null
+
+            val index = generateIndexAllRouteInformation(railCode, lineCode, code)
+
+            val uiTrailSeoulData = viewModel.emptyTimeTableToPortalTimeTableCall(key , uiStationTimeTable , dayCd , index).singleOrNull()
+            val uiTrailPorTalData = viewModel.emptyTimeTableToPortalTimeTableCall(key , uiStationTimeTableNull , dayCd , index).singleOrNull()
+
+            assertTrue(uiTrailSeoulData?.up?.first()?.contains("seoul") ?: false)
+            assertTrue(uiTrailPorTalData?.up?.first()?.contains("public") ?: false)
         }
     }
 
     @Test
-    fun `getSeoulStationTimeTable() Data is Not Null Test`() {
+    fun `getStationTimeTable() Data Call`() {
         runBlocking {
-            stubFindStationCode(generateDomainRow(), randomString())
 
-            viewModel.findAllStationCode(randomString())
+        }
+    }
+
+    suspend fun stubTimeTableUseCase() {
+        (1..2).forEach {
+            stubSeoulStationTimeTableUseCase(
+                generateDomainStationTimeTable("seoul"),
+                key,
+                it.toString(),
+                dayCd,
+                code
+            )
+            stubPublicStationTimeTableUseCase(
+                generateDomainStationTimeTable("public"),
+                key,
+                railCode,
+                dayCd,
+                lineCode,
+                code,
+                it.toString()
+            )
         }
     }
 
     suspend fun stubSeoulStationTimeTableUseCase(
-        data: DomainStationTimeTable, key : String , upDown : String ,dayCd : String, code: String
+        data: DomainStationTimeTable, key: String, upDown: String, dayCd: String, code: String
     ) {
-        whenever(stationDataUseCase.getSeoulStationTimeTable(key , upDown , dayCd , code))
+        whenever(stationDataUseCase.getSeoulStationTimeTable(key, upDown, dayCd, code))
             .thenReturn(flowOf(data))
     }
 
     suspend fun stubPublicStationTimeTableUseCase(
         data: DomainStationTimeTable, key: String, railCode: String, dayCd: String, lineCode: String, stationCode: String, updown: String
     ) {
-        whenever(stationDataUseCase.getStationTimetables(key, railCode, dayCd, lineCode, stationCode, updown))
+        whenever(
+            stationDataUseCase.getStationTimetables(
+                key,
+                railCode,
+                dayCd,
+                lineCode,
+                stationCode,
+                updown
+            )
+        )
             .thenReturn(flowOf(data))
     }
 
