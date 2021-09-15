@@ -2,11 +2,11 @@ package com.young.domain.timetable
 
 import com.young.domain.factory.timetableFactory
 import com.young.domain.model.DomainStationTimeTable
-import com.young.domain.repository.remote.RemoteStationTimeTableRepository
+import com.young.domain.repository.remote.RemoteStationDataRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-interface FakeStationTimeTableRepository : RemoteStationTimeTableRepository {
+interface FakeStationTimeTableRepository : RemoteStationDataRepository {
     override suspend fun getStationTimetables(
         key: String,
         railCode: String,

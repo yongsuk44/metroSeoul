@@ -6,13 +6,16 @@ import com.nhaarman.mockito_kotlin.whenever
 import com.young.domain.factory.timetableFactory.generatePublicDomainStationTimeTable
 import com.young.domain.factory.timetableFactory.generateRowData
 import com.young.domain.factory.timetableFactory.generateSeoulDomainStationTimeTable
+import com.young.domain.model.DomainRow
 import com.young.domain.model.DomainStationTimeTable
-import com.young.domain.model.Row
 import com.young.domain.repository.location.CacheAllStationCodesRepository
-import com.young.domain.repository.remote.RemoteStationTimeTableRepository
-import com.young.domain.usecase.cache.CacheAllStationCodeUseCase
-import com.young.domain.usecase.remote.RemoteTimeTableUseCase
+import com.young.domain.repository.location.CacheFullRouteInformationRepository
+import com.young.domain.repository.remote.RemoteStationDataRepository
+import com.young.domain.usecase.AllStationCodeUseCase
+import com.young.domain.usecase.StationDataUseCase
+import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers
 import org.junit.Assert
@@ -24,19 +27,21 @@ import org.mockito.Mockito.mock
 @RunWith(AndroidJUnit4::class)
 class TimeTableDomainTest {
 
-    private lateinit var remoteStationTimeTableUseCaseImpl: RemoteTimeTableUseCase
-    private lateinit var CacheAllStationCodeUseCase: CacheAllStationCodeUseCase
+    private lateinit var stationDAtaUseCase : StationDataUseCase
+    private lateinit var allStationCodeUseCase : AllStationCodeUseCase
 
-    private lateinit var remoteStationTimeTableRepository: RemoteStationTimeTableRepository
-    private lateinit var CacheAllStationCodesRepository: CacheAllStationCodesRepository
+    private lateinit var remoteStationTimeTableRepository: RemoteStationDataRepository
+    private lateinit var cacheFullRouteInformationRepository : CacheFullRouteInformationRepository
 
+    private lateinit var cacheAllStationCodesRepository : CacheAllStationCodesRepository
     @Before
     fun setUp() {
-        CacheAllStationCodesRepository = mock(FakeFindStationCodeRepository::class.java)
-        remoteStationTimeTableRepository = mock(FakeStationTimeTableRepository::class.java)
+        cacheAllStationCodesRepository = mock(FakeFindStationCodeRepository::class.java)
+        allStationCodeUseCase = AllStationCodeUseCase(cacheAllStationCodesRepository)
 
-        CacheAllStationCodeUseCase = CacheAllStationCodeUseCase(CacheAllStationCodesRepository)
-        remoteStationTimeTableUseCaseImpl = RemoteTimeTableUseCase(remoteStationTimeTableRepository)
+        remoteStationTimeTableRepository = mock(FakeStationTimeTableRepository::class.java)
+        cacheFullRouteInformationRepository = mock(FakeCacheFullRouteInformationRepository::class.java)
+        stationDAtaUseCase = StationDataUseCase(cacheFullRouteInformationRepository , remoteStationTimeTableRepository)
     }
 
     @Test
@@ -46,7 +51,7 @@ class TimeTableDomainTest {
             stubFindStationCode(generateRowData())
 
             // when
-            val item = CacheAllStationCodeUseCase.findStationCode("code")
+            val item = cacheAllStationCodesRepository.findStationCode("code")
 
             // then
             Assert.assertNotNull(item)
@@ -61,10 +66,10 @@ class TimeTableDomainTest {
             stubFindStationCode(generateItem)
 
             // when
-            val item = CacheAllStationCodeUseCase.findStationCode("code").single()
+            val item = cacheAllStationCodesRepository.findStationCode("code").single()
 
             // then
-            assertThat(item , CoreMatchers.equalTo(generateItem))
+            assertThat(item, CoreMatchers.equalTo(generateItem))
         }
     }
 
@@ -75,7 +80,8 @@ class TimeTableDomainTest {
             stubStationSeoulTimeTable(generateSeoulDomainStationTimeTable())
 
             // when
-            val item = remoteStationTimeTableUseCaseImpl.getSeoulStationTimeTable("key" , "11" , "22" , "33")
+            val item =
+                remoteStationTimeTableRepository.getSeoulStationTimeTable("key", "11", "22", "33")
 
             // then
             Assert.assertNull(item)
@@ -91,15 +97,25 @@ class TimeTableDomainTest {
             stubStationPublicTimeTable(generatePublicDomainStationTimeTable())
 
             // when
-            val item = CacheAllStationCodeUseCase.findStationCode("code")
+            val item = cacheAllStationCodesRepository.findStationCode("code")
 
             // then
             item.flatMapConcat {
-                if (it == null) remoteStationTimeTableUseCaseImpl.getStationTimetables("key" , "rail" , "day" , "line" ,"scd" , "updowncode")
-                else remoteStationTimeTableUseCaseImpl.getSeoulStationTimeTable("key" , "11" , "22" , "33")
-            }.collect {
-                it
-            }
+                if (it == null) remoteStationTimeTableRepository.getStationTimetables(
+                    "key",
+                    "rail",
+                    "day",
+                    "line",
+                    "scd",
+                    "updowncode"
+                )
+                else remoteStationTimeTableRepository.getSeoulStationTimeTable(
+                    "key",
+                    "11",
+                    "22",
+                    "33"
+                )
+            }.single()
         }
     }
 
@@ -112,45 +128,73 @@ class TimeTableDomainTest {
             stubStationPublicTimeTable(generatePublicDomainStationTimeTable())
 
             // when
-            val item = CacheAllStationCodeUseCase.findStationCode("code")
+            val item = cacheAllStationCodesRepository.findStationCode("code")
 
             // then
             item.flatMapConcat {
-                if (it == null) remoteStationTimeTableUseCaseImpl.getStationTimetables("key" , "rail" , "day" , "line" ,"scd" , "updowncode")
-                else remoteStationTimeTableUseCaseImpl.getSeoulStationTimeTable("key" , "11" , "22" , "33")
-            }.collect {
-                it
-            }
+                if (it == null) remoteStationTimeTableRepository.getStationTimetables(
+                    "key",
+                    "rail",
+                    "day",
+                    "line",
+                    "scd",
+                    "updowncode"
+                )
+                else remoteStationTimeTableRepository.getSeoulStationTimeTable(
+                    "key",
+                    "11",
+                    "22",
+                    "33"
+                )
+            }.single()
         }
     }
 
-    suspend fun stubFindStationCode(row : Row) {
-        whenever(CacheAllStationCodesRepository.findStationCode("code"))
+    suspend fun stubFindStationCode(row: DomainRow) {
+        whenever(cacheAllStationCodesRepository.findStationCode("code"))
             .thenReturn(flowOf(row))
     }
 
-    suspend fun stubFindStationCodeNull(row : Row) {
-        whenever(CacheAllStationCodesRepository.findStationCode("code"))
+    suspend fun stubFindStationCodeNull(row: DomainRow) {
+        whenever(cacheAllStationCodesRepository.findStationCode("code"))
             .thenReturn(flowOf(null))
     }
 
-    suspend fun stubStationPublicTimeTable(data : DomainStationTimeTable) {
-        whenever(remoteStationTimeTableRepository.getStationTimetables("key" , "rail" , "day" , "line" ,"scd" , "updowncode"))
+    suspend fun stubStationPublicTimeTable(data: DomainStationTimeTable) {
+        whenever(
+            remoteStationTimeTableRepository.getStationTimetables(
+                "key",
+                "rail",
+                "day",
+                "line",
+                "scd",
+                "updowncode"
+            )
+        )
             .thenReturn(flowOf(data))
     }
 
-    suspend fun stubStationPublicTimeTableNull(data : DomainStationTimeTable) {
-        whenever(remoteStationTimeTableRepository.getStationTimetables("key" , "rail" , "day" , "line" ,"scd" , "updowncode"))
+    suspend fun stubStationPublicTimeTableNull(data: DomainStationTimeTable) {
+        whenever(
+            remoteStationTimeTableRepository.getStationTimetables(
+                "key",
+                "rail",
+                "day",
+                "line",
+                "scd",
+                "updowncode"
+            )
+        )
             .thenReturn(null)
     }
 
-    suspend fun stubStationSeoulTimeTable(data : DomainStationTimeTable) {
-        whenever(remoteStationTimeTableRepository.getSeoulStationTimeTable("key" , "11" , "22" , "33"))
+    suspend fun stubStationSeoulTimeTable(data: DomainStationTimeTable) {
+        whenever(remoteStationTimeTableRepository.getSeoulStationTimeTable("key", "11", "22", "33"))
             .thenReturn(flowOf(data))
     }
 
-    suspend fun stubStationSeoulTimeTableNull(data : DomainStationTimeTable) {
-        whenever(remoteStationTimeTableRepository.getSeoulStationTimeTable("key" , "11" , "22" , "33"))
+    suspend fun stubStationSeoulTimeTableNull(data: DomainStationTimeTable) {
+        whenever(remoteStationTimeTableRepository.getSeoulStationTimeTable("key", "11", "22", "33"))
             .thenReturn(null)
     }
 }
