@@ -29,7 +29,7 @@ class RepositoryModule {
     fun provideCacheFullRouteInformationRepository(
         dao: FullRouteInformationDao ,
         @IoDispatcher dispatcher: CoroutineDispatcher
-    ) : com.young.data.datasource.cache.CacheFullRouteInformationDataSource = CacheFullRouteInformationRepositoryImpl(dao)
+    ) : com.young.data.datasource.cache.CacheFullRouteInformationDataSource = CacheFullRouteInformationRepositoryImpl(dao, dispatcher)
 
     @Provides
     @Reusable

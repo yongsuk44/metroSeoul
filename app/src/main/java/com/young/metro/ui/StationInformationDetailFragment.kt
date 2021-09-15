@@ -36,15 +36,16 @@ class StationInformationDetailFragment :
     override val bindingVariable: Int = BR.vm
 
     private val dropBoxItemViewModel: DetailDropBoxItemViewModel by viewModels()
-    private val stationTimeTableViewModel : StationTimeTableViewModel by viewModels()
+    private val stationTimeTableViewModel: StationTimeTableViewModel by viewModels()
 
     private val lineLogoAdapter by lazy { LineLogoSelectAdapter(viewModel) }
-    private val upTimeTableAdapter  by lazy { TimeTableAdapter() }
-    private val downTimeTableAdapter  by lazy { TimeTableAdapter() }
+    private val upTimeTableAdapter by lazy { TimeTableAdapter() }
+    private val downTimeTableAdapter by lazy { TimeTableAdapter() }
     private val args: StationInformationDetailFragmentArgs by navArgs()
 
     override fun initBinding() {
-        sharedElementEnterTransition = TransitionInflater.from(requireContext()).inflateTransition(android.R.transition.move)
+        sharedElementEnterTransition =
+            TransitionInflater.from(requireContext()).inflateTransition(android.R.transition.move)
 
         viewDataBinding.timeTableViewModel = stationTimeTableViewModel
         viewDataBinding.rvDetailInformationStationLogo.adapter = lineLogoAdapter
@@ -78,23 +79,28 @@ class StationInformationDetailFragment :
 
         viewModel.stationTelClick.observe(viewLifecycleOwner) {
             startActivity(
-                Intent(Intent.ACTION_DIAL , Uri.parse("tel:$it"))
+                Intent(Intent.ACTION_DIAL, Uri.parse("tel:$it"))
             )
         }
 
         stationTimeTableViewModel.dayCodeChangeData.observe(viewLifecycleOwner) {
-            stationTimeTableViewModel.getStationTimeTable(viewModel.selectStationLineData.value , it)
+            stationTimeTableViewModel.getStationTimeTable(
+                viewModel.selectStationLineData.value,
+                it,
+                getString(com.young.presentation.R.string.seoulKey),
+                getString(com.young.presentation.R.string.trailKey)
+            )
         }
 
         stationTimeTableViewModel.timeTable.observe(viewLifecycleOwner) {
-            when(it) {
+            when (it) {
                 is SealedTimeTableData.Success -> {
                     viewDataBinding.incTimetable.timeTableData = it.data
                     upTimeTableAdapter.submitList(it.data?.up)
                     downTimeTableAdapter.submitList(it.data?.down)
 
                     viewDataBinding.incTimetable.rvStationTimetableUpList.recyclerViewScrollPosition(
-                        lifecycleScope ,
+                        lifecycleScope,
                         it.data?.up?.nowTimeNearList() ?: 0
                     )
 

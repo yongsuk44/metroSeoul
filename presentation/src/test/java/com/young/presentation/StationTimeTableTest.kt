@@ -23,12 +23,11 @@ import com.young.presentation.factory.ModelFactory.generateUiStationTimeTable
 import com.young.presentation.mapper.FlowMapper.domainStationTimeTableCombine
 import com.young.presentation.model.IndexAllRouteInformation
 import com.young.presentation.model.UiStationTimeTable
+import com.young.presentation.viewmodel.SealedTimeTableData
 import com.young.presentation.viewmodel.StationTimeTableViewModel
-import junit.framework.Assert.assertNull
-import junit.framework.Assert.assertTrue
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import junit.framework.Assert.*
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.`is`
@@ -44,9 +43,13 @@ import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.mockito.junit.MockitoJUnitRunner
 
+@FlowPreview
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 class StationTimeTableViewModelTest {
+
+    @get:Rule
+    var mainCoroutineRule = TestCoroutineRule()
 
     private lateinit var viewModel: StationTimeTableViewModel
 
@@ -56,11 +59,14 @@ class StationTimeTableViewModelTest {
 
     val test = MutableLiveData<UiStationTimeTable>()
 
-    val code = "code"
-    val key = "key"
-    val dayCd = "dayCD"
-    val railCode = "railCode"
-    val lineCode: String = "lineCode"
+    var code = "code"
+    var key = "key"
+    var dayCd = "dayCD"
+    var railCode = "railCode"
+    var lineCode: String = "lineCode"
+    var domainSeoulTimeTable = generateDomainStationTimeTable("seoul")
+    var domainPublicTimeTable = generateDomainStationTimeTable("public")
+    var uiSeoulTimeTable = generateUiStationTimeTable("seoul")
 
     @Before
     fun setUp() {
@@ -101,7 +107,8 @@ class StationTimeTableViewModelTest {
     fun `combineSeoulStationTimeTableAPI() AND combinePublicStationTimeTableAPI() is Response Data Success Test`() {
         runBlocking {
 
-            stubTimeTableUseCase()
+            stubSeoulStationTimeTableUseCase()
+            stubPublicStationTimeTableUseCase()
 
             val useCaseSeoulData = (1..2).map {
                 stationDataUseCase.getSeoulStationTimeTable(
@@ -127,8 +134,10 @@ class StationTimeTableViewModelTest {
 
             val indexData = generateIndexAllRouteInformation(railCode, lineCode, code)
 
-            val viewModelSeoulData = viewModel.combineSeoulStationTimeTableAPI(key, dayCd, code).singleOrNull()
-            val viewModelPorTalData = viewModel.combinePublicStationTimeTableAPI(key, dayCd, indexData).singleOrNull()
+            val viewModelSeoulData =
+                viewModel.combineSeoulStationTimeTableAPI(key, dayCd, code).singleOrNull()
+            val viewModelPorTalData =
+                viewModel.combinePublicStationTimeTableAPI(key, dayCd, indexData).singleOrNull()
 
             assertThat(viewModelSeoulData, `is`(useCaseSeoulData))
             assertThat(viewModelPorTalData, `is`(useCasePorTalData))
@@ -139,14 +148,25 @@ class StationTimeTableViewModelTest {
     fun `findCodeTrueSeoulTimeTableFalsePortalTimeTable() is Null or NotNull Data Test`() {
         runBlocking {
 
-            stubTimeTableUseCase()
+            stubSeoulStationTimeTableUseCase()
+            stubPublicStationTimeTableUseCase()
 
             val domainRow = generateDomainRow(code)
             val domainNullRow = null
             val index = generateIndexAllRouteInformation(railCode, lineCode, code)
 
-            val viewModelSeoulData = viewModel.findCodeTrueSeoulTimeTableFalsePortalTimeTable(key , domainRow , dayCd , index).singleOrNull()
-            val viewModelPorTalData = viewModel.findCodeTrueSeoulTimeTableFalsePortalTimeTable(key , domainNullRow , dayCd , index).singleOrNull()
+            val viewModelSeoulData = viewModel.findCodeTrueSeoulTimeTableFalsePortalTimeTable(
+                key,
+                domainRow,
+                dayCd,
+                index
+            ).singleOrNull()
+            val viewModelPorTalData = viewModel.findCodeTrueSeoulTimeTableFalsePortalTimeTable(
+                key,
+                domainNullRow,
+                dayCd,
+                index
+            ).singleOrNull()
 
             assertTrue(viewModelSeoulData?.up?.first()?.contains("seoul") ?: false)
             assertTrue(viewModelPorTalData?.up?.first()?.contains("public") ?: false)
@@ -157,15 +177,22 @@ class StationTimeTableViewModelTest {
     fun `emptyTimeTableToPortalTimeTableCall() SeoulTimeTable is Null or NotNull Data Test`() {
         runBlocking {
 
-            stubTimeTableUseCase()
+            stubSeoulStationTimeTableUseCase()
 
             val uiStationTimeTable = generateUiStationTimeTable("seoul")
             val uiStationTimeTableNull = null
 
             val index = generateIndexAllRouteInformation(railCode, lineCode, code)
 
-            val uiTrailSeoulData = viewModel.emptyTimeTableToPortalTimeTableCall(key , uiStationTimeTable , dayCd , index).singleOrNull()
-            val uiTrailPorTalData = viewModel.emptyTimeTableToPortalTimeTableCall(key , uiStationTimeTableNull , dayCd , index).singleOrNull()
+            val uiTrailSeoulData =
+                viewModel.emptyTimeTableToPortalTimeTableCall(key, uiStationTimeTable, dayCd, index)
+                    .singleOrNull()
+            val uiTrailPorTalData = viewModel.emptyTimeTableToPortalTimeTableCall(
+                key,
+                uiStationTimeTableNull,
+                dayCd,
+                index
+            ).singleOrNull()
 
             assertTrue(uiTrailSeoulData?.up?.first()?.contains("seoul") ?: false)
             assertTrue(uiTrailPorTalData?.up?.first()?.contains("public") ?: false)
@@ -173,23 +200,49 @@ class StationTimeTableViewModelTest {
     }
 
     @Test
-    fun `getStationTimeTable() Data Call`() {
-        runBlocking {
+    fun `getStationTimeTable() Seoul Station Data Call`() {
+        mainCoroutineRule.runBlockingTest {
+
+            stubFindStationCode(generateDomainRow(), code)
+
+            val domainRow = allStationCodeUseCase.findStationCode(code).singleOrNull()
+            val index = generateIndexAllRouteInformation(railCode, lineCode, code)
+            val dayType = DayType.WEEK
+
+            dayCd = viewModel.getDayCode(dayType , domainRow)
+            code = domainRow?.STATION_CD ?: ""
+
+            stubSeoulStationTimeTableUseCase()
+
+            viewModel.getStationTimeTable(indexAllRouteInformation = index, dayType, key, key)
+
+            val timeTable = viewModel.timeTable.getAwaitValue()
+
+            when(timeTable) {
+                is SealedTimeTableData.Success -> assertEquals(timeTable , `is`(uiSeoulTimeTable))
+                is SealedTimeTableData.Loading -> assertFalse(timeTable.loading)
+                else -> {}
+            }
 
         }
     }
 
-    suspend fun stubTimeTableUseCase() {
-        (1..2).forEach {
+    suspend fun stubSeoulStationTimeTableUseCase() {
+        (1..2).map {
             stubSeoulStationTimeTableUseCase(
-                generateDomainStationTimeTable("seoul"),
+                domainSeoulTimeTable,
                 key,
                 it.toString(),
-                dayCd,
+                dayCd ,
                 code
             )
+        }
+    }
+
+    suspend fun stubPublicStationTimeTableUseCase() {
+        (1..2).map {
             stubPublicStationTimeTableUseCase(
-                generateDomainStationTimeTable("public"),
+                domainPublicTimeTable,
                 key,
                 railCode,
                 dayCd,
@@ -197,7 +250,7 @@ class StationTimeTableViewModelTest {
                 code,
                 it.toString()
             )
-        }
+        }.singleOrNull()
     }
 
     suspend fun stubSeoulStationTimeTableUseCase(
@@ -208,7 +261,13 @@ class StationTimeTableViewModelTest {
     }
 
     suspend fun stubPublicStationTimeTableUseCase(
-        data: DomainStationTimeTable, key: String, railCode: String, dayCd: String, lineCode: String, stationCode: String, updown: String
+        data: DomainStationTimeTable,
+        key: String,
+        railCode: String,
+        dayCd: String,
+        lineCode: String,
+        stationCode: String,
+        updown: String
     ) {
         whenever(
             stationDataUseCase.getStationTimetables(
