@@ -104,6 +104,17 @@ class StationTimeTableViewModelTest {
     }
 
     @Test
+    fun `combineData is Null Check`() {
+        runBlocking {
+            stubSeoulStationTimeTableNullUseCase()
+
+            val viewModelSeoulData = viewModel.combineSeoulStationTimeTableAPI(key, dayCd, code).singleOrNull()
+
+            assertNull(viewModelSeoulData)
+        }
+    }
+
+    @Test
     fun `combineSeoulStationTimeTableAPI() AND combinePublicStationTimeTableAPI() is Response Data Success Test`() {
         runBlocking {
 
@@ -239,6 +250,18 @@ class StationTimeTableViewModelTest {
         }
     }
 
+    suspend fun stubSeoulStationTimeTableNullUseCase() {
+        (1..2).map {
+            stubSeoulStationTimeTableNullUseCase(
+                null,
+                key,
+                it.toString(),
+                dayCd ,
+                code
+            )
+        }
+    }
+
     suspend fun stubPublicStationTimeTableUseCase() {
         (1..2).map {
             stubPublicStationTimeTableUseCase(
@@ -255,6 +278,13 @@ class StationTimeTableViewModelTest {
 
     suspend fun stubSeoulStationTimeTableUseCase(
         data: DomainStationTimeTable, key: String, upDown: String, dayCd: String, code: String
+    ) {
+        whenever(stationDataUseCase.getSeoulStationTimeTable(key, upDown, dayCd, code))
+            .thenReturn(flowOf(data))
+    }
+
+    suspend fun stubSeoulStationTimeTableNullUseCase(
+        data: DomainStationTimeTable?, key: String, upDown: String, dayCd: String, code: String
     ) {
         whenever(stationDataUseCase.getSeoulStationTimeTable(key, upDown, dayCd, code))
             .thenReturn(flowOf(data))
