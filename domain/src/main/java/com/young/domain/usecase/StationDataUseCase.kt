@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 typealias StationDataBaseUseCase = BaseUseCase<List<String>, Flow<List<DomainFullRouteInformationBody>>>
 
-interface RemoteStationTelBaseUseCase {
+interface RemoteStationDataBaseUseCase {
     suspend fun getStationTelData(
         publicDataKey: String,
         stationCode: String
@@ -37,7 +37,7 @@ interface RemoteStationTelBaseUseCase {
 class StationDataUseCase @Inject constructor(
     private val cache: CacheFullRouteInformationRepository,
     private val remote: RemoteStationDataRepository
-) : StationDataBaseUseCase, RemoteStationTelBaseUseCase {
+) : StationDataBaseUseCase, RemoteStationDataBaseUseCase {
     override suspend fun invoke(param: List<String>): Flow<List<DomainFullRouteInformationBody>> =
         cache.getStationData(param)
 

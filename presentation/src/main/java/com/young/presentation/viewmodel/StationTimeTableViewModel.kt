@@ -35,9 +35,6 @@ class StationTimeTableViewModel @ViewModelInject constructor(
     private val allStationCodeUseCase: AllStationCodeUseCase
 ) : BaseViewModel(), StationTimeTableFunction {
 
-    val seoulKey = provider.getString(R.string.seoulKey)
-    val portalKey = provider.getString(R.string.trailKey)
-
     private val _dayCodeChangeData = MutableLiveData<DayType>()
     val dayCodeChangeData: LiveData<DayType>
         get() = _dayCodeChangeData
@@ -53,7 +50,9 @@ class StationTimeTableViewModel @ViewModelInject constructor(
     @FlowPreview
     override fun getStationTimeTable(
         indexAllRouteInformation: IndexAllRouteInformation?,
-        day: DayType
+        day: DayType ,
+        seoulKey : String ,
+        portalKey : String
     ) {
         viewModelScope.launch {
             flowOf(indexAllRouteInformation)
