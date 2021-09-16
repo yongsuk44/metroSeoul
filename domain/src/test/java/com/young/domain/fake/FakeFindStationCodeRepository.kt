@@ -1,6 +1,7 @@
-package com.young.domain.timetable
+package com.young.domain.fake
 
-import com.young.domain.factory.timetableFactory
+import com.young.domain.factory.ModelFactory
+import com.young.domain.factory.ModelFactory.generateRowData
 import com.young.domain.model.DomainAllStationCodes
 import com.young.domain.model.DomainRow
 import com.young.domain.repository.location.CacheAllStationCodesRepository
@@ -13,6 +14,6 @@ interface FakeFindStationCodeRepository : CacheAllStationCodesRepository {
     }
 
     override suspend fun findStationCode(code: String): Flow<DomainRow?> = flow {
-        emit(timetableFactory.generateRowData())
+        emit(generateRowData())
     }
 }

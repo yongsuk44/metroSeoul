@@ -107,7 +107,7 @@ object RemoteToDataMapper {
 
         return mapper.apply {
             register("header" , headerMapper)
-            register("body", bodyMapper)
+            register("body", BaseMapper.setList(bodyMapper))
         }.run {
             this(this@RemoteToData)
         }

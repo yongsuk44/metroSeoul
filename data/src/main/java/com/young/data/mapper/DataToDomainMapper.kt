@@ -72,7 +72,7 @@ object DataToDomainMapper {
     fun DataPlatformEntrance.DataToDomain(): DomainPlatformEntrance {
         val mapper = BaseMapper<DataPlatformEntrance, DomainPlatformEntrance>()
         val body = BaseMapper<DataPlatformEntranceBody, DomainPlatformEntranceBody>()
-        val header = BaseMapper(Header::class, Header::class)
+        val header = BaseMapper(DataHeader::class, Header::class)
 
         mapper.apply {
             register("header", header)

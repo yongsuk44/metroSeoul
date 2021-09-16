@@ -1,6 +1,8 @@
-package com.young.domain.timetable
+package com.young.domain.fake
 
-import com.young.domain.factory.timetableFactory
+import com.young.domain.factory.ModelFactory
+import com.young.domain.factory.ModelFactory.generatePublicDomainStationTimeTable
+import com.young.domain.factory.ModelFactory.generateSeoulDomainStationTimeTable
 import com.young.domain.model.DomainStationTimeTable
 import com.young.domain.repository.remote.RemoteStationDataRepository
 import kotlinx.coroutines.flow.Flow
@@ -14,12 +16,12 @@ interface FakeStationTimeTableRepository : RemoteStationDataRepository {
         lineCode: String,
         stationCode: String,
         updown: String
-    ): Flow<DomainStationTimeTable?> = flowOf(timetableFactory.generatePublicDomainStationTimeTable())
+    ): Flow<DomainStationTimeTable?> = flowOf(generatePublicDomainStationTimeTable())
 
     override suspend fun getSeoulStationTimeTable(
         key: String,
         updown: String,
         dayCd: String,
         stationCode: String
-    ): Flow<DomainStationTimeTable> = flowOf(timetableFactory.generateSeoulDomainStationTimeTable())
+    ): Flow<DomainStationTimeTable> = flowOf(generateSeoulDomainStationTimeTable())
 }

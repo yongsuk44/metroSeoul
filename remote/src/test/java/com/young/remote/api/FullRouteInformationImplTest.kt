@@ -1,12 +1,21 @@
 package com.young.remote.api
 
+import com.nhaarman.mockito_kotlin.whenever
+import com.young.data.datasource.remote.RemoteFullRouteInformationDataSource
+import com.young.data.model.DataPlatformEntrance
 import com.young.remote.TestCoroutineRule
 import com.young.remote.enqueueResponse
+import com.young.remote.generate.DataFactory.generatePlatformEntranceData
 import com.young.remote.generate.DataFactory.getRandomString
 import com.young.remote.generate.RetrofitFactory
+import com.young.remote.mapper.RemoteToDataMapper.RemoteToData
 import com.young.remote.repository.RemoteFullRouteInformationRepositoryImpl
+import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertSame
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
+import net.bytebuddy.matcher.ElementMatchers.`is`
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.Before
@@ -20,19 +29,22 @@ import org.junit.runners.JUnit4
 class FullRouteInformationImplTest {
     private val mockWebServer = MockWebServer()
 
-    private lateinit var repository: RemoteFullRouteInformationRepositoryImpl
     private lateinit var seoulApiService: SeoulApiService
     private lateinit var service: TrailPorTalService
 
     @get:Rule
     val rule: TestCoroutineRule = TestCoroutineRule()
 
+    var key: String = getRandomString()
+    var railCode: String = getRandomString()
+    var lineCd: String = getRandomString()
+    var stinCode: String = getRandomString()
     @Before
     fun setUp() {
         mockWebServer.start()
+
         seoulApiService = RetrofitFactory.RetrofitGenerate(mockWebServer).create(SeoulApiService::class.java)
         service = RetrofitFactory.RetrofitGenerate(mockWebServer).create(TrailPorTalService::class.java)
-        repository = RemoteFullRouteInformationRepositoryImpl(seoulApiService, service)
     }
 
     @After
@@ -69,10 +81,10 @@ class FullRouteInformationImplTest {
         mockWebServer.enqueueResponse("EntranceData", 200)
 
         runBlocking {
-            val call = service.getPlatformEntranceData(getRandomString() , getRandomString() , getRandomString() , getRandomString(), getRandomString())
-            call.body?.forEach {
-                println(it)
-            }
+            val api = service.getPlatformEntranceData(key, "json",railCode, lineCd, stinCode)
+
+            println(api)
+            println(api.RemoteToData())
         }
     }
 

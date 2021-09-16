@@ -3,9 +3,12 @@ package com.young.domain.timetable
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.nhaarman.mockito_kotlin.whenever
-import com.young.domain.factory.timetableFactory.generatePublicDomainStationTimeTable
-import com.young.domain.factory.timetableFactory.generateRowData
-import com.young.domain.factory.timetableFactory.generateSeoulDomainStationTimeTable
+import com.young.domain.factory.ModelFactory.generatePublicDomainStationTimeTable
+import com.young.domain.factory.ModelFactory.generateRowData
+import com.young.domain.factory.ModelFactory.generateSeoulDomainStationTimeTable
+import com.young.domain.fake.FakeCacheFullRouteInformationRepository
+import com.young.domain.fake.FakeFindStationCodeRepository
+import com.young.domain.fake.FakeStationTimeTableRepository
 import com.young.domain.model.DomainRow
 import com.young.domain.model.DomainStationTimeTable
 import com.young.domain.repository.location.CacheAllStationCodesRepository
@@ -16,6 +19,7 @@ import com.young.domain.usecase.StationDataUseCase
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.singleOrNull
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers
 import org.junit.Assert
@@ -81,10 +85,10 @@ class TimeTableDomainTest {
 
             // when
             val item =
-                remoteStationTimeTableRepository.getSeoulStationTimeTable("key", "11", "22", "33")
+                remoteStationTimeTableRepository.getSeoulStationTimeTable("key", "11", "22", "33").singleOrNull()
 
             // then
-            Assert.assertNull(item)
+            Assert.assertNotNull(item)
         }
     }
 
