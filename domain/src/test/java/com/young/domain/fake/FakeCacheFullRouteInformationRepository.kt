@@ -1,4 +1,4 @@
-package com.young.domain.timetable
+package com.young.domain.fake
 
 import com.young.domain.model.DomainFullRouteInformationBody
 import com.young.domain.model.DomainTrailCodeAndLineCode

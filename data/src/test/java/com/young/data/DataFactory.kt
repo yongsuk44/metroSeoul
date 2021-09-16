@@ -1,13 +1,14 @@
-package com.young.remote.generate
+package com.young.data
 
-import com.young.data.model.DataHeader
-import com.young.data.model.DataPlatformEntrance
-import com.young.data.model.DataPlatformEntranceBody
 import java.util.*
 import kotlin.random.Random
+import kotlin.random.Random.Default.nextBoolean
+import kotlin.random.Random.Default.nextDouble
+import kotlin.random.Random.Default.nextInt
+import kotlin.random.Random.Default.nextLong
 
 object DataFactory {
-
+    
     fun getRandomString(): String {
         return UUID.randomUUID().toString().substring(0, 15)
     }

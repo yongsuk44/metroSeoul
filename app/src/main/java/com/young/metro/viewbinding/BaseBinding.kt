@@ -13,6 +13,7 @@ fun setDataVisibleApply(view: View, data: Any?) {
         is Int -> data.ZeroOrNull()
         is List<*> -> !data.isNullOrEmpty()
         is Boolean -> data
+        is Nothing -> true
         else -> false
     }
 }

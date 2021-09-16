@@ -1,6 +1,5 @@
 package com.young.metro.ui
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Looper
 import android.view.LayoutInflater
@@ -13,7 +12,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.translationMatrix
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -27,15 +25,16 @@ import com.young.metro.base.showToast
 import com.young.metro.databinding.BaseSpinnerListBinding
 import com.young.metro.databinding.FragmentHomeBinding
 import com.young.metro.locationPermissionList
+import com.young.presentation.consts.BaseResult
 import com.young.presentation.consts.EventObserver
 import com.young.presentation.viewmodel.FullRouteInformationViewModel
 import com.young.presentation.viewmodel.PermissionViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
+@ExperimentalCoroutinesApi
 @FlowPreview
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding, FullRouteInformationViewModel>() {
@@ -79,8 +78,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, FullRouteInformationViewM
         viewDataBinding.permissionVm = permissionViewModel
         requestPermission.launch(locationPermissionList)
         getRequestLocationData()
-        viewModel.insertAllStationCodes()
-        viewModel.loadFullRouteInformation()
+        viewModel.insertAllStationCodes(getString(R.string.seoulKey))
+        viewModel.loadFullRouteInformation(getString(R.string.trailKey))
     }
 
 
@@ -90,16 +89,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, FullRouteInformationViewM
             popup = setPopUpWindow(viewDataBinding.etStationSearch)
         }
 
-        viewModel.userSearchStationName.observe(viewLifecycleOwner) { searchString ->
-            lifecycleScope.launch(Dispatchers.Main) {
-                searchString.isNotEmpty().also {
-                    if (it) {
-                        searchDataFilter(searchString)
-                    }
-
-                    viewModel.onSearchEditViewClick(it)
-                }
-            }
+        viewModel.filterList.observe(viewLifecycleOwner) {
+            dropBoxAdapter.submitList(it)
+            viewModel.onSearchEditViewClick(!it.isNullOrEmpty())
         }
 
         viewModel.searchEditViewClick.observe(viewLifecycleOwner, EventObserver {
@@ -116,7 +108,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, FullRouteInformationViewM
             } else {
                 requestPermission.launch(locationPermissionList)
             }
-
         })
 
         permissionViewModel.locationPermission.observe(viewLifecycleOwner) {
@@ -128,17 +119,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, FullRouteInformationViewM
             popup.dismiss()
 
             findNavController().navigate(
-                HomeFragmentDirections.actionFragmentHomeToStationInformationDetailFragment(it.stinCd.toTypedArray() , it.stinNm)
+                HomeFragmentDirections.actionFragmentHomeToStationInformationDetailFragment(
+                    it.stinCd.toTypedArray(),
+                    it.stinNm
+                )
             )
         })
-    }
 
-    @SuppressLint("DefaultLocale")
-    private fun searchDataFilter(searchData: String) {
-        viewModel.fullRouteInformation.value?.filter {
-            it.stinNm.toLowerCase().contains(searchData.toLowerCase())
-        }.run {
-            dropBoxAdapter.submitList(this)
+        viewModel.failedInformationData.observe(viewLifecycleOwner) {
+            if (it) showToast(R.string.text_data_not_found)
         }
     }
 
@@ -147,17 +136,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, FullRouteInformationViewM
     ): PopupWindow {
         return PopupWindow(parentView.measuredWidth, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
 
-            setBackgroundDrawable(
-                ResourcesCompat.getDrawable(resources, R.drawable.popup_background, null))
+            setBackgroundDrawable(ResourcesCompat.getDrawable(resources, R.drawable.popup_background, null))
 
-                popUpListBinding.apply {
-                    this?.vm = viewModel
-                    this?.rvList?.apply {
-                        adapter = dropBoxAdapter
-                    }
-                }.run {
-                    contentView = this?.root
-                }
+            popUpListBinding?.apply {
+                vm = viewModel
+                rvList.adapter = dropBoxAdapter
+            }.run {
+                contentView = this?.root
+            }
 
             isOutsideTouchable = true
             elevation = resources.getDimension(R.dimen.defaultViewShadow)

@@ -4,30 +4,34 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.young.domain.model.DomainFullRouteInformationBody
 import com.young.domain.model.DomainTrailCodeAndLineCode
 import com.young.domain.usecase.AllStationCodeUseCase
 import com.young.domain.usecase.FullRouteInformationUseCase
-import com.young.presentation.R
+import com.young.presentation.consts.BaseResult
 import com.young.presentation.consts.BaseViewModel
+import com.young.presentation.consts.CustomTransformationDataMap
 import com.young.presentation.consts.Event
-import com.young.presentation.consts.ResourceProvider
 import com.young.presentation.mapper.DomainToUiMapper.DomainToUi
 import com.young.presentation.model.ListRouteInformation
+import com.young.presentation.model.UiStationTimeTable
 import com.young.presentation.modelfunction.FullRouteInformationCase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.util.*
 
+@ExperimentalCoroutinesApi
 @FlowPreview
 class FullRouteInformationViewModel @ViewModelInject constructor(
     private val fullRouteInformationUseCase: FullRouteInformationUseCase,
-    private val allStationCodeUseCase: AllStationCodeUseCase,
-    private val resourceProvider: ResourceProvider
+    private val allStationCodeUseCase: AllStationCodeUseCase
 ) : BaseViewModel(), FullRouteInformationCase {
 
-    private val _failedInformationData = MutableLiveData<Boolean>(false)
+    private val _failedInformationData = MutableLiveData(false)
     val failedInformationData: LiveData<Boolean>
         get() = _failedInformationData
 
@@ -35,9 +39,15 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
     val fullRouteInformation: LiveData<List<ListRouteInformation>>
         get() = _fullRouteInformation
 
-    val _userSearchStationName = MutableLiveData<String>()
+    private val _userSearchStationName = MutableLiveData<String>()
     val userSearchStationName: LiveData<String>
         get() = _userSearchStationName
+
+    val filterList = CustomTransformationDataMap(userSearchStationName) {
+        fullRouteInformation.value?.filter { list ->
+            list.stinNm.toLowerCase(Locale.KOREAN).contains(it.toLowerCase(Locale.KOREAN))
+        }
+    }
 
     private val _searchActionStation = MutableLiveData<Event<ListRouteInformation>>()
     val searchActionStation: LiveData<Event<ListRouteInformation>>
@@ -52,62 +62,50 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
         get() = _selectPosition
 
 
-    override fun loadFullRouteInformation() {
-        viewModelScope.launch(handler) {
+    override fun loadFullRouteInformation(trailKey: String) {
+        viewModelScope.launch {
             fullRouteInformationUseCase.getDataSize()
-                .flowOn(Dispatchers.IO)
-                .take(1)
-                .collect { size ->
-                    if (size > 0)
-                        getCacheFullRouteInformation()
-                    else
-                        getFullRouteInformation(resourceProvider.getString(R.string.trailKey))
+                .catch {
+                    Timber.e(it)
+                    _failedInformationData.value = true
+                }
+                .flatMapConcat {
+                    if (it > 0) getCacheFullRouteInformation()
+                    else getRemoteFullRouteInformation(trailKey)
+                }.collect {
+                    _fullRouteInformation.value = it.DomainToUi()
+                    insertFullRouteInformationDataAndTrailLineCode(it)
                 }
         }
     }
 
-    override suspend fun getFullRouteInformation(key: String) {
-        fullRouteInformationUseCase.getStationRouteInformation(key)
-            .flowOn(Dispatchers.IO)
-            .flatMapConcat {
-
-                val lineCodeAndTrailCodeList = it.map {
-                    DomainTrailCodeAndLineCode(it.railOprIsttCd, it.lnCd)
-                }.distinctBy {
-                    it.lnCd to it.railOprIsttCd
-                }
-
-                fullRouteInformationUseCase.insertLineCodeAndTrailCode(lineCodeAndTrailCodeList)
-                fullRouteInformationUseCase.insert(it)
-            }
-            .flowOn(Dispatchers.IO)
-            .catch { e ->
-                Timber.e(e)
-                _failedInformationData.value = true
-            }.collect {
-                getCacheFullRouteInformation()
-            }
-    }
-
-    override suspend fun getCacheFullRouteInformation() {
-        fullRouteInformationUseCase.getAllData()
-            .flowOn(Dispatchers.IO)
-            .map {
-                it.DomainToUi()
-            }
-            .flowOn(Dispatchers.Default)
-            .catch { e ->
-                Timber.e(e)
-                _failedInformationData.value = true
-            }.collect {
-                _fullRouteInformation.value = it
-            }
-    }
-
-    override fun insertAllStationCodes() {
+    override fun insertFullRouteInformationDataAndTrailLineCode(list: List<DomainFullRouteInformationBody>) {
         viewModelScope.launch {
-            val code = fullRouteInformationUseCase.getAllStationCode(resourceProvider.getString(R.string.seoulKey)).single()
-            allStationCodeUseCase.insert(code).collect()
+            flowOf(list)
+                .transform {
+                    fullRouteInformationUseCase.insert(it)
+                    emit(it)
+                }.mapLatest {
+                    it.map { DomainTrailCodeAndLineCode(it.railOprIsttCd, it.lnCd) }
+                        .distinctBy { it.lnCd to it.railOprIsttCd }
+                }.mapLatest {
+                    fullRouteInformationUseCase.insertLineCodeAndTrailCode(it)
+                }.single()
+        }
+    }
+
+    override suspend fun getRemoteFullRouteInformation(key: String): Flow<List<DomainFullRouteInformationBody>> =
+        fullRouteInformationUseCase.getStationRouteInformation(key)
+
+    override suspend fun getCacheFullRouteInformation(): Flow<List<DomainFullRouteInformationBody>> =
+        fullRouteInformationUseCase.getAllData()
+
+
+    override fun insertAllStationCodes(seoulKey: String) {
+        viewModelScope.launch {
+            fullRouteInformationUseCase.getAllStationCode(seoulKey)
+                .flatMapConcat { allStationCodeUseCase.insert(it) }
+                .single()
         }
     }
 
