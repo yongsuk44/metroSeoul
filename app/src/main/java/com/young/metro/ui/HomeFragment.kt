@@ -141,6 +141,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, FullRouteInformationViewM
             popUpListBinding?.apply {
                 vm = viewModel
                 rvList.adapter = dropBoxAdapter
+                trailKey = getString(R.string.trailKey)
             }.run {
                 contentView = this?.root
             }

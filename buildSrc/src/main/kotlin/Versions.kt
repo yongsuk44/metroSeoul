@@ -9,7 +9,7 @@ object Versions {
     const val kotlinLanguageVersion = "1.4"
 
     const val googleService = "4.3.0"
-    const val appCompat = "1.3.0"
+    const val appCompat = "1.3.1"
     const val coreKtx = "1.3.2"
 
     const val materialDesign = "1.2.0-alpha03"

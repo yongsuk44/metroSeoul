@@ -70,4 +70,9 @@ interface StationTimeTableFunction {
         dayCode: String,
         stationCode: String
     ): Flow<UiStationTimeTable?>
+
+    /**
+     * 지하철 시간표 접기 열기
+     */
+    fun timeTableOpenAndClose()
 }

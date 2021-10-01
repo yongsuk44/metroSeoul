@@ -39,7 +39,7 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
     val fullRouteInformation: LiveData<List<ListRouteInformation>>
         get() = _fullRouteInformation
 
-    private val _userSearchStationName = MutableLiveData<String>()
+    val _userSearchStationName = MutableLiveData<String>()
     val userSearchStationName: LiveData<String>
         get() = _userSearchStationName
 

@@ -1,21 +1,12 @@
 package com.young.remote.api
 
-import com.nhaarman.mockito_kotlin.whenever
-import com.young.data.datasource.remote.RemoteFullRouteInformationDataSource
-import com.young.data.model.DataPlatformEntrance
 import com.young.remote.TestCoroutineRule
 import com.young.remote.enqueueResponse
-import com.young.remote.generate.DataFactory.generatePlatformEntranceData
 import com.young.remote.generate.DataFactory.getRandomString
 import com.young.remote.generate.RetrofitFactory
 import com.young.remote.mapper.RemoteToDataMapper.RemoteToData
-import com.young.remote.repository.RemoteFullRouteInformationRepositoryImpl
-import junit.framework.Assert.assertEquals
-import junit.framework.Assert.assertSame
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
-import net.bytebuddy.matcher.ElementMatchers.`is`
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.Before
@@ -78,7 +69,7 @@ class FullRouteInformationImplTest {
 
     @Test
     fun `getPlatformEntranceData Success`() {
-        mockWebServer.enqueueResponse("EntranceData", 200)
+        mockWebServer.enqueueResponse("EntranceData2", 200)
 
         runBlocking {
             val api = service.getPlatformEntranceData(key, "json",railCode, lineCd, stinCode)

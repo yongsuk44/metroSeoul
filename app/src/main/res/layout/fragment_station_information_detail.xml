@@ -18,13 +18,12 @@
 
     </data>
 
-    <com.young.metro.ui.custom.CustomConstraintLayout
+    <com.young.metro.ui.custom.CustomConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/lo_detail_information"
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:customBackgroundColor="@color/white"
-        android:transitionName="@{@string/transition_station_layout(stationName)}">
+        android:transitionName="@{@string/transition_station_layout(stationName)}"
+        app:customBackgroundColor="@color/white">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/gl_start"
@@ -65,13 +64,13 @@
             style="@style/SkyTextViewMediumSize12"
             android:layout_marginEnd="20dp"
             android:gravity="center"
-            android:text="@{vm.stationTelNumber}"
             android:onClick="@{() -> vm.onStationCallClick()}"
-            app:cornerRadius="50dp"
             android:paddingStart="10dp"
-            android:paddingEnd="10dp"
             android:paddingTop="5dp"
+            android:paddingEnd="10dp"
             android:paddingBottom="5dp"
+            android:text="@{vm.stationTelNumber}"
+            app:cornerRadius="50dp"
             app:customBackgroundColor="@color/white"
             app:customStrokeColor="@color/sky"
             app:customStrokeWidth="1dp"
@@ -79,16 +78,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_detail_information_station_name" />
 
-
         <include
             android:id="@+id/inc_timetable"
-            app:vm="@{timeTableViewModel}"
+            layout="@layout/include_station_timetable"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            layout="@layout/include_station_timetable"
-            app:layout_constraintStart_toStartOf="@id/gl_start"
+            android:layout_marginTop="15dp"
             app:layout_constraintEnd_toEndOf="@id/gl_end"
-            app:layout_constraintTop_toBottomOf="@id/tv_detail_information_station_name"/>
+            app:layout_constraintStart_toStartOf="@id/gl_start"
+            app:layout_constraintTop_toBottomOf="@id/tv_detail_information_station_name"
+            app:vm="@{timeTableViewModel}" />
     </com.young.metro.ui.custom.CustomConstraintLayout>
 </layout>

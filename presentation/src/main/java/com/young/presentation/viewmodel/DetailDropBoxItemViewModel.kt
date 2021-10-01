@@ -17,47 +17,60 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 interface DetailDropBoxFunction {
-    fun getConvenienceInformation(lineCode: String, trailCode: String, stationCode: String)
-
-    fun getPlatformEntranceData(railCode: String, lineCd : String, stinCode: String)
+    fun getConvenienceInformation(key: String, lineCode: String, trailCode: String, stationCode: String)
+    fun getPlatformEntranceData(key: String, railCode: String, lineCd: String, stinCode: String)
 }
 
 class DetailDropBoxItemViewModel @ViewModelInject constructor(
-    private val provider: ResourceProvider,
-    private val stationDataUseCase: StationDataUseCase,
     private val fullRouteInformationUseCase: FullRouteInformationUseCase
-) : BaseViewModel() ,DetailDropBoxFunction {
+) : BaseViewModel(), DetailDropBoxFunction {
 
     private val _convenienceInformation = MutableLiveData<UiConvenienceInformation>()
     val convenienceInformation: LiveData<UiConvenienceInformation>
         get() = _convenienceInformation
 
-    override fun getPlatformEntranceData(railCode: String,lineCd : String, stinCode: String){
-        viewModelScope.launch(handler) {
-            fullRouteInformationUseCase.getPlatformEntranceData(provider.getString(R.string.trailKey), railCode, lineCd , stinCode)
-                .map {
-                    it.DomainToUi()
-                }
+    override fun getPlatformEntranceData(
+        key: String,
+        railCode: String,
+        lineCd: String,
+        stinCode: String
+    ) {
+        viewModelScope.launch {
+            fullRouteInformationUseCase.getPlatformEntranceData(key, railCode, lineCd, stinCode)
                 .flatMapConcat {
-                    if (it.header.resultCode != "00") throw Exception("$stinCode : 해당 코드 역에 대한 API 호출 실패")
-                    else flowOf(it.body)
+                    if (it.body.isNullOrEmpty()) throw Exception("$stinCode : 해당 코드 역에 대한 API 호출 실패")
+                    else flowOf(it)
                 }
-                .flowOn(Dispatchers.IO)
-                .catch { e ->
-                    Timber.e(e)
+                .map { it.DomainToUi() }
+                .catch {
+                    Timber.e(it)
+                    setToastMsg("데이터를 가져오는데 실패하였습니다.")
                 }
-                .onCompletion {
-                    setLoadingValue(false)
-                }
+                .onStart { setLoadingValue(true) }
+                .onCompletion { setLoadingValue(false) }
                 .collect {
                     it
                 }
         }
     }
 
-    override fun getConvenienceInformation(lineCode: String, trailCode: String, stationCode: String) {
+    suspend fun getPlatformStartMovePathData() {
+
+    }
+
+    override fun getConvenienceInformation(
+        key: String,
+        lineCode: String,
+        trailCode: String,
+        stationCode: String
+    ) {
         viewModelScope.launch(handler) {
-            fullRouteInformationUseCase.getConvenienceInformation(provider.getString(R.string.trailKey), lineCode, trailCode, stationCode)
+            fullRouteInformationUseCase.getConvenienceInformation(
+                key,
+                lineCode,
+                trailCode,
+                stationCode
+            )
                 .map {
                     it.DomainToUi()
                 }

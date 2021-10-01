@@ -62,6 +62,29 @@ fun TextView.setTextNotAnimationPercent(percent : Int , textSize : Float , textT
         .append(textType)
 }
 
+@BindingAdapter("spinnerArrowAnimation")
+fun setSpinnerArrowAnimation(view: ImageView, check: Boolean) {
+    if (check) view.setImageRotationOpen()
+    else view.setImageRotationClose()
+}
+
+@BindingAdapter("viewOpenClose")
+fun setDetailViewOpenAndClose(view : View , check : Boolean) {
+    val anim = if (check) {
+        ObjectAnimator.ofFloat(view , View.TRANSLATION_Y,0f , -1000f).apply {
+            duration = 250
+            view.visibility = View.GONE
+        }
+    } else {
+        ObjectAnimator.ofFloat(view , View.TRANSLATION_Y,-1000f , 0f).apply {
+            duration = 250
+            view.visibility = View.VISIBLE
+        }
+    }
+
+    anim.start()
+}
+
 fun ImageView.setImageRotationOpen() {
     ObjectAnimator.ofFloat(this , View.ROTATION , 0f , 180f).apply {
         duration = 200

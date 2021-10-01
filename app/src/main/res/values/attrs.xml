@@ -15,20 +15,18 @@
         <attr name="cornerRadius" />
         <attr name="customStrokeWidth"/>
         <attr name="customStrokeColor"/>
-        <attr name="cornerTopLeftRadius"/>
-        <attr name="cornerTopRightRadius"/>
-        <attr name="cornerBottomLeftadius"/>
-        <attr name="cornerBottomRightRadius"/>
     </declare-styleable>
 
 
     <declare-styleable name="CircleTextView">
         <attr name="customBackgroundColor" />
         <attr name="cornerRadius" />
-        <attr name="shapeType" format="enum">
-            <enum name="rectangle" value="0"/>
-            <enum name="oval" value="1"/>
-        </attr>
+
+        <attr name="cornerTopLeftRadius"/>
+        <attr name="cornerTopRightRadius"/>
+        <attr name="cornerBottomLeftadius"/>
+        <attr name="cornerBottomRightRadius"/>
+
         <attr name="customStrokeWidth"/>
         <attr name="customStrokeColor"/>
     </declare-styleable>

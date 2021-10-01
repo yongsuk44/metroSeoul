@@ -8,6 +8,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DimenRes
 import androidx.appcompat.widget.AppCompatTextView
 import com.young.metro.R
+import com.young.metro.util.equalsZeroCheck
 
 class CircleTextView(
     context: Context,
@@ -22,7 +23,10 @@ class CircleTextView(
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.CircleTextView)
 
         GradientDrawable().apply {
-            cornerRadius = typedArray.getDimension(R.styleable.CircleTextView_cornerRadius, 0f)
+
+            typedArray.getDimension(R.styleable.CircleTextView_cornerRadius, 0f).run {
+                cornerRadius = equalsZeroCheck(this) ?: return@run
+            }
 
             typedArray.getColor(R.styleable.CircleTextView_customBackgroundColor, resources.getColor(R.color.black, null)).run {
                 gravity = Gravity.CENTER
