@@ -4,6 +4,10 @@
         <variable
             name="vm"
             type="com.young.presentation.viewmodel.FullRouteInformationViewModel" />
+
+        <variable
+            name="trailKey"
+            type="String" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -27,7 +31,7 @@
             app:srcCompat="@drawable/ic_sync"
             android:layout_marginTop="10dp"
             setDataCheckVisible="@{vm.failedInformationData}"
-            android:onClick="@{() -> vm.loadFullRouteInformation()}"
+            android:onClick="@{() -> vm.loadFullRouteInformation(trailKey)}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

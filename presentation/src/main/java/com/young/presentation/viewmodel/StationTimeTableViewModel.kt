@@ -43,6 +43,10 @@ class StationTimeTableViewModel @ViewModelInject constructor(
     val timeTable: LiveData<SealedTimeTableData>
         get() = _timeTable
 
+    private val _timeTableOpen = MutableLiveData(false)
+    val timeTableOpen : LiveData<Boolean>
+        get() = _timeTableOpen
+
     // 서울 코드로 서울 지하철 시간표를 먼저 가져온다.
     // 시간표가 있으면 flatMapConcat 전부 패스
     // 시간표 없으면 공공 데이터 포털에서 시간표를 가져옴
@@ -149,6 +153,10 @@ class StationTimeTableViewModel @ViewModelInject constructor(
 
     override fun changeDayCode(data: DayType) {
         _dayCodeChangeData.value = data
+    }
+
+    override fun timeTableOpenAndClose() {
+        _timeTableOpen.value = !timeTableOpen.value!!
     }
 
     fun getDayCode(day: DayType, data: DomainRow?): String = when (day) {
