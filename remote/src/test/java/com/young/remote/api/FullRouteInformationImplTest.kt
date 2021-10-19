@@ -73,9 +73,9 @@ class FullRouteInformationImplTest {
 
         runBlocking {
             val api = service.getPlatformEntranceData(key, "json",railCode, lineCd, stinCode)
-
-            println(api)
-            println(api.RemoteToData())
+            api.body?.groupBy { it.edMovePath }?.forEach { it.value.forEach { println(it) } }
+//            api.body?.forEach { println(it) }
+//            println(api.RemoteToData())
         }
     }
 

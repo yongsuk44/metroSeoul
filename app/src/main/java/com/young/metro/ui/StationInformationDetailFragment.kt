@@ -44,8 +44,7 @@ class StationInformationDetailFragment :
     private val args: StationInformationDetailFragmentArgs by navArgs()
 
     override fun initBinding() {
-        sharedElementEnterTransition =
-            TransitionInflater.from(requireContext()).inflateTransition(android.R.transition.move)
+        sharedElementEnterTransition = TransitionInflater.from(requireContext()).inflateTransition(android.R.transition.move)
 
         viewDataBinding.timeTableViewModel = stationTimeTableViewModel
         viewDataBinding.rvDetailInformationStationLogo.adapter = lineLogoAdapter
@@ -72,15 +71,16 @@ class StationInformationDetailFragment :
 
         viewModel.selectStationLineData.observe(viewLifecycleOwner) {
             viewModel.getStationCodeToTelData(it.stinCd)
-            stationTimeTableViewModel.changeDayCode(DayType.WEEK)
-//            dropBoxItemViewModel.getConvenienceInformation(it.lnCd, it.railOprIsttCd, it.stinCd)
-//            dropBoxItemViewModel.getPlatformEntranceData(it.railOprIsttCd, it.lnCd, it.stinCd)
         }
 
         viewModel.stationTelClick.observe(viewLifecycleOwner) {
             startActivity(
                 Intent(Intent.ACTION_DIAL, Uri.parse("tel:$it"))
             )
+        }
+
+        stationTimeTableViewModel.timeTableOpen.observe(viewLifecycleOwner) {
+            if (it) stationTimeTableViewModel.changeDayCode(DayType.WEEK)
         }
 
         stationTimeTableViewModel.dayCodeChangeData.observe(viewLifecycleOwner) {

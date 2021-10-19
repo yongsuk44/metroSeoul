@@ -7,17 +7,27 @@
 
         <import type="com.young.presentation.consts.DayType" />
 
-        <variable name="vm" type="com.young.presentation.viewmodel.StationTimeTableViewModel" />
+        <variable
+            name="vm"
+            type="com.young.presentation.viewmodel.StationTimeTableViewModel" />
 
-        <variable name="timeTableLoading" type="Boolean" />
-        <variable name="timeTableData" type="com.young.presentation.model.UiStationTimeTable" />
+        <variable
+            name="timeTableLoading"
+            type="Boolean" />
+
+        <variable
+            name="timeTableData"
+            type="com.young.presentation.model.UiStationTimeTable" />
     </data>
 
     <com.young.metro.ui.custom.CustomConstraintLayout
         android:id="@+id/lo_station_timetable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
         app:cornerRadius="15dp"
         app:customBackgroundColor="@color/colorBg">
 
@@ -26,17 +36,18 @@
             style="@style/BlackTextViewBoldSize18"
             android:onClick="@{() -> vm.timeTableOpenAndClose()}"
             android:text="@string/view_station_timetable_title"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatImageView
+            spinnerArrowAnimation="@{vm.timeTableOpen}"
+            android:onClick="@{() -> vm.timeTableOpenAndClose()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            spinnerArrowAnimation="@{vm.timeTableOpen}"
-            app:srcCompat="@drawable/ic_arrow_drop_down_black"
-            app:layout_constraintTop_toTopOf="@id/tv_station_timetable_title"
             app:layout_constraintBottom_toBottomOf="@id/tv_station_timetable_title"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_station_timetable_title"
+            app:srcCompat="@drawable/ic_arrow_drop_down_black" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/gl_horizon_center"
@@ -67,8 +78,8 @@
             timeTableDayBoxCheckBackground="@{vm.dayCodeChangeData == DayType.SAT}"
             android:layout_width="0dp"
             android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
             android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
             android:gravity="center"
             android:onClick="@{() -> vm.changeDayCode(DayType.SAT)}"
             android:padding="5dp"
@@ -222,8 +233,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
             android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
             android:minHeight="150dp"
             app:cornerRadius="10dp"
             app:customBackgroundColor="@color/white"
@@ -248,9 +259,9 @@
             android:id="@+id/iv_station_down_timetable_list_bg"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginStart="10dp"
             android:minHeight="150dp"
             app:cornerRadius="10dp"
             app:customBackgroundColor="@color/white"
@@ -283,10 +294,15 @@
 
         <androidx.constraintlayout.widget.Group
             setDataCheckVisible="@{!timeTableLoading}"
-            viewOpenClose="@{vm.timeTableOpen}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:constraint_referenced_ids="tv_station_timetable_down_time_title,tv_station_timetable_up_time_title,tv_station_timetable_up_last_time,tv_station_timetable_down_last_time,tv_station_timetable_down_first_time,tv_station_timetable_up_first_time,iv_station_up_timetable_list_bg, iv_station_down_timetable_list_bg, tv_station_timetable_down_first_time_title , tv_station_timetable_up_first_time_title , tv_station_timetable_down_last_time_title , tv_station_timetable_up_last_time_title" />
+
+        <androidx.constraintlayout.widget.Group
+            viewOpenClose="@{vm.timeTableOpen}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="rv_station_timetable_up_list,rv_station_timetable_down_list,tv_station_timetable_down_time_title,tv_station_timetable_up_time_title,tv_station_timetable_up_last_time,tv_station_timetable_down_last_time,tv_station_timetable_down_first_time,tv_station_timetable_up_first_time,iv_station_up_timetable_list_bg, iv_station_down_timetable_list_bg, tv_station_timetable_down_first_time_title , tv_station_timetable_up_first_time_title , tv_station_timetable_down_last_time_title , tv_station_timetable_up_last_time_title,tv_station_timetable_week_day,tv_station_timetable_sat_day,tv_station_timetable_sun_day,iv_station_up_timetable_bg,iv_station_up_timetable_list_bg,iv_station_down_timetable_bg,iv_station_down_timetable_list_bg" />
 
     </com.young.metro.ui.custom.CustomConstraintLayout>
 

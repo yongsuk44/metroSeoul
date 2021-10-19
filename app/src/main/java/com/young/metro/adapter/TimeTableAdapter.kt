@@ -15,7 +15,7 @@ class TimeTableAdapter : ListAdapter<String , BaseViewHolder<ItemSimpleStationTi
         BaseViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context) , R.layout.item_simple_station_time_txt , parent , false))
 
     override fun onBindViewHolder(holder: BaseViewHolder<ItemSimpleStationTimeTxtBinding>, position: Int) {
-        holder.binding.tvItemSimpleTimeTableTxt.animation = AnimationUtils.loadAnimation(holder.itemView.context , R.anim.anim_item_alpha)
+        holder.binding.tvItemSimpleTimeTableTxt.animation = AnimationUtils.loadAnimation(holder.itemView.context , R.anim.anim_item_scale)
         holder.binding.time = getItem(position)
     }
 }

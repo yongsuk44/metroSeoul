@@ -9,6 +9,7 @@ import com.young.cache.factory.DataFactory.randomString
 import com.young.cache.factory.ModelFactory
 import com.young.cache.mapper.CacheToDataMapper.CacheToData
 import com.young.cache.repository.CacheFullRouteInformationRepositoryImpl
+import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.single
@@ -60,10 +61,11 @@ class FullRouteInformationTest {
             }
 
             val call = LocalTime.now().toNanoOfDay()
-            repo.insert(items.map { it.CacheToData() }).single()
+            val insertReturn = repo.insert(items.map { it.CacheToData() }).single()
             val time = LocalTime.now().minusNanos(call)
             println(time)
 
+            assertTrue(insertReturn.all { it > 0 })
             val allData = repo.getAllData().single()
 
             assertThat(

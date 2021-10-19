@@ -29,6 +29,10 @@ class DetailDropBoxItemViewModel @ViewModelInject constructor(
     val convenienceInformation: LiveData<UiConvenienceInformation>
         get() = _convenienceInformation
 
+    private val _platformEntranceOpen = MutableLiveData(false)
+    val platformEntranceOpen : LiveData<Boolean>
+        get() = _platformEntranceOpen
+
     override fun getPlatformEntranceData(
         key: String,
         railCode: String,

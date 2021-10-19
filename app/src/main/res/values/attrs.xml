@@ -7,7 +7,7 @@
     <attr name="customStrokeColor" format="color|reference"/>
     <attr name="cornerTopLeftRadius" format="dimension"/>
     <attr name="cornerTopRightRadius" format="dimension"/>
-    <attr name="cornerBottomLeftadius" format="dimension"/>
+    <attr name="cornerBottomLeftRadius" format="dimension"/>
     <attr name="cornerBottomRightRadius" format="dimension"/>
 
     <declare-styleable name="CustomConstraintLayout">
@@ -15,18 +15,17 @@
         <attr name="cornerRadius" />
         <attr name="customStrokeWidth"/>
         <attr name="customStrokeColor"/>
+
+        <attr name="cornerTopLeftRadius"/>
+        <attr name="cornerTopRightRadius"/>
+        <attr name="cornerBottomLeftRadius"/>
+        <attr name="cornerBottomRightRadius"/>
     </declare-styleable>
 
 
     <declare-styleable name="CircleTextView">
         <attr name="customBackgroundColor" />
         <attr name="cornerRadius" />
-
-        <attr name="cornerTopLeftRadius"/>
-        <attr name="cornerTopRightRadius"/>
-        <attr name="cornerBottomLeftadius"/>
-        <attr name="cornerBottomRightRadius"/>
-
         <attr name="customStrokeWidth"/>
         <attr name="customStrokeColor"/>
     </declare-styleable>

@@ -1,6 +1,7 @@
 package com.young.metro.ui
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import com.young.metro.R
 import com.young.metro.base.BindActivity
 import com.young.metro.databinding.ActivityMainBinding
@@ -10,7 +11,6 @@ import kotlinx.coroutines.flow.*
 
 @AndroidEntryPoint
 class MainActivity : BindActivity() {
-
     private val binding: ActivityMainBinding by binding(R.layout.activity_main)
 
     override fun onCreate(savedInstanceState: Bundle?) {
