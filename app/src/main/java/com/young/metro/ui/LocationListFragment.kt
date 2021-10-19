@@ -38,15 +38,13 @@ class LocationListFragment : BaseFragment<FragmentLocationListBinding, LocationV
     private val adapter : LocationNearAdapter by lazy { LocationNearAdapter(viewModel) }
 
     override fun initBinding() {
-        viewDataBinding.lottieLoading.playAnimation()
-
         getLastLocationServiceData()
         viewDataBinding.rvLocationNearStation.adapter = this@LocationListFragment.adapter
     }
 
     override fun observerLiveData() {
         viewModel.loading.observe(viewLifecycleOwner) {
-            if (it) viewDataBinding.lottieLoading.cancelAnimation()
+//            if (it) viewDataBinding.lottieLoading.cancelAnimation()
         }
 
         viewModel.stationCoordinateDataSize.observe(viewLifecycleOwner) {
@@ -88,7 +86,8 @@ class LocationListFragment : BaseFragment<FragmentLocationListBinding, LocationV
             LocationServices.getFusedLocationProviderClient(requireContext()).run {
                 lastLocation.addOnSuccessListener { location ->
                     if (location == null) {
-                        throw SecurityException("Location Data를 얻지 못함")
+                        showToast(R.string.toast_location_data_failed)
+                        viewModel.setNowLocation(37.5283169,126.9294254)
                     } else {
                         Geocoder(requireContext(), Locale.KOREAN).getFromLocation(
                             location.latitude,

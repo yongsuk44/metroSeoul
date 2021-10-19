@@ -44,7 +44,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, FullRouteInformationViewM
 
     private val permissionViewModel by viewModels<PermissionViewModel>()
 
-    lateinit var popup: PopupWindow
+    private var popup: PopupWindow? = null
     private val dropBoxAdapter: DropBoxAdapter by lazy { DropBoxAdapter(viewModel) }
 
     private val popUpListBinding by lazy {
@@ -95,10 +95,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, FullRouteInformationViewM
         }
 
         viewModel.searchEditViewClick.observe(viewLifecycleOwner, EventObserver {
-            if (it)
-                popup.showAsDropDown(viewDataBinding.etStationSearch, 0, 0)
-            else
-                popup.dismiss()
+            if (it) {
+                popup?.showAsDropDown(viewDataBinding.etStationSearch, 0, 0)
+            } else {
+                popup?.dismiss()
+            }
         })
 
         permissionViewModel.locationSearchClick.observe(viewLifecycleOwner, EventObserver {
@@ -116,7 +117,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, FullRouteInformationViewM
 
         viewModel.searchActionStation.observe(viewLifecycleOwner, EventObserver {
             hideSoftKeyboard(requireView())
-            popup.dismiss()
+            popup?.dismiss()
 
             findNavController().navigate(
                 HomeFragmentDirections.actionFragmentHomeToStationInformationDetailFragment(
@@ -184,7 +185,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, FullRouteInformationViewM
     }
 
     override fun onDestroy() {
-        popup.dismiss()
+        popup?.dismiss()
         super.onDestroy()
     }
 }

@@ -83,14 +83,14 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
         viewModelScope.launch {
             flowOf(list)
                 .transform {
-                    fullRouteInformationUseCase.insert(it)
+                    fullRouteInformationUseCase.insert(it).single()
                     emit(it)
                 }.mapLatest {
                     it.map { DomainTrailCodeAndLineCode(it.railOprIsttCd, it.lnCd) }
                         .distinctBy { it.lnCd to it.railOprIsttCd }
-                }.mapLatest {
-                    fullRouteInformationUseCase.insertLineCodeAndTrailCode(it)
-                }.single()
+                }.collect {
+                    fullRouteInformationUseCase.insertLineCodeAndTrailCode(it).single()
+                }
         }
     }
 
@@ -104,8 +104,7 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
     override fun insertAllStationCodes(seoulKey: String) {
         viewModelScope.launch {
             fullRouteInformationUseCase.getAllStationCode(seoulKey)
-                .flatMapConcat { allStationCodeUseCase.insert(it) }
-                .single()
+                .collect { allStationCodeUseCase.insert(it).single() }
         }
     }
 

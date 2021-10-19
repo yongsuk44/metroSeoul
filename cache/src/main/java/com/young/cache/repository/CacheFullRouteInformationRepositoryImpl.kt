@@ -12,10 +12,10 @@ import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 class CacheFullRouteInformationRepositoryImpl @Inject constructor(
-    private val dao: FullRouteInformationDao ,
+    private val dao: FullRouteInformationDao,
     private val dispatcher: CoroutineDispatcher
 ) : CacheFullRouteInformationDataSource {
-        override suspend fun insert(param: List<DataFullRouteInformationBody>) : Flow<List<Long>> =
+    override suspend fun insert(param: List<DataFullRouteInformationBody>): Flow<List<Long>> =
         flowOf(param)
             .map { it.map { it.DataToCache() } }
             .map { dao.insertFullRouteInformation(it) }

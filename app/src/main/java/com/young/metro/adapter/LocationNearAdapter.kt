@@ -21,7 +21,7 @@ class LocationNearAdapter(
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder<ItemLocationNearStationBinding>, position: Int) {
-        holder.binding.loItemLocationNearStation.animation = AnimationUtils.loadAnimation(holder.itemView.context , R.anim.anim_item_scale)
+        holder.binding.loItemLocationNearStation.animation = AnimationUtils.loadAnimation(holder.itemView.context , R.anim.anim_item_scale_alpha)
         holder.binding.vm = vm
         holder.binding.data = getItem(position)
         holder.binding.adapter = LineLogoAdapter().apply { submitList(getItem(position).lineCode) }
