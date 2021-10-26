@@ -3,7 +3,7 @@ package com.young.data.impl.remote
 import com.young.data.mapper.DataToDomainMapper.DataToDomain
 import com.young.domain.model.DomainConvenienceInformation
 import com.young.domain.model.DomainFullRouteInformationBody
-import com.young.domain.model.DomainPlatformEntrance
+import com.young.domain.model.DomainStationEntrance
 import com.young.domain.model.DomainRow
 import com.young.domain.repository.remote.RemoteFullRouteInformationRepository
 import kotlinx.coroutines.flow.Flow
@@ -35,13 +35,13 @@ class RemoteFullRouteInformationDataSourceImpl @Inject constructor(
             it.map { it.DataToDomain() }
         }
 
-    override suspend fun getPlatformEntranceData(
+    override suspend fun getStationEntranceData(
         key: String,
         railCode: String,
         lineCd: String,
         stinCode: String
-    ): Flow<DomainPlatformEntrance> =
-        datasource.getPlatformEntranceData(key, railCode, lineCd, stinCode)
+    ): Flow<DomainStationEntrance> =
+        datasource.getStationEntranceData(key, railCode, lineCd, stinCode)
             .map { it.DataToDomain() }
 
 }

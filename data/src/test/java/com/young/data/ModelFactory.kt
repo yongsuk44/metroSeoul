@@ -3,8 +3,8 @@ package com.young.data
 import com.young.data.DataFactory.getRandomInt
 import com.young.data.DataFactory.getRandomString
 import com.young.data.model.DataHeader
-import com.young.data.model.DataPlatformEntrance
-import com.young.data.model.DataPlatformEntranceBody
+import com.young.data.model.DataStationEntrance
+import com.young.data.model.DataStationEntranceBody
 
 object ModelFactory {
     fun generateDataHeader() = DataHeader(
@@ -12,17 +12,17 @@ object ModelFactory {
         getRandomString(),
         getRandomString()
     )
-    fun generatePlatformEntranceData() = DataPlatformEntrance(
+    fun generateStationEntranceData() = DataStationEntrance(
         header = generateDataHeader() ,
-        body = listOf(generatePlatformEntranceBodyData() , generatePlatformEntranceBodyData())
+        body = listOf(generateStationEntranceBodyData() , generateStationEntranceBodyData())
     )
 
-    fun generateNullPlatformEntranceData() = DataPlatformEntrance(
+    fun generateNullStationEntranceData() = DataStationEntrance(
         header = generateDataHeader() ,
         body = null
     )
 
-    fun generatePlatformEntranceBodyData() = DataPlatformEntranceBody(
+    fun generateStationEntranceBodyData() = DataStationEntranceBody(
         edMovePath = getRandomString(),
         elvtSttCd = null,
         elvtTpCd = null,

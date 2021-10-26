@@ -19,8 +19,8 @@ object FlowMapper {
                         up.body,
                         down.body,
                         up.firstTime,
-                        down.firstTime,
                         up.lastTime,
+                        down.firstTime,
                         down.lastTime
                     )
                 }

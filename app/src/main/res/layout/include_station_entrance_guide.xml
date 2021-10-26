@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
             name="vm"
-            type="com.young.presentation.viewmodel.DetailDropBoxItemViewModel" />
+            type="com.young.presentation.viewmodel.StationEntranceViewModel" />
+
+        <variable
+            name="data"
+            type="com.young.presentation.model.UiStationEntrance" />
+
+        <variable
+            name="loading"
+            type="Boolean" />
     </data>
 
     <com.young.metro.ui.custom.CustomConstraintLayout
@@ -19,24 +28,69 @@
         app:customBackgroundColor="@color/colorBg">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_station_timetable_title"
+            android:id="@+id/tv_station_entrance_title"
             style="@style/BlackTextViewBoldSize18"
+            android:layout_width="0dp"
             android:text="@string/view_entrance_guide_title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_station_entrance_arrow"/>
 
         <androidx.appcompat.widget.AppCompatImageView
-            spinnerArrowAnimation="@{vm.platformEntranceOpen}"
+            android:id="@+id/iv_station_entrance_arrow"
+            spinnerArrowAnimation="@{vm.stationEntranceOpen}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@id/tv_station_timetable_title"
+            app:layout_constraintBottom_toBottomOf="@id/tv_station_entrance_title"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_station_timetable_title"
+            app:layout_constraintTop_toTopOf="@id/tv_station_entrance_title"
             app:srcCompat="@drawable/ic_arrow_drop_down_black" />
 
         <com.young.metro.ui.custom.CircleTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:id="@+id/tv_station_entrance_up_title"
+            style="@style/BlackTextViewBoldSize16"
+            app:layout_constraintTop_toBottomOf="@id/tv_station_entrance_title"
+            android:layout_marginTop="15dp"
+            app:cornerRadius="10dp"
+            android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            app:customBackgroundColor="@color/white"
+            android:text="@{data.upStationTitle}"
+            android:onClick="@{() -> vm.onEntranceNumberList(data.upBody)}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_station_entrance_bottom_title"/>
+
+        <com.young.metro.ui.custom.CircleTextView
+            android:id="@+id/tv_station_entrance_bottom_title"
+            style="@style/BlackTextViewBoldSize16"
+            app:layout_constraintTop_toBottomOf="@id/tv_station_entrance_title"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            app:customBackgroundColor="@color/white"
+            android:text="@{data.downStationTitle ?? @string/view_nothing}"
+            android:onClick="@{() -> vm.onEntranceNumberList(data.downBody)}"
+            app:cornerRadius="10dp"
+            app:layout_constraintStart_toEndOf="@id/tv_station_entrance_up_title"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_station_entrance_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_entrance_number"
+            app:layout_constraintTop_toBottomOf="@id/tv_station_entrance_up_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
     </com.young.metro.ui.custom.CustomConstraintLayout>
 </layout>

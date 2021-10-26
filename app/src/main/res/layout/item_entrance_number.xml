@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="vm"
+            type="com.young.presentation.viewmodel.StationEntranceViewModel" />
+
+        <variable
+            name="key"
+            type="String" />
+    </data>
+
+    <com.young.metro.ui.custom.CircleTextView
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        app:customBackgroundColor="@color/white"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        app:cornerRadius="10dp"
+        android:text="@{key}"
+        android:textColor="@color/black"
+        android:gravity="center"/>
+</layout>

@@ -34,12 +34,15 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_station_timetable_title"
             style="@style/BlackTextViewBoldSize18"
+            android:layout_width="0dp"
             android:onClick="@{() -> vm.timeTableOpenAndClose()}"
             android:text="@string/view_station_timetable_title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_station_timetable_arrow"/>
 
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_station_timetable_arrow"
             spinnerArrowAnimation="@{vm.timeTableOpen}"
             android:onClick="@{() -> vm.timeTableOpenAndClose()}"
             android:layout_width="wrap_content"
@@ -59,7 +62,7 @@
         <com.young.metro.ui.custom.CircleTextView
             android:id="@+id/tv_station_timetable_week_day"
             style="@style/BlackTextViewBoldSize16"
-            timeTableDayBoxCheckBackground="@{vm.dayCodeChangeData == DayType.WEEK}"
+            CircleTextViewSelectedBackground="@{vm.dayCodeChangeData == DayType.WEEK}"
             android:layout_width="0dp"
             android:gravity="center"
             android:onClick="@{() -> vm.changeDayCode(DayType.WEEK)}"
@@ -75,7 +78,7 @@
         <com.young.metro.ui.custom.CircleTextView
             android:id="@+id/tv_station_timetable_sat_day"
             style="@style/BlackTextViewBoldSize16"
-            timeTableDayBoxCheckBackground="@{vm.dayCodeChangeData == DayType.SAT}"
+            CircleTextViewSelectedBackground="@{vm.dayCodeChangeData == DayType.SAT}"
             android:layout_width="0dp"
             android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
@@ -93,7 +96,7 @@
         <com.young.metro.ui.custom.CircleTextView
             android:id="@+id/tv_station_timetable_sun_day"
             style="@style/BlackTextViewBoldSize16"
-            timeTableDayBoxCheckBackground="@{vm.dayCodeChangeData == DayType.SUN}"
+            CircleTextViewSelectedBackground="@{vm.dayCodeChangeData == DayType.SUN}"
             android:layout_width="wrap_content"
             android:gravity="center"
             android:onClick="@{() -> vm.changeDayCode(DayType.SUN)}"

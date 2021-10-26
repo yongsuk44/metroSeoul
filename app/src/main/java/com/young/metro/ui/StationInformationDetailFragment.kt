@@ -5,9 +5,11 @@ import android.net.Uri
 import android.transition.TransitionInflater
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.young.metro.BR
 import com.young.metro.R
+import com.young.metro.adapter.EntranceNumberAdapter
 import com.young.metro.adapter.LineLogoSelectAdapter
 import com.young.metro.adapter.TimeTableAdapter
 import com.young.metro.base.BaseFragment
@@ -16,8 +18,9 @@ import com.young.metro.databinding.FragmentStationInformationDetailBinding
 import com.young.metro.util.nowTimeNearList
 import com.young.metro.util.recyclerViewScrollPosition
 import com.young.metro.util.waitForTransition
+import com.young.presentation.consts.BaseResult
 import com.young.presentation.consts.DayType
-import com.young.presentation.viewmodel.DetailDropBoxItemViewModel
+import com.young.presentation.viewmodel.StationEntranceViewModel
 import com.young.presentation.viewmodel.DetailStationInformationViewModel
 import com.young.presentation.viewmodel.SealedTimeTableData
 import com.young.presentation.viewmodel.StationTimeTableViewModel
@@ -35,22 +38,26 @@ class StationInformationDetailFragment :
     override val viewModel: DetailStationInformationViewModel by viewModels()
     override val bindingVariable: Int = BR.vm
 
-    private val dropBoxItemViewModel: DetailDropBoxItemViewModel by viewModels()
+    private val stationEntranceViewModel: StationEntranceViewModel by viewModels()
     private val stationTimeTableViewModel: StationTimeTableViewModel by viewModels()
 
     private val lineLogoAdapter by lazy { LineLogoSelectAdapter(viewModel) }
     private val upTimeTableAdapter by lazy { TimeTableAdapter() }
     private val downTimeTableAdapter by lazy { TimeTableAdapter() }
+    private val entranceNumberAdapter by lazy { EntranceNumberAdapter(stationEntranceViewModel) }
     private val args: StationInformationDetailFragmentArgs by navArgs()
 
     override fun initBinding() {
-        sharedElementEnterTransition = TransitionInflater.from(requireContext()).inflateTransition(android.R.transition.move)
+        sharedElementEnterTransition =
+            TransitionInflater.from(requireContext()).inflateTransition(android.R.transition.move)
 
         viewDataBinding.timeTableViewModel = stationTimeTableViewModel
+        viewDataBinding.entranceViewModel = stationEntranceViewModel
+
         viewDataBinding.rvDetailInformationStationLogo.adapter = lineLogoAdapter
-        viewDataBinding.incTimetable.rvStationTimetableUpList.adapter = upTimeTableAdapter
-        viewDataBinding.incTimetable.rvStationTimetableDownList.adapter = downTimeTableAdapter
         viewDataBinding.stationName = args.stationName
+
+        viewDataBinding.incEntrance.rvStationEntranceNumber.adapter = entranceNumberAdapter
 
         viewModel.getStationData(args.stinCodes.toList())
 
@@ -71,6 +78,13 @@ class StationInformationDetailFragment :
 
         viewModel.selectStationLineData.observe(viewLifecycleOwner) {
             viewModel.getStationCodeToTelData(it.stinCd)
+
+            stationEntranceViewModel.getStationEntranceData(
+                getString(R.string.trailKey),
+                it.railOprIsttCd,
+                it.lnCd,
+                it.stinCd
+            )
         }
 
         viewModel.stationTelClick.observe(viewLifecycleOwner) {
@@ -80,15 +94,20 @@ class StationInformationDetailFragment :
         }
 
         stationTimeTableViewModel.timeTableOpen.observe(viewLifecycleOwner) {
-            if (it) stationTimeTableViewModel.changeDayCode(DayType.WEEK)
+            if (it) {
+                viewDataBinding.incTimetable.rvStationTimetableUpList.adapter = upTimeTableAdapter
+                viewDataBinding.incTimetable.rvStationTimetableDownList.adapter = downTimeTableAdapter
+
+                stationTimeTableViewModel.changeDayCode(DayType.WEEK)
+            }
         }
 
         stationTimeTableViewModel.dayCodeChangeData.observe(viewLifecycleOwner) {
             stationTimeTableViewModel.getStationTimeTable(
                 viewModel.selectStationLineData.value,
                 it,
-                getString(com.young.presentation.R.string.seoulKey),
-                getString(com.young.presentation.R.string.trailKey)
+                getString(R.string.seoulKey),
+                getString(R.string.trailKey)
             )
         }
 
@@ -112,12 +131,39 @@ class StationInformationDetailFragment :
 
                 is SealedTimeTableData.Failed -> {
                     Timber.e(it.exception)
-                    showToast("해당역에 대한 정보를 가져오지 못하였습니다.다시 시도해주세요.")
+                    showToast(getString(R.string.text_data_not_found))
                 }
 
                 is SealedTimeTableData.Loading -> {
                     viewDataBinding.incTimetable.timeTableLoading = it.loading
                 }
+            }
+        }
+
+        stationEntranceViewModel.stationEntranceData.observe(viewLifecycleOwner) {
+            when (it) {
+                is BaseResult.Failed -> {
+                    Timber.e(it.exception)
+                    showToast(getString(R.string.text_data_not_found))
+                }
+                is BaseResult.Loading -> {
+                    viewDataBinding.incEntrance.loading = it.loading
+                }
+                is BaseResult.Success -> {
+                    viewDataBinding.incEntrance.data = it.data
+                }
+            }
+        }
+        stationEntranceViewModel.stationEntranceNumberList.observe(viewLifecycleOwner) {
+            entranceNumberAdapter.submitList(it)
+        }
+
+        stationEntranceViewModel.photoListData.observe(viewLifecycleOwner) {
+            it?.let {
+                with(findNavController().getBackStackEntry(R.id.stationInformationDetailFragment).savedStateHandle) {
+                    set("photoData", it)
+                }
+                findNavController().navigate(R.id.action_stationInformationDetailFragment_to_photoListFragment)
             }
         }
     }

@@ -3,8 +3,10 @@ package com.young.presentation.mapper
 import android.location.Location
 import com.young.domain.mapper.BaseMapper
 import com.young.domain.model.*
+import com.young.domain.model.Header
 import com.young.presentation.model.*
 import kotlinx.coroutines.flow.*
+import okhttp3.internal.filterList
 
 object DomainToUiMapper {
 
@@ -134,20 +136,26 @@ object DomainToUiMapper {
         return start.distanceTo(end).toInt()
     }
 
-    fun DomainPlatformEntrance.DomainToUi(): UiPlatformEntrance {
-        val mapper = BaseMapper<DomainPlatformEntrance, UiPlatformEntrance>()
-        val body =
-            BaseMapper<PlatformEntranceBody, com.young.presentation.model.PlatformEntranceBody>()
-        val header = BaseMapper(
-            com.young.domain.model.Header::class,
-            com.young.presentation.model.Header::class
-        )
+    fun DomainStationEntrance.DomainToUi(): UiStationEntrance {
+        val header = BaseMapper(Header::class, com.young.presentation.model.Header::class)(header)
+        val call = this.body?.groupBy { it.edMovePath }
 
-        mapper.apply {
-            register("header", header)
-            register("body", BaseMapper.setList(body))
-        }.run {
-            return this(this@DomainToUi)
-        }
+        return call?.toList()?.let {
+            val up = it.getOrNull(0)
+            val down = it.getOrNull(1)
+
+            val upBody = up?.second
+                ?.groupBy { it.stMovePath }
+                ?.toList()
+                ?.map { it.first to it.second.map { StationEntranceBody(it.imgPath , it.mvContDtl) } }
+
+            val downBody = down?.second
+                ?.groupBy { it.stMovePath }
+                ?.toList()
+                ?.map { it.first to it.second.map { StationEntranceBody(it.imgPath , it.mvContDtl) } }
+
+            UiStationEntrance(upBody , up?.first , downBody , down?.first , header)
+        } ?: UiStationEntrance(null,null,null,null,header)
+
     }
 }

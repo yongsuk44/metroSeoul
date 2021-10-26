@@ -7,8 +7,8 @@ import com.young.metro.adapter.LineLogoAdapter
 import com.young.metro.adapter.TimeTableAdapter
 import com.young.metro.ui.custom.CircleTextView
 
-@BindingAdapter("timeTableDayBoxCheckBackground")
-fun setTimeTableDayBoxCheckBackground(view : CircleTextView , check : Boolean) {
+@BindingAdapter("CircleTextViewSelectedBackground")
+fun setCircleTextViewSelectedBackground(view : CircleTextView , check : Boolean) {
     if (check) {
         view.setCustomBackgroundColor(R.color.black)
         view.setTextColor(view.resources.getColor(R.color.white , null))

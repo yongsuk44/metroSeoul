@@ -100,9 +100,9 @@ object RemoteToDataMapper {
         }
     }
 
-    fun RemotePlatformEntrance.RemoteToData() : DataPlatformEntrance {
-        val mapper = BaseMapper<RemotePlatformEntrance , DataPlatformEntrance>()
-        val bodyMapper = BaseMapper<PlatformEntranceBody , DataPlatformEntranceBody>()
+    fun RemoteStationEntrance.RemoteToData() : DataStationEntrance {
+        val mapper = BaseMapper<RemoteStationEntrance , DataStationEntrance>()
+        val bodyMapper = BaseMapper<StationEntranceBody , DataStationEntranceBody>()
         val headerMapper = BaseMapper(Header::class, DataHeader::class)
 
         return mapper.apply {

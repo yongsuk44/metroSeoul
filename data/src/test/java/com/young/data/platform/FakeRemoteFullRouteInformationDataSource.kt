@@ -3,7 +3,7 @@ package com.young.data.platform
 import com.young.data.datasource.remote.RemoteFullRouteInformationDataSource
 import com.young.data.model.DataConvenienceInformation
 import com.young.data.model.DataFullRouteInformation
-import com.young.data.model.DataPlatformEntrance
+import com.young.data.model.DataStationEntrance
 import com.young.data.model.DataRow
 import kotlinx.coroutines.flow.Flow
 
@@ -25,12 +25,12 @@ interface FakeRemoteFullRouteInformationDataSource : RemoteFullRouteInformationD
         TODO("Not yet implemented")
     }
 
-    override suspend fun getPlatformEntranceData(
+    override suspend fun getStationEntranceData(
         key: String,
         railCode: String,
         lineCd: String,
         stinCode: String
-    ): Flow<DataPlatformEntrance> {
+    ): Flow<DataStationEntrance> {
         TODO("Not yet implemented")
     }
 }
