@@ -18,6 +18,7 @@ class EntranceNumberAdapter(val vm : StationEntranceViewModel) : ListAdapter<Pai
     override fun onBindViewHolder(holder: BaseViewHolder<ItemEntranceNumberBinding>, position: Int) {
         holder.binding.vm = vm
         holder.binding.key = getItem(position).first
+        holder.binding.data = getItem(position)
     }
 }
 

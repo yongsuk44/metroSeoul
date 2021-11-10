@@ -152,7 +152,8 @@ object DomainToUiMapper {
             val downBody = down?.second
                 ?.groupBy { it.stMovePath }
                 ?.toList()
-                ?.map { it.first to it.second.map { StationEntranceBody(it.imgPath , it.mvContDtl) } }
+                ?.map {
+                    it.first to it.second.map { StationEntranceBody(it.imgPath , it.mvContDtl) } }
 
             UiStationEntrance(upBody , up?.first , downBody , down?.first , header)
         } ?: UiStationEntrance(null,null,null,null,header)

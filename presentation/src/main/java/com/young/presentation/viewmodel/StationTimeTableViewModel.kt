@@ -93,8 +93,6 @@ class StationTimeTableViewModel @ViewModelInject constructor(
                     _timeTable.value = SealedTimeTableData.Failed(it)
                 }.onStart {
                     _timeTable.value = SealedTimeTableData.Loading(true)
-                }.onCompletion {
-                    _timeTable.value = SealedTimeTableData.Loading(false)
                 }.collect {
                     _timeTable.value = SealedTimeTableData.Success(it)
                 }

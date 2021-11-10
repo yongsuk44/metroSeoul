@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.young.domain.usecase.FullRouteInformationUseCase
 import com.young.presentation.consts.BaseResult
 import com.young.presentation.consts.BaseViewModel
+import com.young.presentation.consts.Event
 import com.young.presentation.mapper.DomainToUiMapper.DomainToUi
 import com.young.presentation.model.StationEntranceBody
 import com.young.presentation.model.UiConvenienceInformation
@@ -33,13 +34,17 @@ class StationEntranceViewModel @ViewModelInject constructor(
     val stationEntranceData: LiveData<BaseResult<UiStationEntrance>>
         get() = _stationEntranceData
 
-    private val _stationEntranceNumberList = MutableLiveData<List<Pair<String,List<StationEntranceBody>>>>()
-    val stationEntranceNumberList : LiveData<List<Pair<String,List<StationEntranceBody>>>>
+    private val _stationEntranceNumberList = MutableLiveData<List<Pair<String, List<StationEntranceBody>>>>()
+    val stationEntranceNumberList: LiveData<List<Pair<String, List<StationEntranceBody>>>>
         get() = _stationEntranceNumberList
 
-    private val _photoListData = MutableLiveData<List<StationEntranceBody>>()
-    val photoListData : LiveData<List<StationEntranceBody>>
-        get() = _photoListData
+    private val _entranceGuideData = MutableLiveData<Pair<String , List<String>>>()
+    val entranceGuideData: LiveData<Pair<String , List<String>>>
+        get() = _entranceGuideData
+
+    private val _photoData = MutableLiveData<Event<String>>()
+    val photoData : LiveData<Event<String>>
+        get() = _photoData
 
     override fun getStationEntranceData(
         key: String,
@@ -50,23 +55,26 @@ class StationEntranceViewModel @ViewModelInject constructor(
         viewModelScope.launch {
             fullRouteInformationUseCase.getStationEntranceData(key, railCode, lineCd, stinCode)
                 .flatMapConcat {
-                    if (it.body.isNullOrEmpty()) throw Exception("$stinCode : 해당 코드 역에 대한 API 호출 실패")
+                    if (it.body.isNullOrEmpty()) throw NullPointerException("$stinCode : 해당 코드 역에 대한 API 호출 실패")
                     else flowOf(it)
                 }
                 .map { it.DomainToUi() }
                 .catch { _stationEntranceData.value = BaseResult.Failed(it) }
                 .onStart { _stationEntranceData.value = BaseResult.Loading(true) }
-                .onCompletion { _stationEntranceData.value = BaseResult.Loading(false) }
                 .collect { _stationEntranceData.value = BaseResult.Success(it) }
         }
     }
 
-    override fun onEntranceNumberList(item : List<Pair<String,List<StationEntranceBody>>>) {
+    override fun onEntranceNumberList(item: List<Pair<String, List<StationEntranceBody>>>) {
         _stationEntranceNumberList.value = item
     }
 
-    override fun onMovePhotoView(item : List<StationEntranceBody>) {
-        _photoListData.value = item
+    override fun onEntranceGuideView(item: Pair<String , List<StationEntranceBody>>) {
+        _entranceGuideData.value = item.second.first().image to item.second.map { it.description }
+    }
+
+    override fun onGuidePhotoMove(photoUrl: String) {
+        _photoData.value = Event(photoUrl)
     }
 
     override fun getConvenienceInformation(
@@ -82,17 +90,10 @@ class StationEntranceViewModel @ViewModelInject constructor(
                 trailCode,
                 stationCode
             )
-                .map {
-                    it.DomainToUi()
-                }
+                .map { it.DomainToUi() }
                 .flowOn(Dispatchers.IO)
-                .catch { e ->
-                    Timber.e(e)
-                }.onCompletion {
-                    setLoadingValue(false)
-                }.collect {
-                    _convenienceInformation.value = it
-                }
+                .catch { Timber.e(it) }
+                .collect { _convenienceInformation.value = it }
         }
     }
 

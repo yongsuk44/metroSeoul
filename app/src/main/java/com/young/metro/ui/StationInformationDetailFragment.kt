@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.young.metro.BR
 import com.young.metro.R
+import com.young.metro.adapter.EntranceGuideDescriptionAdapter
 import com.young.metro.adapter.EntranceNumberAdapter
 import com.young.metro.adapter.LineLogoSelectAdapter
 import com.young.metro.adapter.TimeTableAdapter
@@ -20,9 +21,10 @@ import com.young.metro.util.recyclerViewScrollPosition
 import com.young.metro.util.waitForTransition
 import com.young.presentation.consts.BaseResult
 import com.young.presentation.consts.DayType
-import com.young.presentation.viewmodel.StationEntranceViewModel
+import com.young.presentation.consts.EventObserver
 import com.young.presentation.viewmodel.DetailStationInformationViewModel
 import com.young.presentation.viewmodel.SealedTimeTableData
+import com.young.presentation.viewmodel.StationEntranceViewModel
 import com.young.presentation.viewmodel.StationTimeTableViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -45,6 +47,7 @@ class StationInformationDetailFragment :
     private val upTimeTableAdapter by lazy { TimeTableAdapter() }
     private val downTimeTableAdapter by lazy { TimeTableAdapter() }
     private val entranceNumberAdapter by lazy { EntranceNumberAdapter(stationEntranceViewModel) }
+    private val entranceGuideDescriptionAdapter by lazy { EntranceGuideDescriptionAdapter() }
     private val args: StationInformationDetailFragmentArgs by navArgs()
 
     override fun initBinding() {
@@ -58,6 +61,7 @@ class StationInformationDetailFragment :
         viewDataBinding.stationName = args.stationName
 
         viewDataBinding.incEntrance.rvStationEntranceNumber.adapter = entranceNumberAdapter
+        viewDataBinding.incEntrance.rvStationEntranceGuideDescription.adapter = entranceGuideDescriptionAdapter
 
         viewModel.getStationData(args.stinCodes.toList())
 
@@ -114,6 +118,7 @@ class StationInformationDetailFragment :
         stationTimeTableViewModel.timeTable.observe(viewLifecycleOwner) {
             when (it) {
                 is SealedTimeTableData.Success -> {
+                    viewDataBinding.incTimetable.timeTableLoading = false
                     viewDataBinding.incTimetable.timeTableData = it.data
                     upTimeTableAdapter.submitList(it.data?.up)
                     downTimeTableAdapter.submitList(it.data?.down)
@@ -135,7 +140,7 @@ class StationInformationDetailFragment :
                 }
 
                 is SealedTimeTableData.Loading -> {
-                    viewDataBinding.incTimetable.timeTableLoading = it.loading
+                    viewDataBinding.incTimetable.timeTableLoading = true
                 }
             }
         }
@@ -147,10 +152,11 @@ class StationInformationDetailFragment :
                     showToast(getString(R.string.text_data_not_found))
                 }
                 is BaseResult.Loading -> {
-                    viewDataBinding.incEntrance.loading = it.loading
+                    viewDataBinding.incEntrance.loading = true
                 }
                 is BaseResult.Success -> {
                     viewDataBinding.incEntrance.data = it.data
+                    viewDataBinding.incEntrance.loading = false
                 }
             }
         }
@@ -158,13 +164,13 @@ class StationInformationDetailFragment :
             entranceNumberAdapter.submitList(it)
         }
 
-        stationEntranceViewModel.photoListData.observe(viewLifecycleOwner) {
-            it?.let {
-                with(findNavController().getBackStackEntry(R.id.stationInformationDetailFragment).savedStateHandle) {
-                    set("photoData", it)
-                }
-                findNavController().navigate(R.id.action_stationInformationDetailFragment_to_photoListFragment)
-            }
+        stationEntranceViewModel.entranceGuideData.observe(viewLifecycleOwner) {
+            entranceGuideDescriptionAdapter.submitList(it.second)
         }
+
+        stationEntranceViewModel.photoData.observe(viewLifecycleOwner , EventObserver {
+            val action = StationInformationDetailFragmentDirections.actionStationInformationDetailFragmentToPhotoListFragment(it)
+            findNavController().navigate(action)
+        })
     }
 }

@@ -45,7 +45,7 @@ object NetworkModule {
     const val seoulUrl = "http://openapi.seoul.go.kr:8088/"
     const val trailPortalUrl = "http://openapi.kric.go.kr/openapi/"
 
-    val NETWORK_TIME_OUT: Long = 10
+    val NETWORK_TIME_OUT: Long = 5
 
     @Provides
     @Singleton

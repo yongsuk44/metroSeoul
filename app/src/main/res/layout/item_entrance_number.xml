@@ -2,6 +2,10 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
+        <import type="kotlin.Pair"/>
+        <import type="java.util.List"/>
+        <import type="com.young.presentation.model.StationEntranceBody"/>
+
         <variable
             name="vm"
             type="com.young.presentation.viewmodel.StationEntranceViewModel" />
@@ -9,10 +13,14 @@
         <variable
             name="key"
             type="String" />
+
+        <variable
+            name="data"
+            type="Pair&lt;String,List&lt;StationEntranceBody&gt;&gt;" />
     </data>
 
     <com.young.metro.ui.custom.CircleTextView
-        android:layout_width="100dp"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         app:customBackgroundColor="@color/white"
         android:layout_marginStart="10dp"
@@ -23,6 +31,7 @@
         android:paddingBottom="5dp"
         app:cornerRadius="10dp"
         android:text="@{key}"
+        android:onClick="@{() -> vm.onEntranceGuideView(data)}"
         android:textColor="@color/black"
         android:gravity="center"/>
 </layout>

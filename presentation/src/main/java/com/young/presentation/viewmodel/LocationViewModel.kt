@@ -159,11 +159,9 @@ class LocationViewModel @ViewModelInject constructor(
                     .flowOn(Dispatchers.Default)
                     .catch { e ->
                         Timber.e(e)
-                        _failedLocationData.value = true
-                    }.onCompletion {
                         setLoadingValue(false)
-                    }
-                    .collect {
+                        _failedLocationData.value = true
+                    }.collect {
                         _zeroLocationDataList.value = it.isEmpty()
                         _stationNameAndMapXY.value = it
                     }

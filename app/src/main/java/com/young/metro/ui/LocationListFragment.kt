@@ -43,9 +43,6 @@ class LocationListFragment : BaseFragment<FragmentLocationListBinding, LocationV
     }
 
     override fun observerLiveData() {
-        viewModel.loading.observe(viewLifecycleOwner) {
-//            if (it) viewDataBinding.lottieLoading.cancelAnimation()
-        }
 
         viewModel.stationCoordinateDataSize.observe(viewLifecycleOwner) {
             it?.let {

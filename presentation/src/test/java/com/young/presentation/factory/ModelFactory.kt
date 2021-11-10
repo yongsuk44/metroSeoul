@@ -42,6 +42,10 @@ object ModelFactory {
         generateDomainHeader()
     )
 
+    fun generateDomainStationEntranceNull() = DomainStationEntrance(
+        null, generateDomainHeader()
+    )
+
     fun generateDomainHeader() = com.young.domain.model.Header(
         randomInt(), randomString(), randomString()
     )

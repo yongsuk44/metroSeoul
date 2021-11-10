@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="txt"
+            type="String" />
+    </data>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        style="@style/BlackTextViewBoldSize15"
+        android:text="@{txt}"/>
+</layout>
