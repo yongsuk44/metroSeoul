@@ -8,15 +8,12 @@ import com.young.domain.model.DomainFullRouteInformationBody
 import com.young.domain.model.DomainTrailCodeAndLineCode
 import com.young.domain.usecase.AllStationCodeUseCase
 import com.young.domain.usecase.FullRouteInformationUseCase
-import com.young.presentation.consts.BaseResult
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.consts.CustomTransformationDataMap
 import com.young.presentation.consts.Event
 import com.young.presentation.mapper.DomainToUiMapper.DomainToUi
 import com.young.presentation.model.ListRouteInformation
-import com.young.presentation.model.UiStationTimeTable
 import com.young.presentation.modelfunction.FullRouteInformationCase
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
@@ -104,6 +101,7 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
     override fun insertAllStationCodes(seoulKey: String) {
         viewModelScope.launch {
             fullRouteInformationUseCase.getAllStationCode(seoulKey)
+                .catch { Timber.e(it) }
                 .collect { allStationCodeUseCase.insert(it).single() }
         }
     }

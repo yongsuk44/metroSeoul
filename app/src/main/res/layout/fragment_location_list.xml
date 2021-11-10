@@ -87,7 +87,7 @@
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottie_loading"
-            setDataCheckVisible="@{vm.loading}"
+            setDataCheckVisible="@{vm.loading &amp;&amp; !vm.zeroLocationDataList}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:lottie_loop="true"
@@ -99,7 +99,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             style="@style/BlackTextViewMediumSize15"
-            setDataCheckVisible="@{vm.loading}"
+            setDataCheckVisible="@{vm.loading &amp;&amp; !vm.zeroLocationDataList}"
             android:layout_width="0dp"
             android:layout_margin="20dp"
             android:gravity="center"

@@ -1,11 +1,11 @@
 package com.young.data.model
 
-data class DataPlatformEntrance(
-    val body: List<DataPlatformEntranceBody>?,
+data class DataStationEntrance(
+    val body: List<DataStationEntranceBody>?,
     val header: DataHeader
 )
 
-data class DataPlatformEntranceBody(
+data class DataStationEntranceBody(
     val edMovePath: String,
     val elvtSttCd: String?,
     val elvtTpCd: String?,

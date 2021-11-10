@@ -45,11 +45,11 @@ interface TrailPorTalService {
 
     // 출입구에서 승강장까지 출입 경로
     @GET("vulnerableUserInfo/stationMovement")
-    suspend fun getPlatformEntranceData(
+    suspend fun getStationEntranceData(
         @Query("serviceKey", encoded = true) key: String,
         @Query("format") format: String,
         @Query("railOprIsttCd") trailCode: String,
         @Query("lnCd") lineCode: String,
         @Query("stinCd") stinCd: String
-    ) : RemotePlatformEntrance
+    ) : RemoteStationEntrance
 }

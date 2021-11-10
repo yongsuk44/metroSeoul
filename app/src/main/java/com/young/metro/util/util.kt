@@ -21,11 +21,8 @@ fun List<String>?.nowTimeNearList(): Int {
     val min = 1000
     val target = LocalTime.now().toSecondOfDay()
 
-    this?.find { s ->
-        abs(min) > abs(LocalTime.parse(s).toSecondOfDay() - target)
-    }.run {
-        return this@nowTimeNearList?.indexOf(this) ?: 0
-    }
+    return this?.find { s -> abs(min) > abs(LocalTime.parse(s).toSecondOfDay() - target) }
+        .let { this@nowTimeNearList?.indexOf(it) ?: 0 }
 }
 
 fun RecyclerView.recyclerViewScrollPosition(scope: LifecycleCoroutineScope, position: Int) {

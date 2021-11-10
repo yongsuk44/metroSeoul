@@ -3,9 +3,7 @@ package com.young.data.mapper
 import com.young.base.BaseMapper
 import com.young.data.model.*
 import com.young.domain.model.*
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.transform
+import kotlinx.coroutines.flow.*
 
 object DataToDomainMapper {
     fun DataLocationTrailData.DataToDomain() : DomainLocationTrailData {
@@ -69,9 +67,9 @@ object DataToDomainMapper {
         }
     }
 
-    fun DataPlatformEntrance.DataToDomain(): DomainPlatformEntrance {
-        val mapper = BaseMapper<DataPlatformEntrance, DomainPlatformEntrance>()
-        val body = BaseMapper<DataPlatformEntranceBody, DomainPlatformEntranceBody>()
+    fun DataStationEntrance.DataToDomain(): DomainStationEntrance {
+        val mapper = BaseMapper<DataStationEntrance, DomainStationEntrance>()
+        val body = BaseMapper<DataStationEntranceBody, DomainStationEntranceBody>()
         val header = BaseMapper(DataHeader::class, Header::class)
 
         mapper.apply {
@@ -136,13 +134,12 @@ object DataToDomainMapper {
         return if (SearchSTNTimeTableByIDService == null) null
         else {
             flowOf(SearchSTNTimeTableByIDService.row)
-                .transform {
+                .map {
                     it.map {
                         (it.ARRIVETIME).dropLast(3)
-                    }.run {
-                        emit(
-                            DomainStationTimeTable(this, first(), last())
-                        )
+                    }.let {
+                        val sortList = it.toSortedSet().toList()
+                        DomainStationTimeTable(sortList, sortList.first(), sortList.last())
                     }
                 }.first()
         }

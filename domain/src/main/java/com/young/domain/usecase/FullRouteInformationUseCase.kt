@@ -24,12 +24,12 @@ interface RemoteFullRouteInformationBaseUseCase {
     ): Flow<DomainConvenienceInformation>
 
     suspend fun getAllStationCode(seoulKey: String): Flow<List<DomainRow>>
-    suspend fun getPlatformEntranceData(
+    suspend fun getStationEntranceData(
         key: String,
         railCode: String,
         lineCd: String,
         stinCode: String
-    ): Flow<DomainPlatformEntrance>
+    ): Flow<DomainStationEntrance>
 }
 
 class FullRouteInformationUseCase @Inject constructor(
@@ -69,12 +69,12 @@ class FullRouteInformationUseCase @Inject constructor(
     override suspend fun getAllStationCode(seoulKey: String): Flow<List<DomainRow>> =
         remote.getAllStationCode(seoulKey)
 
-    override suspend fun getPlatformEntranceData(
+    override suspend fun getStationEntranceData(
         key: String,
         railCode: String,
         lineCd: String,
         stinCode: String
-    ): Flow<DomainPlatformEntrance> =
-        remote.getPlatformEntranceData(key, railCode, lineCd, stinCode)
+    ): Flow<DomainStationEntrance> =
+        remote.getStationEntranceData(key, railCode, lineCd, stinCode)
 
 }

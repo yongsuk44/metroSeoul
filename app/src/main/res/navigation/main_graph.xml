@@ -45,5 +45,23 @@
         <argument
             android:name="stationName"
             app:argType="string" />
+        <action
+            android:id="@+id/action_stationInformationDetailFragment_to_photoListFragment"
+            app:destination="@id/photoDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/photoDetailFragment"
+        android:name="com.young.metro.ui.PhotoDetailFragment"
+        android:label="PhotoDetailFragment"
+        tools:layout="fragment_photo_detail">
+
+        <argument
+            android:name="photoUrl"
+            app:argType="String"/>
+
     </fragment>
 </navigation>

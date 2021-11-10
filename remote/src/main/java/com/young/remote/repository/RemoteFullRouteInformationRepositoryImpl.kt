@@ -2,7 +2,7 @@ package com.young.remote.repository
 
 import com.young.data.model.DataConvenienceInformation
 import com.young.data.model.DataFullRouteInformation
-import com.young.data.model.DataPlatformEntrance
+import com.young.data.model.DataStationEntrance
 import com.young.data.model.DataRow
 import com.young.remote.api.SeoulApiService
 import com.young.remote.api.TrailPorTalService
@@ -18,13 +18,13 @@ class RemoteFullRouteInformationRepositoryImpl @Inject constructor(
     private val seoulApiService: SeoulApiService,
     private val service: TrailPorTalService
 ) : com.young.data.datasource.remote.RemoteFullRouteInformationDataSource {
-    override suspend fun getPlatformEntranceData(
+    override suspend fun getStationEntranceData(
         key: String,
         railCode: String,
         lineCd: String,
         stinCode: String
-    ): Flow<DataPlatformEntrance> = flow {
-        emit(service.getPlatformEntranceData(key, "json", railCode, lineCd, stinCode).RemoteToData())
+    ): Flow<DataStationEntrance> = flow {
+        emit(service.getStationEntranceData(key, "json", railCode, lineCd, stinCode).RemoteToData())
     }.flowOn(Dispatchers.IO)
 
     override suspend fun getStationRouteInformation(

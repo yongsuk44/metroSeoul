@@ -24,17 +24,17 @@ object ModelFactory {
         getRandomString(),
         getRandomString()
     )
-    fun generatePlatformEntranceData() = DomainPlatformEntrance(
+    fun generateStationEntranceData() = DomainStationEntrance(
         header = generateDataHeader() ,
-        body = listOf(generatePlatformEntranceBodyData() , generatePlatformEntranceBodyData())
+        body = listOf(generateStationEntranceBodyData() , generateStationEntranceBodyData())
     )
 
-    fun generateNullPlatformEntranceData() = DomainPlatformEntrance(
+    fun generateNullStationEntranceData() = DomainStationEntrance(
         header = generateDataHeader() ,
         body = null
     )
 
-    fun generatePlatformEntranceBodyData() = DomainPlatformEntranceBody(
+    fun generateStationEntranceBodyData() = DomainStationEntranceBody(
         edMovePath = getRandomString(),
         elvtSttCd = null,
         elvtTpCd = null,

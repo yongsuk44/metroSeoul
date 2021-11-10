@@ -1,11 +1,11 @@
 package com.young.remote.model
 
-data class RemotePlatformEntrance(
-    val body: List<PlatformEntranceBody>?,
+data class RemoteStationEntrance(
+    val body: List<StationEntranceBody>?,
     val header: Header
 )
 
-data class PlatformEntranceBody(
+data class StationEntranceBody(
     val edMovePath: String,
     val elvtSttCd: String?,
     val elvtTpCd: String?,

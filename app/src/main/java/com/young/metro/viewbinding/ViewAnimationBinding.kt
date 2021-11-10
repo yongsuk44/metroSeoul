@@ -72,12 +72,12 @@ fun setSpinnerArrowAnimation(view: ImageView, check: Boolean) {
 fun setDetailViewOpenAndClose(view : View , check : Boolean) {
     val anim = if (check) {
         ObjectAnimator.ofFloat(view , View.TRANSLATION_Y,-1000f , 0f).apply {
-            duration = 250
+            duration = 500
             view.visibility = View.VISIBLE
         }
     } else {
         ObjectAnimator.ofFloat(view , View.TRANSLATION_Y,0f , -1000f).apply {
-            duration = 250
+            duration = 500
             view.visibility = View.GONE
         }
     }

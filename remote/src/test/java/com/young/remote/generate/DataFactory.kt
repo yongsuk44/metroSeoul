@@ -1,8 +1,8 @@
 package com.young.remote.generate
 
 import com.young.data.model.DataHeader
-import com.young.data.model.DataPlatformEntrance
-import com.young.data.model.DataPlatformEntranceBody
+import com.young.data.model.DataStationEntrance
+import com.young.data.model.DataStationEntranceBody
 import java.util.*
 import kotlin.random.Random
 

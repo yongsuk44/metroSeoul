@@ -26,6 +26,7 @@
     <string name="transition_station_line_number">lineNumber %s</string>
     <string name="transition_station_layout">layout %s</string>
 
+    <string name="view_nothing">없음</string>
     <string name="view_station_up_time_title">올라가는 경로</string>
     <string name="view_station_down_time_title">내려가는 경로</string>
     <string name="view_station_first_time">첫차</string>

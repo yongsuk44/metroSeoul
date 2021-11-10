@@ -68,14 +68,14 @@ class FullRouteInformationImplTest {
     }
 
     @Test
-    fun `getPlatformEntranceData Success`() {
+    fun `getStationEntranceData Success`() {
         mockWebServer.enqueueResponse("EntranceData2", 200)
 
         runBlocking {
-            val api = service.getPlatformEntranceData(key, "json",railCode, lineCd, stinCode)
+            val api = service.getStationEntranceData(key, "json",railCode, lineCd, stinCode)
             api.body?.groupBy { it.edMovePath }?.forEach { it.value.forEach { println(it) } }
-//            api.body?.forEach { println(it) }
-//            println(api.RemoteToData())
+            api.body?.forEach { println(it) }
+            println(api.RemoteToData())
         }
     }
 

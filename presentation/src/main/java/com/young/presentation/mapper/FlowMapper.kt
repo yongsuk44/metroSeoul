@@ -10,17 +10,17 @@ object FlowMapper {
     fun List<Flow<DomainStationTimeTable?>>.domainStationTimeTableCombine() =
         combineTransform(this) { table ->
             emit(
-                if (table.any { it == null })
+                if (table.any { it == null }) {
                     null
-                else {
+                } else {
                     val up = table.first()!!
                     val down = table.last()!!
                     UiStationTimeTable(
                         up.body,
                         down.body,
                         up.firstTime,
-                        down.firstTime,
                         up.lastTime,
+                        down.firstTime,
                         down.lastTime
                     )
                 }
