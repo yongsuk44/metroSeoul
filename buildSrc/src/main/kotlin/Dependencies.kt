@@ -14,9 +14,9 @@ object Libraries {
     const val hilt = "com.google.dagger:hilt-android:${Versions.hiltCore}"
     const val hiltLifecycle = "androidx.hilt:hilt-lifecycle-viewmodel:${Versions.hiltAndroidX}"
     const val hiltCore = "com.google.dagger:hilt-android:${Versions.hiltCore}"
-
     const val hiltKapt = "com.google.dagger:hilt-android-compiler:${Versions.hiltCore}"
     const val hiltAndroidx = "androidx.hilt:hilt-compiler:${Versions.hiltAndroidX}"
+    const val hiltTest = "com.google.dagger:hilt-android-testing:${Versions.hiltCore}"
 
     const val gson = "com.google.code.gson:gson:${Versions.gson}"
     const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
@@ -32,6 +32,7 @@ object Libraries {
     const val coroutineTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.1"
 
     const val lottie = "com.airbnb.android:lottie:${Versions.lottie}"
+    const val photoView = "com.github.chrisbanes:PhotoView:${Versions.photoView}"
 }
 
 object AndroidX {
@@ -57,10 +58,6 @@ object AndroidX {
         "androidx.room:room-testing:${Versions.room}"
 
     const val robolectric = "org.robolectric:robolectric:4.5-alpha-3"
-}
-
-object AndroidTestImplementationList {
-
 }
 
 object Mockito {
@@ -220,6 +217,7 @@ object LibraryList {
     val Glide = arrayListOf<String>().apply {
         add(Libraries.glide)
         add(Libraries.glideCompiler)
+        add(Libraries.photoView)
     }
 
     val AndroidTestLibrary = arrayListOf<String>().apply {
@@ -234,6 +232,7 @@ object LibraryList {
         add(AndroidX.pagingTesting)
         add(AndroidX.roomTest)
         add(AndroidX.robolectric)
+        add(Libraries.hiltTest)
     }
 
     val mockitoLibrary = arrayListOf<String>().apply {

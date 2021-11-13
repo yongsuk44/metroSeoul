@@ -4,11 +4,15 @@ import com.young.presentation.model.StationEntranceBody
 
 interface StationEntranceFunction {
     fun getConvenienceInformation(key: String, lineCode: String, trailCode: String, stationCode: String)
+    /**
+     *
+     */
+    fun onEntranceGuideOpen()
 
     /**
      * 지하철 입구에서 승강장 안내하는 가이드 보기
      */
-    fun onEntranceGuideView(item: Pair<String , List<StationEntranceBody>>)
+    fun onEntranceGuideView(item: Pair<String , List<StationEntranceBody>>?)
 
     /**
      *

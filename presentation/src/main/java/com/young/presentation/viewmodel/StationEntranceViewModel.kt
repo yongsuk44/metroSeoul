@@ -46,6 +46,10 @@ class StationEntranceViewModel @ViewModelInject constructor(
     val photoData : LiveData<Event<String>>
         get() = _photoData
 
+    override fun onEntranceGuideOpen() {
+        _stationEntranceOpen.value = !stationEntranceOpen.value!!
+    }
+
     override fun getStationEntranceData(
         key: String,
         railCode: String,
@@ -69,8 +73,10 @@ class StationEntranceViewModel @ViewModelInject constructor(
         _stationEntranceNumberList.value = item
     }
 
-    override fun onEntranceGuideView(item: Pair<String , List<StationEntranceBody>>) {
-        _entranceGuideData.value = item.second.first().image to item.second.map { it.description }
+    override fun onEntranceGuideView(item: Pair<String , List<StationEntranceBody>>?) {
+        item?.let {
+            _entranceGuideData.value = item.second.first().image to item.second.map { it.description }
+        } ?: setToastMsg("해당 역이 없습니다.")
     }
 
     override fun onGuidePhotoMove(photoUrl: String) {

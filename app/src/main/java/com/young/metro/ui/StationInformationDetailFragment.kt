@@ -82,19 +82,12 @@ class StationInformationDetailFragment :
 
         viewModel.selectStationLineData.observe(viewLifecycleOwner) {
             viewModel.getStationCodeToTelData(it.stinCd)
-
-            stationEntranceViewModel.getStationEntranceData(
-                getString(R.string.trailKey),
-                it.railOprIsttCd,
-                it.lnCd,
-                it.stinCd
-            )
+            stationEntranceViewModel.getStationEntranceData(getString(R.string.trailKey), it.railOprIsttCd, it.lnCd, it.stinCd)
+            stationTimeTableViewModel.changeDayCode(DayType.WEEK)
         }
 
         viewModel.stationTelClick.observe(viewLifecycleOwner) {
-            startActivity(
-                Intent(Intent.ACTION_DIAL, Uri.parse("tel:$it"))
-            )
+            startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:$it")))
         }
 
         stationTimeTableViewModel.timeTableOpen.observe(viewLifecycleOwner) {
@@ -103,6 +96,14 @@ class StationInformationDetailFragment :
                 viewDataBinding.incTimetable.rvStationTimetableDownList.adapter = downTimeTableAdapter
 
                 stationTimeTableViewModel.changeDayCode(DayType.WEEK)
+            }
+        }
+
+        stationEntranceViewModel.stationEntranceOpen.observe(viewLifecycleOwner) {
+            if (it && viewModel.selectStationLineData.value != null) {
+                viewModel.selectStationLineData.value!!.run {
+                    stationEntranceViewModel.getStationEntranceData(getString(R.string.trailKey), railOprIsttCd, lnCd, stinCd)
+                }
             }
         }
 
