@@ -28,7 +28,7 @@ android {
         versionCode = AppConfig.versionCode
         versionName = AppConfig.versionName
 
-        testInstrumentationRunner = "com.young.metro.HiltTestRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         compileOptions {
             sourceCompatibility = JavaVersion.VERSION_1_8

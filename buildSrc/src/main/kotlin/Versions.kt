@@ -55,6 +55,7 @@ object Versions {
 
     const val flexBox = "2.0.1"
     const val lottie = "3.4.3"
+    const val photoView = "2.0.0"
 
     const val camera = "1.0.0-beta04"
     const val exoPlayer = "2.14.1"

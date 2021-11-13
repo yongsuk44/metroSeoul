@@ -1,6 +1,7 @@
 package com.young.metro.ui
 
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import com.young.metro.BR
 import com.young.metro.R
 import com.young.metro.base.BaseFragment
@@ -14,8 +15,11 @@ class PhotoDetailFragment : BaseFragment<FragmentPhotoDetailBinding , PhotoListV
     override val viewModel: PhotoListViewModel by viewModels()
     override val bindingVariable: Int = BR.vm
 
-    override fun initBinding() {
+    val args : PhotoDetailFragmentArgs by navArgs()
 
+    override fun initBinding() {
+        requireActivity()
+        viewDataBinding.url = args.photoUrl
     }
 
     override fun observerLiveData() {

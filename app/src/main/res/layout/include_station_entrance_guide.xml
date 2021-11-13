@@ -32,6 +32,7 @@
             android:id="@+id/tv_station_entrance_title"
             style="@style/BlackTextViewBoldSize18"
             android:layout_width="0dp"
+            android:onClick="@{() -> vm.onEntranceGuideOpen()}"
             android:text="@string/view_entrance_guide_title"
             app:layout_constraintEnd_toStartOf="@id/iv_station_entrance_arrow"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,6 +43,7 @@
             spinnerArrowAnimation="@{vm.stationEntranceOpen}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="@{() -> vm.onEntranceGuideOpen()}"
             app:layout_constraintBottom_toBottomOf="@id/tv_station_entrance_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_station_entrance_title"
@@ -86,23 +88,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
+            setDataCheckVisible="@{vm.stationEntranceNumberList != null}"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_station_entrance_up_title"
-            tools:listitem="@layout/item_entrance_number" />
+            tools:listitem="@layout/item_station_entrance_number" />
 
         <com.young.metro.ui.custom.CircleImageView
             android:id="@+id/iv_station_entrance_guide_img"
+            setDataCheckVisible="@{vm.entranceGuideData.second}"
             entranceGuideImage="@{vm.entranceGuideData.first}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
+            android:onClick="@{() -> vm.onGuidePhotoMove(vm.entranceGuideData.first)}"
             android:padding="10dp"
             app:cornerRadius="10dp"
-            android:onClick="@{() -> vm.onGuidePhotoMove(vm.entranceGuideData.first)}"
-            app:customBackgroundColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rv_station_entrance_number" />
@@ -111,11 +114,34 @@
             android:id="@+id/rv_station_entrance_guide_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginTop="10dp"
+            android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/iv_station_entrance_guide_img"
-            tools:listitem="@layout/item_station_entrance_guide_description"/>
+            tools:listitem="@layout/item_station_entrance_guide_description" />
+
+        <ProgressBar
+            android:id="@+id/pb_entrance_guide"
+            style="@style/BaseProgressBar"
+            setDataCheckVisible="@{loading}"
+            android:layout_margin="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_station_entrance_title" />
+
+        <androidx.constraintlayout.widget.Group
+            setDataCheckVisible="@{!loading}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="rv_station_entrance_number,rv_station_entrance_guide_description,iv_station_entrance_guide_img,tv_station_entrance_bottom_title,tv_station_entrance_up_title" />
+
+        <androidx.constraintlayout.widget.Group
+            viewOpenClose="@{vm.stationEntranceOpen}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="rv_station_entrance_number,rv_station_entrance_guide_description,iv_station_entrance_guide_img,tv_station_entrance_bottom_title,tv_station_entrance_up_title" />
+
 
     </com.young.metro.ui.custom.CustomConstraintLayout>
 </layout>
