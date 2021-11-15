@@ -54,10 +54,6 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
     val searchEditViewClick: LiveData<Event<Boolean>>
         get() = _searchEditViewClick
 
-    private val _selectPosition = MutableLiveData<Int>()
-    val selectPosition: LiveData<Int>
-        get() = _selectPosition
-
 
     override fun loadFullRouteInformation(trailKey: String) {
         viewModelScope.launch {
@@ -110,9 +106,9 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
         _searchEditViewClick.value = Event(value)
     }
 
-    override fun onStationClick(item: ListRouteInformation, position: Int) {
-        _selectPosition.value = position
+    override fun onStationClick(item: ListRouteInformation) {
         _searchActionStation.value = Event(item)
+        Timber.d("검색한 역 : $item")
     }
 
     override fun onSearchEditViewClear() {

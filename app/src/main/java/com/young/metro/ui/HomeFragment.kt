@@ -97,6 +97,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, FullRouteInformationViewM
         viewModel.searchEditViewClick.observe(viewLifecycleOwner, EventObserver {
             if (it) {
                 popup?.showAsDropDown(viewDataBinding.etStationSearch, 0, 0)
+                    ?: Timber.d("PopUp 만들지 못함")
             } else {
                 popup?.dismiss()
             }
@@ -118,7 +119,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, FullRouteInformationViewM
         viewModel.searchActionStation.observe(viewLifecycleOwner, EventObserver {
             hideSoftKeyboard(requireView())
             popup?.dismiss()
-
             findNavController().navigate(
                 HomeFragmentDirections.actionFragmentHomeToStationInformationDetailFragment(
                     it.stinCd.toTypedArray(),
@@ -141,7 +141,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, FullRouteInformationViewM
 
             popUpListBinding?.apply {
                 vm = viewModel
-                rvList.adapter = dropBoxAdapter
+                rvPopupList.adapter = dropBoxAdapter
                 trailKey = getString(R.string.trailKey)
             }.run {
                 contentView = this?.root

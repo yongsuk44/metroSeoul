@@ -1,7 +1,5 @@
 package com.young.presentation
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import com.nhaarman.mockito_kotlin.whenever
 import com.young.domain.model.DomainStationEntrance
 import com.young.domain.usecase.FullRouteInformationUseCase
@@ -18,6 +16,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.instanceOf
+import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
 import org.junit.Before
 import org.junit.Rule
@@ -30,8 +29,8 @@ import org.mockito.Mockito
 @FlowPreview
 @RunWith(JUnit4::class)
 class StationEntranceTest {
-    @get:Rule
-    var instantExecutorRule = InstantTaskExecutorRule()
+//    @get:Rule
+//    var instantExecutorRule = InstantTaskExecutorRule()
 
     @get:Rule
     var mainCoroutineRule = TestCoroutineRule()

@@ -1,27 +1,20 @@
 package com.young.presentation
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+
 import androidx.lifecycle.MutableLiveData
-import androidx.test.espresso.matcher.ViewMatchers.assertThat
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import com.young.domain.model.DomainRow
 import com.young.domain.model.DomainStationTimeTable
 import com.young.domain.usecase.AllStationCodeUseCase
 import com.young.domain.usecase.StationDataUseCase
-import com.young.presentation.consts.CustomTransformationDataMap
 import com.young.presentation.consts.DayType
 import com.young.presentation.consts.ResourceProvider
-import com.young.presentation.factory.DataFactory
 import com.young.presentation.factory.DataFactory.randomString
 import com.young.presentation.factory.ModelFactory.generateDomainRow
 import com.young.presentation.factory.ModelFactory.generateDomainStationTimeTable
-import com.young.presentation.factory.ModelFactory.generateFlowListDomainStationTimeTable
 import com.young.presentation.factory.ModelFactory.generateIndexAllRouteInformation
 import com.young.presentation.factory.ModelFactory.generateUiStationTimeTable
 import com.young.presentation.mapper.FlowMapper.domainStationTimeTableCombine
-import com.young.presentation.model.IndexAllRouteInformation
 import com.young.presentation.model.UiStationTimeTable
 import com.young.presentation.viewmodel.SealedTimeTableData
 import com.young.presentation.viewmodel.StationTimeTableViewModel
@@ -29,23 +22,18 @@ import junit.framework.Assert.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.runBlockingTest
-import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.nullValue
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.Mockito
-import org.mockito.Mockito.`when`
+import org.junit.runners.JUnit4
 import org.mockito.Mockito.mock
-import org.mockito.junit.MockitoJUnitRunner
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-@RunWith(AndroidJUnit4::class)
+@RunWith(JUnit4::class)
 class StationTimeTableViewModelTest {
 
     @get:Rule

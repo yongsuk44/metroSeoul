@@ -11,6 +11,6 @@ interface FullRouteInformationCase {
     fun insertFullRouteInformationDataAndTrailLineCode(list : List<DomainFullRouteInformationBody>)
     fun insertAllStationCodes(seoulKey : String)
     fun onSearchEditViewClick(value : Boolean)
-    fun onStationClick(item : ListRouteInformation , position : Int)
+    fun onStationClick(item : ListRouteInformation)
     fun onSearchEditViewClear()
 }

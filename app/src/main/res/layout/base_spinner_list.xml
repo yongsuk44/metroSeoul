@@ -17,7 +17,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_list"
+            android:id="@+id/rv_popup_list"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             tools:listitem="@layout/item_station_name"

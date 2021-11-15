@@ -37,5 +37,4 @@ dependencies {
 
     testImplementationList(LibraryList.mockitoLibrary)
     testImplementation(Libraries.coroutineTest)
-    testImplementationList(LibraryList.AndroidTestLibrary)
 }
