@@ -3,18 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="vm"
             type="com.young.presentation.viewmodel.FullRouteInformationViewModel" />
+
         <variable
             name="permissionVm"
             type="com.young.presentation.viewmodel.PermissionViewModel" />
+
+        <variable
+            name="trailKey"
+            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
+        android:onClick="@{() -> vm.onPopupWindowViewVisibleCheck(false)}"
         tools:context=".ui.MainActivity">
 
         <androidx.constraintlayout.widget.Guideline
@@ -29,15 +36,15 @@
             android:id="@+id/gl_top"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintGuide_percent="0.05"
-            android:orientation="horizontal"/>
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.05" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/gl_horizon_center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintGuide_percent="0.5"
-            android:orientation="vertical"/>
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/et_station_search"
@@ -45,89 +52,128 @@
             android:hint="@string/hint_main_search_station"
             android:imeOptions="actionSearch"
             android:inputType="text"
-            android:onClick="@{() -> vm.onSearchEditViewClick(true)}"
             android:text="@={vm._userSearchStationName}"
-            app:layout_constraintTop_toBottomOf="@id/gl_top"
+            app:layout_constraintEnd_toEndOf="@id/gl_end"
             app:layout_constraintStart_toStartOf="@+id/gl_start"
-            app:layout_constraintEnd_toEndOf="@id/gl_end" />
+            app:layout_constraintTop_toBottomOf="@id/gl_top" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_popup_list"
+            android:layout_width="0dp"
+            android:layout_height="300dp"
+            android:layout_marginTop="6dp"
+            setDataCheckVisible="@{vm.popupWindowVisible}"
+            android:background="@drawable/popup_background"
+            android:elevation="@dimen/defaultViewShadow"
+            android:translationY="@dimen/defaultViewShadowTansY"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="@id/et_station_search"
+            app:layout_constraintStart_toStartOf="@id/et_station_search"
+            app:layout_constraintTop_toBottomOf="@id/et_station_search"
+            tools:listitem="@layout/item_station_name" />
 
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_network_failed_icon"
+            setDataCheckVisible="@{vm.failedInformationData || vm.popupWindowVisible}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/close_circle_outline"
-            android:onClick="@{() -> vm.onSearchEditViewClear()}"
+            android:layout_marginTop="10dp"
+            android:onClick="@{() -> vm.loadFullRouteInformation(trailKey)}"
+            app:layout_constraintBottom_toTopOf="@id/tv_network_failed_txt"
+            app:layout_constraintEnd_toEndOf="@id/rv_popup_list"
+            app:layout_constraintStart_toStartOf="@id/rv_popup_list"
+            app:layout_constraintTop_toTopOf="@id/rv_popup_list"
+            app:srcCompat="@drawable/ic_sync" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_network_failed_txt"
+            style="@style/BlackTextViewMediumSize15"
+            setDataCheckVisible="@{vm.failedInformationData || vm.popupWindowVisible}"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:text="@string/txt_network_failed"
+            app:layout_constraintBottom_toBottomOf="@id/rv_popup_list"
+            app:layout_constraintEnd_toEndOf="@id/rv_popup_list"
+            app:layout_constraintStart_toStartOf="@id/rv_popup_list"
+            app:layout_constraintTop_toBottomOf="@id/iv_network_failed_icon" />
+
+        <androidx.appcompat.widget.AppCompatImageView
             setDataCheckVisible="@{vm.userSearchStationName}"
-            app:layout_constraintTop_toTopOf="@id/et_station_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:onClick="@{() -> vm.onSearchEditViewClear()}"
             app:layout_constraintBottom_toBottomOf="@id/et_station_search"
             app:layout_constraintEnd_toEndOf="@id/et_station_search"
-            android:layout_marginEnd="10dp"/>
+            app:layout_constraintTop_toTopOf="@id/et_station_search"
+            app:srcCompat="@drawable/close_circle_outline" />
 
         <com.young.metro.ui.custom.CircleImageView
             android:id="@+id/iv_main_menu_line_background"
             android:layout_width="0dp"
             android:layout_height="150dp"
-            android:layout_marginTop="35dp"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="35dp"
             android:layout_marginEnd="10dp"
             app:cornerRadius="20dp"
             app:customBackgroundColor="@color/colorGray"
-            app:layout_constraintTop_toBottomOf="@id/et_station_search"
+            app:layout_constraintEnd_toEndOf="@id/gl_horizon_center"
             app:layout_constraintStart_toStartOf="@id/gl_start"
-            app:layout_constraintEnd_toEndOf="@id/gl_horizon_center"/>
+            app:layout_constraintTop_toBottomOf="@id/et_station_search" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_main_menu_line_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_train_white"
             android:layout_marginTop="20dp"
-            app:layout_constraintTop_toTopOf="@id/iv_main_menu_line_background"
+            app:layout_constraintEnd_toEndOf="@id/iv_main_menu_line_background"
             app:layout_constraintStart_toStartOf="@id/iv_main_menu_line_background"
-            app:layout_constraintEnd_toEndOf="@id/iv_main_menu_line_background"/>
+            app:layout_constraintTop_toTopOf="@id/iv_main_menu_line_background"
+            app:srcCompat="@drawable/ic_train_white" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_main_menu_line_txt"
             style="@style/WhiteTextViewMediumSize14"
             android:gravity="center"
             android:text="@string/main_menu_line_title_txt"
-            app:layout_constraintTop_toBottomOf="@id/iv_main_menu_line_icon"
             app:layout_constraintBottom_toBottomOf="@id/iv_main_menu_line_background"
+            app:layout_constraintEnd_toEndOf="@id/iv_main_menu_line_background"
             app:layout_constraintStart_toStartOf="@id/iv_main_menu_line_background"
-            app:layout_constraintEnd_toEndOf="@id/iv_main_menu_line_background"/>
+            app:layout_constraintTop_toBottomOf="@id/iv_main_menu_line_icon" />
 
         <com.young.metro.ui.custom.CircleImageView
             android:id="@+id/iv_main_menu_location_background"
             android:layout_width="0dp"
             android:layout_height="150dp"
-            android:layout_marginTop="35dp"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="35dp"
             android:layout_marginEnd="10dp"
-            app:cornerRadius="20dp"
             android:onClick="@{() -> permissionVm.onLocationSearchClick()}"
+            app:cornerRadius="20dp"
             app:customBackgroundColor="@color/colorGray"
-            app:layout_constraintTop_toBottomOf="@id/et_station_search"
+            app:layout_constraintEnd_toEndOf="@id/gl_end"
             app:layout_constraintStart_toStartOf="@id/gl_horizon_center"
-            app:layout_constraintEnd_toEndOf="@id/gl_end"/>
+            app:layout_constraintTop_toBottomOf="@id/et_station_search" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_main_menu_location_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_location_white"
             android:layout_marginTop="20dp"
-            app:layout_constraintTop_toTopOf="@id/iv_main_menu_location_background"
+            app:layout_constraintEnd_toEndOf="@id/iv_main_menu_location_background"
             app:layout_constraintStart_toStartOf="@id/iv_main_menu_location_background"
-            app:layout_constraintEnd_toEndOf="@id/iv_main_menu_location_background"/>
+            app:layout_constraintTop_toTopOf="@id/iv_main_menu_location_background"
+            app:srcCompat="@drawable/ic_location_white" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_main_menu_location_txt"
             style="@style/WhiteTextViewMediumSize14"
             android:gravity="center"
             android:text="@string/main_menu_location_title_txt"
-            app:layout_constraintTop_toBottomOf="@id/iv_main_menu_location_icon"
             app:layout_constraintBottom_toBottomOf="@id/iv_main_menu_location_background"
+            app:layout_constraintEnd_toEndOf="@id/iv_main_menu_location_background"
             app:layout_constraintStart_toStartOf="@id/iv_main_menu_location_background"
-            app:layout_constraintEnd_toEndOf="@id/iv_main_menu_location_background"/>
+            app:layout_constraintTop_toBottomOf="@id/iv_main_menu_location_icon" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

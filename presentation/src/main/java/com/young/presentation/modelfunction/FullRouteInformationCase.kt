@@ -13,4 +13,5 @@ interface FullRouteInformationCase {
     fun onSearchEditViewClick(value : Boolean)
     fun onStationClick(item : ListRouteInformation)
     fun onSearchEditViewClear()
+    fun onPopupWindowViewVisibleCheck(check : Boolean)
 }

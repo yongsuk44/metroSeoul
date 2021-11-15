@@ -32,6 +32,10 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
     val failedInformationData: LiveData<Boolean>
         get() = _failedInformationData
 
+    private val _popupWindowVisible = MutableLiveData(false)
+    val popupWindowVisible : LiveData<Boolean>
+        get() = _popupWindowVisible
+
     private val _fullRouteInformation = MutableLiveData<List<ListRouteInformation>>()
     val fullRouteInformation: LiveData<List<ListRouteInformation>>
         get() = _fullRouteInformation
@@ -113,5 +117,9 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
 
     override fun onSearchEditViewClear() {
         _userSearchStationName.value = ""
+    }
+
+    override fun onPopupWindowViewVisibleCheck(check: Boolean) {
+        _popupWindowVisible.value = check
     }
 }
