@@ -32,6 +32,10 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
     val failedInformationData: LiveData<Boolean>
         get() = _failedInformationData
 
+    private val _popupWindowVisible = MutableLiveData(false)
+    val popupWindowVisible : LiveData<Boolean>
+        get() = _popupWindowVisible
+
     private val _fullRouteInformation = MutableLiveData<List<ListRouteInformation>>()
     val fullRouteInformation: LiveData<List<ListRouteInformation>>
         get() = _fullRouteInformation
@@ -53,10 +57,6 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
     private val _searchEditViewClick = MutableLiveData<Event<Boolean>>()
     val searchEditViewClick: LiveData<Event<Boolean>>
         get() = _searchEditViewClick
-
-    private val _selectPosition = MutableLiveData<Int>()
-    val selectPosition: LiveData<Int>
-        get() = _selectPosition
 
 
     override fun loadFullRouteInformation(trailKey: String) {
@@ -110,12 +110,16 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
         _searchEditViewClick.value = Event(value)
     }
 
-    override fun onStationClick(item: ListRouteInformation, position: Int) {
-        _selectPosition.value = position
+    override fun onStationClick(item: ListRouteInformation) {
         _searchActionStation.value = Event(item)
+        Timber.d("검색한 역 : $item")
     }
 
     override fun onSearchEditViewClear() {
         _userSearchStationName.value = ""
+    }
+
+    override fun onPopupWindowViewVisibleCheck(check: Boolean) {
+        _popupWindowVisible.value = check
     }
 }

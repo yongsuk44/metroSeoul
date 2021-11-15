@@ -14,8 +14,6 @@ android{
         minSdkVersion(AppConfig.minSdk)
         maxSdkVersion(AppConfig.targetSdk)
         targetSdkVersion(AppConfig.targetSdk)
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     kotlinOptions {

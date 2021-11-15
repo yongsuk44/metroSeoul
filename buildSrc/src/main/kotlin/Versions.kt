@@ -48,7 +48,7 @@ object Versions {
     const val legacy = "1.0.0"
 
     const val navigation = "2.3.1"
-    const val navigationTest = "2.3.0"
+    const val navigationTest = "2.3.5"
     const val navigationArgs = "2.2.2"
 
     const val timber = "4.7.1"
@@ -60,6 +60,7 @@ object Versions {
     const val camera = "1.0.0-beta04"
     const val exoPlayer = "2.14.1"
     const val fragmentVersion = "1.4.0-alpha03"
+    const val fragmentTest = "1.2.4"
     const val viewPager = "1.0.0"
 
     const val coroutinesTest = "1.4.2"

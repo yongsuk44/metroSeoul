@@ -20,10 +20,13 @@ object Libraries {
 
     const val gson = "com.google.code.gson:gson:${Versions.gson}"
     const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
-    const val retrofitGsonConverter = "com.squareup.retrofit2:converter-gson:${Versions.retrofitGson}"
-    const val retrofitMoshiConverter = "com.squareup.retrofit2:converter-moshi:${Versions.retrofitGson}"
+    const val retrofitGsonConverter =
+        "com.squareup.retrofit2:converter-gson:${Versions.retrofitGson}"
+    const val retrofitMoshiConverter =
+        "com.squareup.retrofit2:converter-moshi:${Versions.retrofitGson}"
     const val httpLoggingInterceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.okHttp}"
-    const val retrofitRxAdapter = "com.squareup.retrofit2:adapter-rxjava2:${Versions.rxjava2Adapter}"
+    const val retrofitRxAdapter =
+        "com.squareup.retrofit2:adapter-rxjava2:${Versions.rxjava2Adapter}"
 
     const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
     const val glideCompiler = "com.github.bumptech.glide:compiler:${Versions.glide}"
@@ -56,8 +59,12 @@ object AndroidX {
         "androidx.paging:paging-common:${Versions.paging}"
     const val roomTest =
         "androidx.room:room-testing:${Versions.room}"
+    const val navigationTest =
+        "androidx.navigation:navigation-testing:${Versions.navigationTest}"
+    const val fragmentTest =
+        "androidx.fragment:fragment-testing:${Versions.fragmentTest}"
 
-    const val robolectric = "org.robolectric:robolectric:4.5-alpha-3"
+    const val robolectric = "org.robolectric:robolectric:4.5.1"
 }
 
 object Mockito {
@@ -78,10 +85,13 @@ object AndroidLibraries {
     const val appCompat = "androidx.appcompat:appcompat:${Versions.appCompat}"
     const val materialDesign = "com.google.android.material:material:${Versions.materialDesign}"
     const val coreKtx = "androidx.core:core-ktx:${Versions.coreKtx}"
-    const val constraintLayout = "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
+    const val constraintLayout =
+        "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
 
-    const val lifecycleViewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}"
-    const val lifecycleExtensions = "androidx.lifecycle:lifecycle-viewmodel-savedstate:${Versions.lifecycle}"
+    const val lifecycleViewModel =
+        "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}"
+    const val lifecycleExtensions =
+        "androidx.lifecycle:lifecycle-viewmodel-savedstate:${Versions.lifecycle}"
     const val lifecycleLiveData = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycle}"
     const val lifecycleRunTime = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycle}"
 
@@ -99,8 +109,10 @@ object AndroidLibraries {
     const val pagingJetPack = "androidx.paging:paging-compose:${Versions.pagingJetpack}"
 
     // navigation
-    const val navigationRuntimeKtx = "androidx.navigation:navigation-runtime-ktx:${Versions.navigation}"
-    const val navigationFragmentKtx = "androidx.navigation:navigation-fragment-ktx:${Versions.navigation}"
+    const val navigationRuntimeKtx =
+        "androidx.navigation:navigation-runtime-ktx:${Versions.navigation}"
+    const val navigationFragmentKtx =
+        "androidx.navigation:navigation-fragment-ktx:${Versions.navigation}"
     const val navigationUiKtx = "androidx.navigation:navigation-ui-ktx:${Versions.navigation}"
 
     // Room
@@ -136,7 +148,8 @@ object AndroidLibraries {
 }
 
 object googleCloudeService {
-    const val googleService = "com.google.android.gms:play-services-location:${Versions.googleLocationService}"
+    const val googleService =
+        "com.google.android.gms:play-services-location:${Versions.googleLocationService}"
     const val googleBom = "com.google.firebase:firebase-bom:${Versions.firebaseBom}"
     const val analytics = "com.google.firebase:firebase-analytics"
     const val database = "com.google.firebase:firebase-database-ktx"
@@ -231,7 +244,8 @@ object LibraryList {
         add(AndroidX.coreTesting)
         add(AndroidX.pagingTesting)
         add(AndroidX.roomTest)
-        add(AndroidX.robolectric)
+//        add(AndroidX.robolectric)
+        add(AndroidX.navigationTest)
         add(Libraries.hiltTest)
     }
 

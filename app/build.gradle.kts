@@ -28,7 +28,8 @@ android {
         versionCode = AppConfig.versionCode
         versionName = AppConfig.versionName
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+//        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner("com.young.metro.HiltApplicationTestRunner")
 
         compileOptions {
             sourceCompatibility = JavaVersion.VERSION_1_8
@@ -112,6 +113,8 @@ dependencies {
     implementationList(LibraryList.HiltLibraries)
     kaptList(LibraryList.HiltLibraryKapt)
 
+    kaptAndroidTest(Libraries.hiltKapt)
+    debugImplementation(AndroidX.fragmentTest)
     testImplementation(Libraries.coroutineTest)
     androidTestImplementationList(LibraryList.AndroidTestLibrary)
 }
