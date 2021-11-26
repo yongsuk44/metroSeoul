@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.consts.Event
+import timber.log.Timber
 
 interface PermissionFunction {
     fun setLocationPermissionCheck(check : Boolean)
@@ -26,5 +27,6 @@ class PermissionViewModel : BaseViewModel() , PermissionFunction {
 
     override fun onLocationSearchClick() {
        _locationSearchClick.value = Event(locationPermission.value ?: false)
+        Timber.d("현재 위치 근처에 있는 역으로 보여주는 Fragment 화면 이동")
     }
 }

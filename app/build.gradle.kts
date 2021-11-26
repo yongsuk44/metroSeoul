@@ -86,6 +86,7 @@ android {
     }
     testOptions {
         unitTests.isReturnDefaultValues = true
+        animationsDisabled = true
     }
 
 }

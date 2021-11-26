@@ -18,6 +18,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lo_home_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
@@ -159,6 +160,7 @@
             android:id="@+id/iv_main_menu_location_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="@{() -> permissionVm.onLocationSearchClick()}"
             android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="@id/iv_main_menu_location_background"
             app:layout_constraintStart_toStartOf="@id/iv_main_menu_location_background"
@@ -169,6 +171,7 @@
             android:id="@+id/tv_main_menu_location_txt"
             style="@style/WhiteTextViewMediumSize14"
             android:gravity="center"
+            android:onClick="@{() -> permissionVm.onLocationSearchClick()}"
             android:text="@string/main_menu_location_title_txt"
             app:layout_constraintBottom_toBottomOf="@id/iv_main_menu_location_background"
             app:layout_constraintEnd_toEndOf="@id/iv_main_menu_location_background"
