@@ -4,6 +4,7 @@ import android.location.Geocoder
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -19,11 +20,14 @@ import com.young.metro.databinding.FragmentLocationListBinding
 import com.young.metro.util.toTransitionGroup
 import com.young.metro.util.waitForTransition
 import com.young.presentation.consts.EventObserver
+import com.young.presentation.viewmodel.LocationCurrentViewModel
 import com.young.presentation.viewmodel.LocationViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
 
@@ -36,9 +40,12 @@ class LocationListFragment : BaseFragment<FragmentLocationListBinding, LocationV
     override val bindingVariable: Int = BR.vm
 
     private val adapter : LocationNearAdapter by lazy { LocationNearAdapter(viewModel) }
+    private val currentViewModel : LocationCurrentViewModel by viewModels()
 
     override fun initBinding() {
         getLastLocationServiceData()
+
+        viewDataBinding.ivLocationListRefresh.setOnClickListener { getLastLocationServiceData() }
         viewDataBinding.rvLocationNearStation.adapter = this@LocationListFragment.adapter
     }
 
@@ -59,6 +66,7 @@ class LocationListFragment : BaseFragment<FragmentLocationListBinding, LocationV
 
         viewModel.stationClick.observe(viewLifecycleOwner , EventObserver {
             val holderBinding = viewDataBinding.rvLocationNearStation.findViewHolderForLayoutPosition(viewModel.selectPosition.value ?: 0)?.itemView ?: return@EventObserver
+
             val extras = FragmentNavigatorExtras(
                 holderBinding.findViewById<ConstraintLayout>(R.id.lo_item_location_near_station).toTransitionGroup(),
                 holderBinding.findViewById<RecyclerView>(R.id.rv_item_location_near_line_logo).toTransitionGroup(),
@@ -81,41 +89,23 @@ class LocationListFragment : BaseFragment<FragmentLocationListBinding, LocationV
 
     private fun getLastLocationServiceData() {
         try {
-            LocationServices.getFusedLocationProviderClient(requireContext()).run {
-                lastLocation.addOnSuccessListener { location ->
-                    if (location == null) {
+            lifecycleScope.launch {
+                flow {
+                    val lastLocationTask = LocationServices.getFusedLocationProviderClient(requireContext()).lastLocation
+                    currentViewModel.setApplyCurrentLocation(lastLocationTask)
+                        .collect {
+                            emit(it)
+                        }
+                }
+                    .catch { exception ->
+                        Timber.e(exception)
                         showToast(R.string.toast_location_data_failed)
                         viewModel.setNowLocation(37.5283169,126.9294254)
-                    } else {
-                        Geocoder(requireContext(), Locale.KOREAN).getFromLocation(
-                            location.latitude,
-                            location.longitude,
-                            2
-                        )?.also { address ->
-                            when (address.size) {
-                                1 -> {
-                                    viewModel.setNowLocation(address[0].latitude, address[0].longitude)
-                                }
-
-                                2 -> {
-                                    viewModel.setNowLocation(
-                                        listOf(address[0].latitude, address[1].latitude).average(),
-                                        listOf(address[0].longitude, address[1].longitude).average()
-                                    )
-                                }
-
-                                else -> showToast(R.string.toast_location_data_failed)
-                            }
-                        }
+                    }.collect {
+                        viewModel.setNowLocation(it.first , it.second)
                     }
-                }.addOnFailureListener { e ->
-                    Timber.e(e)
-                    showToast(R.string.toast_location_data_failed)
-                }.addOnCanceledListener {
-                    showToast(R.string.toast_location_data_cancel)
-                }
             }
-        } catch (e: SecurityException) {
+        }catch (e : SecurityException) {
             Timber.e(e)
             showToast(R.string.toast_location_data_failed)
         }

@@ -86,6 +86,16 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </HorizontalScrollView>
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_location_list_refresh"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_refresh_black"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintTop_toTopOf="@id/hsv_area_radius"
+            app:layout_constraintBottom_toBottomOf="@id/hsv_area_radius"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottie_loading"
             setDataCheckVisible="@{vm.loading &amp;&amp; !vm.zeroLocationDataList}"
