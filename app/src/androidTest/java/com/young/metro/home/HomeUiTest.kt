@@ -3,7 +3,6 @@ package com.young.metro.home
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
-import androidx.test.annotation.UiThreadTest
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
@@ -13,7 +12,6 @@ import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
-import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread
 import com.young.metro.R
 import com.young.metro.base.BaseViewHolder
 import com.young.metro.databinding.ItemStationNameBinding
@@ -23,7 +21,8 @@ import com.young.metro.util.*
 import com.young.presentation.viewmodel.FullRouteInformationViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import org.hamcrest.core.Is.`is`
 import org.junit.Before
 import org.junit.Rule
@@ -42,7 +41,6 @@ class HomeUiTest {
 
     private val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
     lateinit var viewModel: FullRouteInformationViewModel
-
 
     @Before
     fun setUp() {
@@ -92,5 +90,7 @@ class HomeUiTest {
         onView(withId(R.id.tv_main_menu_location_txt)).perFormClick()
 
         assertThat(navController.currentDestination?.id, `is`(R.id.locationListFragment))
+
+        Thread.sleep(3000L)
     }
 }
