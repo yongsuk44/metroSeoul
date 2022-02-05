@@ -1,5 +1,5 @@
 import java.io.FileInputStream
-import java.util.*
+import java.util.Properties
 
 plugins {
     id(GradlePluginId.ANDROID_APP)
@@ -38,7 +38,6 @@ android {
     }
 
     buildTypes {
-
         getByName("release") {
             isMinifyEnabled = false
             isDebuggable = false

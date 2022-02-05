@@ -37,7 +37,6 @@ dependencies {
     kapt(AndroidLibraries.roomKapt)
     api(AndroidLibraries.roomRuntime)
     implementation(AndroidLibraries.roomKtx)
-    annotationProcessor(AndroidLibraries.roomKapt)
     androidTestImplementationList(LibraryList.AndroidTestLibrary)
     testImplementationList(LibraryList.AndroidTestLibrary)
 }

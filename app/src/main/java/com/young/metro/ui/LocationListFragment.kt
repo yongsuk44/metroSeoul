@@ -53,6 +53,7 @@ class LocationListFragment : BaseFragment<FragmentLocationListBinding, LocationV
 
         viewModel.stationNameAndMapXY.observe(viewLifecycleOwner) {
             adapter.submitList(it)
+            viewModel.setLoadingValue(false)
             waitForTransition(viewDataBinding.rvLocationNearStation)
         }
 

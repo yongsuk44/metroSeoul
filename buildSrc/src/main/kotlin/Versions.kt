@@ -30,7 +30,7 @@ object Versions {
     const val recyclerview = "1.2.0-alpha04"
     const val recyclerviewSelection = "1.1.0-rc01"
     const val glide = "4.11.0"
-    const val room = "2.2.5"
+    const val room = "2.2.3"
     const val paging = "3.0.0-alpha11"
     const val pagingJetpack = "1.0.0-alpha04"
     const val anko = "0.10.8"
