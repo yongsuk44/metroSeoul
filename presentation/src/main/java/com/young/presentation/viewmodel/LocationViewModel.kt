@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 interface LocationViewModelFunction {
-    fun setNowLocation(latitude: Double, longitude: Double)
+    fun setNowLocation(latitude: Double?, longitude: Double?)
     fun loadAddressDataSize()
     fun insertAllStationNameAndMapXYData(items: List<UiStationNameAndMapXY>)
     fun getLocationNearStationList(areaKm: Double)
@@ -83,13 +83,11 @@ class LocationViewModel @ViewModelInject constructor(
         saveInstance.set("locationRadius", data)
     }
 
-    override fun setNowLocation(latitude: Double, longitude: Double) {
-        _nowLocationLatitude.value = latitude
-        _nowLocationLongitude.value = longitude
+    override fun setNowLocation(latitude: Double?, longitude: Double?) {
+        _nowLocationLatitude.value = latitude ?: return setToastMsg(provider.getString(R.string.toast_location_data_failed))
+        _nowLocationLongitude.value = longitude ?: return setToastMsg(provider.getString(R.string.toast_location_data_failed))
 
-        if (nowLocationLongitude.value != null && nowLocationLatitude.value != null) {
-            loadAddressDataSize()
-        }
+        loadAddressDataSize()
     }
 
     override fun loadAddressDataSize() {
