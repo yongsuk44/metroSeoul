@@ -134,7 +134,7 @@ class LocationViewModel @ViewModelInject constructor(
         viewModelScope.launch(handler) {
             flowOf(items)
                 .map { it.map { it.UiToDomain() } }
-                .flatMapConcat { flowOf(useCase.insertStationCoordinateData(it)).flowOn(Dispatchers.IO) }
+                .flatMapConcat { useCase.insertStationCoordinateData(it) }
                 .collect { _locationRadiusData.value = 3.0 }
         }
     }
