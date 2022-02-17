@@ -75,6 +75,8 @@ object Mockito {
     const val mockitoKotlin =
         "com.nhaarman:mockito-kotlin:${Versions.mockitoKotlin}"
 
+    const val mockkCore = "io.mockk:mockk:1.9.3"
+
     const val mockWebServer = "com.squareup.okhttp3:mockwebserver:${Versions.mockWebserver}"
 }
 
@@ -254,6 +256,7 @@ object LibraryList {
         add(Mockito.mockitoInline)
         add(Mockito.mockitoKotlin)
         add(Mockito.mockWebServer)
+        add(Mockito.mockkCore)
     }
 }
 

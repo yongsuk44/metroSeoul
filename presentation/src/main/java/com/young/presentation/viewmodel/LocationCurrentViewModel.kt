@@ -7,13 +7,10 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.tasks.Task
 import com.young.presentation.consts.BaseViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.sendBlocking
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -21,7 +18,7 @@ class LocationCurrentViewModel @ViewModelInject constructor(
     private val geocoder: Geocoder
 ) : BaseViewModel() {
 
-    fun getGoogleServiceLastLocation(task: Task<Location>) =
+    suspend fun getGoogleServiceLastLocation(task: Task<Location>) =
         callbackFlow<Location> {
             task.addOnSuccessListener { sendBlocking(it) }
                 .addOnFailureListener { close(NullPointerException("Last Location onFailureListener"))  }
@@ -29,7 +26,7 @@ class LocationCurrentViewModel @ViewModelInject constructor(
             awaitClose()
         }
 
-    fun getAddressGroup(task: Task<Location>) =
+    suspend fun getAddressGroup(task: Task<Location>) =
         getGoogleServiceLastLocation(task)
             .transform { location ->
                 geocoder.getFromLocation(location.latitude, location.longitude, 2)
@@ -38,7 +35,7 @@ class LocationCurrentViewModel @ViewModelInject constructor(
                     } ?: throw NullPointerException("GeoCoder 경로 값을 가져오지 못함")
             }
 
-    fun setApplyCurrentLocation(task: Task<Location>): Flow<Pair<Double, Double>> =
+    suspend fun setApplyCurrentLocation(task: Task<Location>): Flow<Pair<Double, Double>> =
         getAddressGroup(task).map { addressGroup ->
             when (addressGroup.size) {
                 1 -> addressGroup.first().latitude to addressGroup.first().longitude
