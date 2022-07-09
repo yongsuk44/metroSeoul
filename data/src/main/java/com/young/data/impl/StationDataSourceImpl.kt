@@ -1,21 +1,21 @@
-package com.young.data.impl.remote
+package com.young.data.impl
 
 import com.young.data.mapper.DataToDomainMapper.DataToDomain
 import com.young.domain.model.DomainStationBody
 import com.young.domain.model.DomainStationTimeTable
-import com.young.domain.repository.remote.RemoteStationDataRepository
+import com.young.domain.repository.StationDataRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class RemoteStationDataSourceImpl @Inject constructor(
-    private val dataSource: com.young.data.datasource.remote.RemoteStationDataSource
-) : RemoteStationDataRepository {
+class StationDataSourceImpl @Inject constructor(
+    private val remote: com.young.data.datasource.remote.RemoteStationDataSource
+) : StationDataRepository {
     override suspend fun getStationTelData(
         publicDataKey: String,
         stationCode: String
     ): Flow<List<DomainStationBody>?> =
-        dataSource.getStationTelData(publicDataKey, stationCode).map {
+        remote.getStationTelData(publicDataKey, stationCode).map {
             it?.map { it.DataToDomain() }
         }
 
@@ -28,7 +28,7 @@ class RemoteStationDataSourceImpl @Inject constructor(
         stationCode: String,
         updown: String
     ): Flow<DomainStationTimeTable?> =
-        dataSource.getDataStationTimeTable(key, railCode, dayCd, lineCode, stationCode ,updown).map {
+        remote.getDataStationTimeTable(key, railCode, dayCd, lineCode, stationCode, updown).map {
             it.DataToDomain(updown)
         }
 
@@ -38,7 +38,7 @@ class RemoteStationDataSourceImpl @Inject constructor(
         dayCd: String,
         stationCode: String
     ): Flow<DomainStationTimeTable?> =
-        dataSource.getDataSeoulStationTimeTable(key, updown, dayCd, stationCode).map {
+        remote.getDataSeoulStationTimeTable(key, updown, dayCd, stationCode).map {
             it.DataToDomain()
         }
 

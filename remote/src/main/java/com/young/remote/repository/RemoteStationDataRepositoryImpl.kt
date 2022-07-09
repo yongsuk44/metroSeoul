@@ -7,7 +7,7 @@ import com.young.remote.api.PublicDataOpenApiService
 import com.young.remote.api.SeoulApiService
 import com.young.remote.api.TrailPorTalService
 import com.young.remote.mapper.RemoteToDataMapper.RemoteToData
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
@@ -16,7 +16,8 @@ import javax.inject.Inject
 class RemoteStationDataRepositoryImpl @Inject constructor(
     private val publicDataPortalApiService: PublicDataOpenApiService,
     private val service: TrailPorTalService,
-    private val seoulApi: SeoulApiService
+    private val seoulApi: SeoulApiService,
+    private val dispatcher: CoroutineDispatcher
 ) : com.young.data.datasource.remote.RemoteStationDataSource {
     override suspend fun getStationTelData(
         publicDataKey: String,
@@ -29,7 +30,7 @@ class RemoteStationDataRepositoryImpl @Inject constructor(
             "json",
             stationCode
         ).RemoteToData()
-    ).flowOn(Dispatchers.IO)
+    ).flowOn(dispatcher)
 
     override suspend fun getDataStationTimeTable(
         key: String,
@@ -47,7 +48,7 @@ class RemoteStationDataRepositoryImpl @Inject constructor(
             lineCode = lineCode,
             stationCode = stationCode
         ).RemoteToData()
-    ).flowOn(Dispatchers.IO)
+    ).flowOn(dispatcher)
 
     override suspend fun getDataSeoulStationTimeTable(
         key: String,
@@ -61,5 +62,5 @@ class RemoteStationDataRepositoryImpl @Inject constructor(
             dayCode = dayCd,
             updown = updown
         ).RemoteToData()
-    ).flowOn(Dispatchers.IO)
+    ).flowOn(dispatcher)
 }

@@ -4,12 +4,9 @@ plugins {
     id(GradlePluginId.kotlinKapt)
     id(GradlePluginId.kotlinAndroidExtensions)
     id(GradlePluginId.hilt)
-
 }
 
 android{
-    compileSdkVersion(AppConfig.compileSdk)
-    buildToolsVersion(AppConfig.buildToolsVersion)
 
     kotlinOptions {
         jvmTarget = Versions.jvmTarget

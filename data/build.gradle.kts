@@ -7,14 +7,6 @@ plugins {
 }
 
 android{
-    compileSdkVersion(AppConfig.compileSdk)
-    buildToolsVersion(AppConfig.buildToolsVersion)
-
-    defaultConfig {
-        minSdkVersion(AppConfig.minSdk)
-        maxSdkVersion(AppConfig.targetSdk)
-        targetSdkVersion(AppConfig.targetSdk)
-    }
 
     kotlinOptions {
         jvmTarget = Versions.jvmTarget

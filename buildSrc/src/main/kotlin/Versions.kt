@@ -31,8 +31,7 @@ object Versions {
     const val recyclerviewSelection = "1.1.0-rc01"
     const val glide = "4.11.0"
     const val room = "2.2.3"
-    const val paging = "3.0.0-alpha11"
-    const val pagingJetpack = "1.0.0-alpha04"
+    const val paging = "3.1.1"
     const val anko = "0.10.8"
     const val jsoup = "1.11.3"
 
@@ -59,7 +58,7 @@ object Versions {
 
     const val camera = "1.0.0-beta04"
     const val exoPlayer = "2.14.1"
-    const val fragmentVersion = "1.4.0-alpha03"
+    const val fragmentVersion = "1.4.0"
     const val fragmentTest = "1.2.4"
     const val viewPager = "1.0.0"
 

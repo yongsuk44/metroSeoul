@@ -3,13 +3,13 @@ package com.young.data.platform
 import com.nhaarman.mockito_kotlin.whenever
 import com.young.data.DataFactory.getRandomString
 import com.young.data.ModelFactory
+import com.young.data.datasource.cache.CacheFullRouteInformationDataSource
 import com.young.data.datasource.remote.RemoteFullRouteInformationDataSource
-import com.young.data.impl.remote.RemoteFullRouteInformationDataSourceImpl
+import com.young.data.impl.FullRouteInformationDataSourceImpl
 import com.young.data.model.DataStationEntrance
 import com.young.domain.model.DomainStationEntrance
 import junit.framework.Assert.assertNull
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.singleOrNull
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -21,8 +21,9 @@ import org.mockito.Mockito.mock
 @RunWith(JUnit4::class)
 class StationEntranceDataTest {
 
-    private lateinit var remoteFullRouteInformationDataSourceImpl: RemoteFullRouteInformationDataSourceImpl
-    private lateinit var remoteFullRouteInformationDataSource : RemoteFullRouteInformationDataSource
+    private lateinit var fullRouteInformationDataSourceImpl: FullRouteInformationDataSourceImpl
+    private lateinit var remote: RemoteFullRouteInformationDataSource
+    private lateinit var cache: CacheFullRouteInformationDataSource
 
     var key: String = getRandomString()
     var railCode: String = getRandomString()
@@ -31,8 +32,9 @@ class StationEntranceDataTest {
 
     @Before
     fun setUp() {
-        remoteFullRouteInformationDataSource = mock(FakeRemoteFullRouteInformationDataSource::class.java)
-        remoteFullRouteInformationDataSourceImpl = RemoteFullRouteInformationDataSourceImpl(remoteFullRouteInformationDataSource)
+        remote = mock(RemoteFullRouteInformationDataSource::class.java)
+        cache = mock(CacheFullRouteInformationDataSource::class.java)
+        fullRouteInformationDataSourceImpl = FullRouteInformationDataSourceImpl(cache, remote)
     }
 
     @Test
@@ -40,7 +42,7 @@ class StationEntranceDataTest {
         runBlocking {
             stubPlatformData(ModelFactory.generateStationEntranceData())
 
-            val impl = remoteFullRouteInformationDataSourceImpl.getStationEntranceData(key, railCode, lineCd, stinCode).singleOrNull()
+            val impl = fullRouteInformationDataSourceImpl.getStationEntranceData(key, railCode, lineCd, stinCode).singleOrNull()
 
             assert(impl is DomainStationEntrance)
         }
@@ -51,19 +53,19 @@ class StationEntranceDataTest {
         runBlocking {
             stubNullPlatformData(ModelFactory.generateNullStationEntranceData())
 
-            val impl = remoteFullRouteInformationDataSourceImpl.getStationEntranceData(key, railCode, lineCd, stinCode).singleOrNull()
+            val impl = fullRouteInformationDataSourceImpl.getStationEntranceData(key, railCode, lineCd, stinCode).singleOrNull()
 
             assertNull(impl?.body)
         }
     }
 
-    suspend fun stubPlatformData(data : DataStationEntrance) {
-        whenever(remoteFullRouteInformationDataSource.getStationEntranceData(key, railCode, lineCd, stinCode))
+    suspend fun stubPlatformData(data: DataStationEntrance) {
+        whenever(remote.getStationEntranceData(key, railCode, lineCd, stinCode))
             .thenReturn(flowOf(data))
     }
 
-    suspend fun stubNullPlatformData(data : DataStationEntrance) {
-        whenever(remoteFullRouteInformationDataSource.getStationEntranceData(key, railCode, lineCd, stinCode))
+    suspend fun stubNullPlatformData(data: DataStationEntrance) {
+        whenever(remote.getStationEntranceData(key, railCode, lineCd, stinCode))
             .thenReturn(flowOf(data))
     }
 }

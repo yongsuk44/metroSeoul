@@ -106,7 +106,6 @@ object AndroidLibraries {
         "androidx.recyclerview:recyclerview-selection:${Versions.recyclerviewSelection}"
     const val paging = "androidx.paging:paging-runtime:${Versions.paging}"
     const val pagingRxjava = "androidx.paging:paging-rxjava2:${Versions.paging}"
-    const val pagingJetPack = "androidx.paging:paging-compose:${Versions.pagingJetpack}"
 
     // navigation
     const val navigationRuntimeKtx =
@@ -197,7 +196,6 @@ object LibraryList {
         add(AndroidLibraries.recyclerView)
         add(AndroidLibraries.recyclerViewTracker)
         add(AndroidLibraries.paging)
-        add(AndroidLibraries.pagingJetPack)
         add(AndroidLibraries.pagingRxjava)
     }
 

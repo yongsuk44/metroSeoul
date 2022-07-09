@@ -7,10 +7,6 @@ plugins {
 }
 
 android {
-    android {
-        compileSdkVersion(AppConfig.compileSdk)
-        buildToolsVersion(AppConfig.buildToolsVersion)
-    }
 
     kotlinOptions {
         jvmTarget = Versions.jvmTarget

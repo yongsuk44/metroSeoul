@@ -3,12 +3,10 @@ plugins {
     id(GradlePluginId.kotlinAndroid)
     id(GradlePluginId.kotlinKapt)
     id(GradlePluginId.kotlinAndroidExtensions)
+    id(GradlePluginId.hilt)
 }
 
 android{
-
-    compileSdkVersion(AppConfig.compileSdk)
-    buildToolsVersion(AppConfig.buildToolsVersion)
 
     kotlinOptions {
         jvmTarget = Versions.jvmTarget
@@ -19,6 +17,8 @@ android{
 dependencies {
     implementationList(LibraryList.appLibraries)
     api(AndroidLibraries.paging)
+    implementationList(LibraryList.HiltLibraries)
+    kaptList(LibraryList.HiltLibraryKapt)
 
     testImplementation(Libraries.coroutineAndroid)
     testImplementation(Libraries.coroutineTest)

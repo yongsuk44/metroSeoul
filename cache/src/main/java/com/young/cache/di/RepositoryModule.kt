@@ -1,5 +1,6 @@
 package com.young.cache.di
 
+import com.young.base.di.IoDispatcher
 import com.young.cache.dao.AllStationCodeDao
 import com.young.cache.dao.FullRouteInformationDao
 import com.young.cache.dao.LocationDao
@@ -12,7 +13,6 @@ import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 
 @Module
 @InstallIn(ApplicationComponent::class)
@@ -21,8 +21,9 @@ class RepositoryModule {
     @Provides
     @Reusable
     fun provideCacheSubwayRepository(
-        dao: AllStationCodeDao
-    ) : com.young.data.datasource.cache.CacheAllStationCodesDataSource = CacheAllStationCodesRepositoryImpl(dao)
+        dao: AllStationCodeDao,
+        @IoDispatcher dispatcher: CoroutineDispatcher
+    ) : com.young.data.datasource.cache.CacheAllStationCodesDataSource = CacheAllStationCodesRepositoryImpl(dao, dispatcher)
 
     @Provides
     @Reusable
@@ -34,7 +35,8 @@ class RepositoryModule {
     @Provides
     @Reusable
     fun provideCacheStationCoordinatesRepository(
-        dao: LocationDao
-    ) : com.young.data.datasource.cache.CacheStationCoordinatesDataSource = CacheStationCoordinatesRepositoryImpl(dao)
+        dao: LocationDao,
+        @IoDispatcher dispatcher: CoroutineDispatcher
+    ) : com.young.data.datasource.cache.CacheStationCoordinatesDataSource = CacheStationCoordinatesRepositoryImpl(dao, dispatcher)
 
 }

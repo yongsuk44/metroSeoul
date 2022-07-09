@@ -1,4 +1,4 @@
-package com.young.cache.di
+package com.young.base.di
 
 import javax.inject.Qualifier
 

@@ -1,11 +1,11 @@
 package com.young.domain.usecase
 
 import com.young.domain.model.DomainStationNameAndMapXY
-import com.young.domain.repository.location.CacheStationCoordinatesRepository
+import com.young.domain.repository.StationCoordinatesRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-interface CacheCoordinateBaseUseCase {
+interface CoordinateBaseUseCase {
     suspend fun insertStationCoordinateData(items : List<DomainStationNameAndMapXY>) : Flow<List<Long>>
     suspend fun getStationCoordinateAllData() : Flow<List<DomainStationNameAndMapXY>>
     suspend fun getStationCoordinateDataSize() : Flow<Int>
@@ -13,8 +13,8 @@ interface CacheCoordinateBaseUseCase {
 }
 
 class CoordinateUseCase @Inject constructor(
-    private val cache : CacheStationCoordinatesRepository
-) : CacheCoordinateBaseUseCase {
+    private val cache : StationCoordinatesRepository
+) : CoordinateBaseUseCase {
     override suspend fun insertStationCoordinateData(items: List<DomainStationNameAndMapXY>) : Flow<List<Long>> =
         cache.insertStationCoordinateData(items)
 

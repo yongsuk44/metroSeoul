@@ -1,10 +1,10 @@
-package com.young.domain.repository.remote
+package com.young.domain.repository
 
 import com.young.domain.model.DomainStationBody
 import com.young.domain.model.DomainStationTimeTable
 import kotlinx.coroutines.flow.Flow
 
-interface RemoteStationDataRepository {
+interface StationDataRepository {
     suspend fun getStationTelData(publicDataKey: String , stationCode: String) : Flow<List<DomainStationBody>?>
     suspend fun getStationTimetables(
         key :String ,
