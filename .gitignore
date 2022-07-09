@@ -58,3 +58,12 @@ local.properties
 
 *.aab
 *.apk
+
+/gradle.properties
+
+app/build
+presentation/build
+domain/build
+data/build
+cache/build
+base/build
