@@ -23,11 +23,8 @@ import com.young.presentation.consts.EventObserver
 import com.young.presentation.viewmodel.LocationCurrentViewModel
 import com.young.presentation.viewmodel.LocationViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
 
@@ -89,21 +86,16 @@ class LocationListFragment : BaseFragment<FragmentLocationListBinding, LocationV
 
     private fun getLastLocationServiceData() {
         try {
-            lifecycleScope.launch {
-                flow {
-                    val lastLocationTask = LocationServices.getFusedLocationProviderClient(requireContext()).lastLocation
-                    currentViewModel.setApplyCurrentLocation(lastLocationTask)
-                        .collect {
-                            emit(it)
-                        }
-                }
+            lifecycleScope.launch(Dispatchers.IO) {
+                val lastLocationTask = LocationServices.getFusedLocationProviderClient(requireContext()).lastLocation
+
+                currentViewModel.setApplyCurrentLocation(lastLocationTask)
                     .catch { exception ->
                         Timber.e(exception)
                         showToast(R.string.toast_location_data_failed)
                         viewModel.setNowLocation(37.5283169,126.9294254)
-                    }.collect {
-                        viewModel.setNowLocation(it.first , it.second)
                     }
+                    .collectLatest { viewModel.setNowLocation(it.first , it.second) }
             }
         }catch (e : SecurityException) {
             Timber.e(e)

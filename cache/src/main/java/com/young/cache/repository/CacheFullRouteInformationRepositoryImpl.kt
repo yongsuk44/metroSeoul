@@ -27,30 +27,29 @@ class CacheFullRouteInformationRepositoryImpl @Inject constructor(
             .map { dao.insertLineCodeAndTrailCode(it) }
             .flowOn(dispatcher)
 
-    override suspend fun getAllData(): Flow<List<DataFullRouteInformationBody>> =
-        flowOf(dao.getAllData())
-            .map { it.map { it.CacheToData() } }
-            .flowOn(dispatcher)
-
-    override suspend fun getDataSize(): Flow<Int> =
+    override suspend fun readDataSize(): Flow<Int> =
         flowOf(dao.getDataSize())
             .flowOn(dispatcher)
 
-    override suspend fun getTrailCodeAllData(): Flow<List<DataTrailCodeAndLineCode>> =
+    override suspend fun readTrailCodeAllData(): Flow<List<DataTrailCodeAndLineCode>> =
         flowOf(dao.getTrailCodeAllData())
             .map { it.map { it.CacheToData() } }
             .flowOn(dispatcher)
 
-    override suspend fun getStationData(stinCode: List<String>): Flow<List<DataFullRouteInformationBody>> =
+    override suspend fun readStationData(stinCode: List<String>): Flow<List<DataFullRouteInformationBody>> =
         flowOf(stinCode)
             .map { dao.getStationData(it) }
             .map { it.map { it.CacheToData() } }
             .flowOn(dispatcher)
 
-    override suspend fun getStationNameToFullRouteInformationData(name: String): Flow<DataFullRouteInformationBody> =
+    override suspend fun readStationNameToFullRouteInformationData(name: String): Flow<DataFullRouteInformationBody> =
         flowOf(name)
             .map { dao.getStationNameToFullRouteInformationData(it) }
             .map { it.CacheToData() }
             .flowOn(dispatcher)
 
+    override suspend fun findStationRouteInformation(key: String?): Flow<List<DataFullRouteInformationBody>> =
+        flowOf(dao.getAllData())
+            .map { it.map { it.CacheToData() } }
+            .flowOn(dispatcher)
 }

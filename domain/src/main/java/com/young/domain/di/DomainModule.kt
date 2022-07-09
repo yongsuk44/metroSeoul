@@ -1,11 +1,10 @@
 package com.young.domain.di
 
-import com.young.domain.repository.location.CacheAllStationCodesRepository
-import com.young.domain.repository.location.CacheFullRouteInformationRepository
-import com.young.domain.repository.location.CacheStationCoordinatesRepository
-import com.young.domain.repository.remote.RemoteFullRouteInformationRepository
-import com.young.domain.repository.remote.RemoteLocationRepository
-import com.young.domain.repository.remote.RemoteStationDataRepository
+import com.young.domain.repository.FullRouteInformationRepository
+import com.young.domain.repository.AllStationCodesRepository
+import com.young.domain.repository.StationCoordinatesRepository
+import com.young.domain.repository.LocationRepository
+import com.young.domain.repository.StationDataRepository
 import com.young.domain.usecase.*
 import dagger.Module
 import dagger.Provides
@@ -20,33 +19,32 @@ object DomainModule {
     @Provides
     @Reusable
     fun provideStationData(
-        cache: CacheFullRouteInformationRepository,
-        remote: RemoteStationDataRepository
-    ) = StationDataUseCase(cache, remote)
+        fullRouteInformationRepository: FullRouteInformationRepository,
+        remote: StationDataRepository
+    ) = StationDataUseCase(fullRouteInformationRepository, remote)
 
     @Provides
     @Reusable
     fun provideAllStationCodes(
-        cache : CacheAllStationCodesRepository
-    ) = AllStationCodeUseCase(cache)
+        allStationCodesRepository: AllStationCodesRepository
+    ) = AllStationCodeUseCase(allStationCodesRepository)
 
     @Provides
     @Reusable
     fun provideCoordinate(
-        cache : CacheStationCoordinatesRepository
+        cache : StationCoordinatesRepository
     ) = CoordinateUseCase(cache)
 
     @Provides
     @Reusable
     fun provideFullRouteInformation(
-        remote: RemoteFullRouteInformationRepository,
-        cache: CacheFullRouteInformationRepository
-    ) = FullRouteInformationUseCase(remote , cache)
+        repository: FullRouteInformationRepository
+    ) = FullRouteInformationUseCase(repository)
 
     @Provides
     @Reusable
     fun provideLocation(
-        remote: RemoteLocationRepository
+        remote: LocationRepository
     ) = LocationUseCase(remote)
 
 }

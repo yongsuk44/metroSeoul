@@ -6,14 +6,14 @@ import com.nhaarman.mockito_kotlin.whenever
 import com.young.domain.factory.ModelFactory.generatePublicDomainStationTimeTable
 import com.young.domain.factory.ModelFactory.generateRowData
 import com.young.domain.factory.ModelFactory.generateSeoulDomainStationTimeTable
-import com.young.domain.fake.FakeCacheFullRouteInformationRepository
 import com.young.domain.fake.FakeFindStationCodeRepository
+import com.young.domain.fake.FakeFullRouteInformationRepository
 import com.young.domain.fake.FakeStationTimeTableRepository
 import com.young.domain.model.DomainRow
 import com.young.domain.model.DomainStationTimeTable
-import com.young.domain.repository.location.CacheAllStationCodesRepository
-import com.young.domain.repository.location.CacheFullRouteInformationRepository
-import com.young.domain.repository.remote.RemoteStationDataRepository
+import com.young.domain.repository.AllStationCodesRepository
+import com.young.domain.repository.FullRouteInformationRepository
+import com.young.domain.repository.StationDataRepository
 import com.young.domain.usecase.AllStationCodeUseCase
 import com.young.domain.usecase.StationDataUseCase
 import kotlinx.coroutines.flow.flatMapConcat
@@ -31,21 +31,22 @@ import org.mockito.Mockito.mock
 @RunWith(AndroidJUnit4::class)
 class TimeTableDomainTest {
 
-    private lateinit var stationDAtaUseCase : StationDataUseCase
-    private lateinit var allStationCodeUseCase : AllStationCodeUseCase
+    private lateinit var stationDAtaUseCase: StationDataUseCase
+    private lateinit var allStationCodeUseCase: AllStationCodeUseCase
 
-    private lateinit var remoteStationTimeTableRepository: RemoteStationDataRepository
-    private lateinit var cacheFullRouteInformationRepository : CacheFullRouteInformationRepository
+    private lateinit var remoteStationTimeTableRepository: StationDataRepository
+    private lateinit var cacheFullRouteInformationRepository: FullRouteInformationRepository
 
-    private lateinit var cacheAllStationCodesRepository : CacheAllStationCodesRepository
+    private lateinit var allStationCodesRepository: AllStationCodesRepository
+
     @Before
     fun setUp() {
-        cacheAllStationCodesRepository = mock(FakeFindStationCodeRepository::class.java)
-        allStationCodeUseCase = AllStationCodeUseCase(cacheAllStationCodesRepository)
+        allStationCodesRepository = mock(FakeFindStationCodeRepository::class.java)
+        allStationCodeUseCase = AllStationCodeUseCase(allStationCodesRepository)
 
         remoteStationTimeTableRepository = mock(FakeStationTimeTableRepository::class.java)
-        cacheFullRouteInformationRepository = mock(FakeCacheFullRouteInformationRepository::class.java)
-        stationDAtaUseCase = StationDataUseCase(cacheFullRouteInformationRepository , remoteStationTimeTableRepository)
+        cacheFullRouteInformationRepository = mock(FakeFullRouteInformationRepository::class.java)
+        stationDAtaUseCase = StationDataUseCase(cacheFullRouteInformationRepository, remoteStationTimeTableRepository)
     }
 
     @Test
@@ -55,7 +56,7 @@ class TimeTableDomainTest {
             stubFindStationCode(generateRowData())
 
             // when
-            val item = cacheAllStationCodesRepository.findStationCode("code")
+            val item = allStationCodesRepository.findStationCode("code")
 
             // then
             Assert.assertNotNull(item)
@@ -70,7 +71,7 @@ class TimeTableDomainTest {
             stubFindStationCode(generateItem)
 
             // when
-            val item = cacheAllStationCodesRepository.findStationCode("code").single()
+            val item = allStationCodesRepository.findStationCode("code").single()
 
             // then
             assertThat(item, CoreMatchers.equalTo(generateItem))
@@ -101,7 +102,7 @@ class TimeTableDomainTest {
             stubStationPublicTimeTable(generatePublicDomainStationTimeTable())
 
             // when
-            val item = cacheAllStationCodesRepository.findStationCode("code")
+            val item = allStationCodesRepository.findStationCode("code")
 
             // then
             item.flatMapConcat {
@@ -132,7 +133,7 @@ class TimeTableDomainTest {
             stubStationPublicTimeTable(generatePublicDomainStationTimeTable())
 
             // when
-            val item = cacheAllStationCodesRepository.findStationCode("code")
+            val item = allStationCodesRepository.findStationCode("code")
 
             // then
             item.flatMapConcat {
@@ -155,12 +156,12 @@ class TimeTableDomainTest {
     }
 
     suspend fun stubFindStationCode(row: DomainRow) {
-        whenever(cacheAllStationCodesRepository.findStationCode("code"))
+        whenever(allStationCodesRepository.findStationCode("code"))
             .thenReturn(flowOf(row))
     }
 
     suspend fun stubFindStationCodeNull(row: DomainRow) {
-        whenever(cacheAllStationCodesRepository.findStationCode("code"))
+        whenever(allStationCodesRepository.findStationCode("code"))
             .thenReturn(flowOf(null))
     }
 

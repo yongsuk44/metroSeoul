@@ -17,11 +17,8 @@ import com.young.presentation.mapper.DomainToUiMapper.DomainToUiDistance
 import com.young.presentation.mapper.DomainToUiMapper.UiToDomain
 import com.young.presentation.model.UiStationNameAndMapXY
 import com.young.presentation.model.UiStationNameDistance
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 interface LocationViewModelFunction {
@@ -94,37 +91,30 @@ class LocationViewModel @ViewModelInject constructor(
         viewModelScope.launch(handler) {
             useCase.getStationCoordinateDataSize()
                 .flowOn(Dispatchers.IO)
+                .stateIn(this)
                 .take(1)
-                .collect {
-                    _stationCoordinateDataSize.value = it
-                }
+                .collect { _stationCoordinateDataSize.value = it }
         }
     }
 
     override fun getFireBaseMapXYData(firebase: FirebaseDatabase) {
-        viewModelScope.launch {
-            flowOf(firebase.reference.child("StationLocationData").get())
-                .flowOn(Dispatchers.IO)
-                .catch { e ->
-                    Timber.e(e)
-                    setToastMsg(provider.getString(R.string.toast_location_data_failed))
-                }
-                .collect {
-                    it.addOnSuccessListener {
-                        insertAllStationNameAndMapXYData(
-                            (it.value as List<String>).map {
-                                Gson().fromJson(it, UiStationNameAndMapXY::class.java)
-                            }
-                        )
-                    }.addOnCanceledListener {
-                        setToastMsg(provider.getString(R.string.toast_location_data_cancel))
-                    }.addOnFailureListener {
-                        Timber.e(it)
-                        setToastMsg(
-                            it.message ?: provider.getString(R.string.toast_location_data_failed)
-                        )
+        viewModelScope.launch(handler) {
+            withContext(Dispatchers.IO) {
+                firebase.reference.child("StationLocationData").get()
+                    .addOnSuccessListener { snapShot ->
+                        launch(Dispatchers.Default) {
+                            val uiStationNameAndMapXYList = (snapShot.value as List<String>).map { location -> Gson().fromJson(location, UiStationNameAndMapXY::class.java) }
+                            insertAllStationNameAndMapXYData(uiStationNameAndMapXYList)
+                        }
                     }
-                }
+                    .addOnCanceledListener {
+                        setToastMsg(provider.getString(R.string.toast_location_data_cancel))
+                    }
+                    .addOnFailureListener { exception ->
+                        Timber.e(exception)
+                        setToastMsg(exception.message ?: provider.getString(R.string.toast_location_data_failed))
+                    }
+            }
         }
     }
 
@@ -133,6 +123,7 @@ class LocationViewModel @ViewModelInject constructor(
             flowOf(items)
                 .map { it.map { it.UiToDomain() } }
                 .flatMapConcat { useCase.insertStationCoordinateData(it) }
+                .flowOn(Dispatchers.Default)
                 .collect { _locationRadiusData.value = 3.0 }
         }
     }

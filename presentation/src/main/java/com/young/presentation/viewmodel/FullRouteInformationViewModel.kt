@@ -61,14 +61,14 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
 
     override fun loadFullRouteInformation(trailKey: String) {
         viewModelScope.launch {
-            fullRouteInformationUseCase.getDataSize()
+            fullRouteInformationUseCase.readDataSize()
                 .catch {
                     Timber.e(it)
                     _failedInformationData.value = true
                 }
                 .flatMapConcat {
-                    if (it > 0) getCacheFullRouteInformation()
-                    else getRemoteFullRouteInformation(trailKey)
+                    if (it > 0) findStationRouteInformation(null)
+                    else findStationRouteInformation(trailKey)
                 }.collect {
                     _fullRouteInformation.value = it.DomainToUi()
                     insertFullRouteInformationDataAndTrailLineCode(it)
@@ -91,12 +91,8 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
         }
     }
 
-    override suspend fun getRemoteFullRouteInformation(key: String): Flow<List<DomainFullRouteInformationBody>> =
-        fullRouteInformationUseCase.getStationRouteInformation(key)
-
-    override suspend fun getCacheFullRouteInformation(): Flow<List<DomainFullRouteInformationBody>> =
-        fullRouteInformationUseCase.getAllData()
-
+    override suspend fun findStationRouteInformation(key: String?): Flow<List<DomainFullRouteInformationBody>> =
+        fullRouteInformationUseCase.findStationRouteInformation(key)
 
     override fun insertAllStationCodes(seoulKey: String) {
         viewModelScope.launch {

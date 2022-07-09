@@ -1,14 +1,10 @@
 package com.young.domain.StationEntrance
 
-import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import com.young.domain.factory.DataFactory.getRandomString
 import com.young.domain.factory.ModelFactory
-import com.young.domain.fake.FakeCacheFullRouteInformationRepository
-import com.young.domain.fake.FakeRemoteFullRouteInformationRepository
 import com.young.domain.model.DomainStationEntrance
-import com.young.domain.repository.location.CacheFullRouteInformationRepository
-import com.young.domain.repository.remote.RemoteFullRouteInformationRepository
+import com.young.domain.repository.FullRouteInformationRepository
 import com.young.domain.usecase.FullRouteInformationUseCase
 import junit.framework.Assert.assertNull
 import kotlinx.coroutines.flow.flowOf
@@ -23,9 +19,8 @@ import org.mockito.Mockito.mock
 @RunWith(JUnit4::class)
 class StationEntranceDomainTest {
 
-    private lateinit var useCase : FullRouteInformationUseCase
-    private lateinit var remote : RemoteFullRouteInformationRepository
-    private lateinit var cache : CacheFullRouteInformationRepository
+    private lateinit var useCase: FullRouteInformationUseCase
+    private lateinit var repository: FullRouteInformationRepository
 
     var key: String = getRandomString()
     var railCode: String = getRandomString()
@@ -34,9 +29,8 @@ class StationEntranceDomainTest {
 
     @Before
     fun setUp() {
-        remote = mock(FakeRemoteFullRouteInformationRepository::class.java)
-        cache = mock(FakeCacheFullRouteInformationRepository::class.java)
-        useCase = FullRouteInformationUseCase(remote, cache)
+        repository = mock(FullRouteInformationRepository::class.java)
+        useCase = FullRouteInformationUseCase(repository)
     }
 
     @Test
@@ -61,13 +55,13 @@ class StationEntranceDomainTest {
         }
     }
 
-    suspend fun stubRemoteStationEntranceDomain(data : DomainStationEntrance) {
-        whenever(remote.getStationEntranceData(key, railCode, lineCd, stinCode))
+    suspend fun stubRemoteStationEntranceDomain(data: DomainStationEntrance) {
+        whenever(repository.getStationEntranceData(key, railCode, lineCd, stinCode))
             .thenReturn(flowOf(data))
     }
 
-    suspend fun stubRemoteStationEntranceDomainNull(data : DomainStationEntrance) {
-        whenever(remote.getStationEntranceData(key, railCode, lineCd, stinCode))
+    suspend fun stubRemoteStationEntranceDomainNull(data: DomainStationEntrance) {
+        whenever(repository.getStationEntranceData(key, railCode, lineCd, stinCode))
             .thenReturn(flowOf(data))
     }
 }

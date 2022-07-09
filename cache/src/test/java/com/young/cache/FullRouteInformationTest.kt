@@ -66,7 +66,7 @@ class FullRouteInformationTest {
             println(time)
 
             assertTrue(insertReturn.all { it > 0 })
-            val allData = repo.getAllData().single()
+            val allData = repo.findStationRouteInformation(null).single()
 
             assertThat(
                 allData.first().railOprIsttCd,
@@ -92,7 +92,7 @@ class FullRouteInformationTest {
 
             repo.insertLineCodeAndTrailCode(items.map { it.CacheToData() }).single()
 
-            val allData = repo.getTrailCodeAllData().single()
+            val allData = repo.readTrailCodeAllData().single()
 
             val assertAllData = allData.map { it.lnCd to it.railOprIsttCd }
             val assertInsertData = items.map { it.lnCd to it.railOprIsttCd }
@@ -117,7 +117,7 @@ class FullRouteInformationTest {
 
             repo.insert(items.map { it.CacheToData() }).single()
 
-            val selectData = repo.getStationNameToFullRouteInformationData("테스트역1").single()
+            val selectData = repo.readStationNameToFullRouteInformationData("테스트역1").single()
 
             assertThat(selectData.stinCd, `is`(items[0].stinCd))
         }
@@ -140,7 +140,7 @@ class FullRouteInformationTest {
 
             repo.insert(items.map { it.CacheToData() }).single()
 
-            val selectData = repo.getStationData(selectCodeList).single()
+            val selectData = repo.readStationData(selectCodeList).single()
 
             assertThat(selectData.last().stinCd, IsNot.not(items.last().stinCd))
             assertThat(selectData.first().stinCd, `is`(items.first().stinCd))

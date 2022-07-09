@@ -55,6 +55,7 @@ Thumbs.db
 *.imi
 Build/
 local.properties
+keystore.properties
 
 *.aab
 *.apk

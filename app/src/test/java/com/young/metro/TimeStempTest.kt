@@ -18,8 +18,8 @@ class TimeStampTest {
     lateinit var localTime: String
     lateinit var localDay: String
 
-    @get:Rule
-    val rule = TestCoroutineRule()
+//    @get:Rule
+//    val rule = TestCoroutineRule()
 
     @Before
     fun set() {

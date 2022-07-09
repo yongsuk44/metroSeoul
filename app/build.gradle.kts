@@ -28,7 +28,6 @@ android {
         versionCode = AppConfig.versionCode
         versionName = AppConfig.versionName
 
-//        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunner("com.young.metro.HiltApplicationTestRunner")
 
         compileOptions {
@@ -69,9 +68,8 @@ android {
                 storePassword = "android"
             }
 
-            manifestPlaceholders["appName"] = "app_dev"
+            manifestPlaceholders["appName"] = "서울 지하철 테스트"
             manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher"
-
         }
     }
 
@@ -83,6 +81,7 @@ android {
         jvmTarget = Versions.jvmTarget
         languageVersion = Versions.kotlinLanguageVersion
     }
+
     testOptions {
         unitTests.isReturnDefaultValues = true
         animationsDisabled = true
@@ -116,5 +115,6 @@ dependencies {
     kaptAndroidTest(Libraries.hiltKapt)
     debugImplementation(AndroidX.fragmentTest)
     testImplementation(Libraries.coroutineTest)
+    testImplementationList(LibraryList.AndroidTestLibrary)
     androidTestImplementationList(LibraryList.AndroidTestLibrary)
 }
