@@ -13,6 +13,7 @@ plugins {
 val releaseKeystoreFile = rootProject.file("keystore.properties")
 val debugKeystoreFile = file("${projectDir}/debug.keystore")
 val properties = Properties()
+val keyProperties = Properties().apply { load(FileInputStream(rootProject.file("local.properties"))) }
 
 android {
     buildTypes {
@@ -28,9 +29,15 @@ android {
                 storePassword = properties.getProperty("storePassword")
             }
 
-            manifestPlaceholders["appName"] = "서울지하철 편의시설"
-            manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher"
+            manifestPlaceholders.apply {
+                put("appName", "서울지하철 편의시설")
+                put("appIcon", "@mipmap/ic_launcher")
+                put("cloud_key", keyProperties.getProperty("googleCloudeKey"))
+            }
 
+            buildConfigField("String", "seoulKey", keyProperties.getProperty("seoulKey"))
+            buildConfigField("String", "trailKey", keyProperties.getProperty("trailKey"))
+            buildConfigField("String", "apiKey", keyProperties.getProperty("apiKey"))
         }
 
         getByName("debug") {
@@ -47,8 +54,15 @@ android {
                 storePassword = "android"
             }
 
-            manifestPlaceholders["appName"] = "서울 지하철 테스트"
-            manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher"
+            manifestPlaceholders.apply {
+                put("appName", "서울 지하철 테스트")
+                put("appIcon", "@mipmap/ic_launcher")
+                put("cloud_key", keyProperties.getProperty("googleCloudeKey"))
+            }
+
+            buildConfigField("String", "seoulKey", keyProperties.getProperty("seoulKey"))
+            buildConfigField("String", "trailKey", keyProperties.getProperty("trailKey"))
+            buildConfigField("String", "apiKey", keyProperties.getProperty("apiKey"))
         }
     }
 

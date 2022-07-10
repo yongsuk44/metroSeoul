@@ -51,6 +51,7 @@ internal fun Project.configureBaseDependencies() = dependencies {
     kapts(*LibraryList.HiltLibraryKapt)
 
     testImplementations(Libraries.coroutineTest)
+    testImplementations(*LibraryList.AndroidTestLibrary)
     testImplementations(*LibraryList.mockitoLibrary)
 }
 

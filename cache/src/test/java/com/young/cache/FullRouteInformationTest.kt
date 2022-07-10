@@ -1,9 +1,9 @@
 package com.young.cache
 
+import android.content.Context
 import androidx.room.Room
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import com.young.cache.dao.FullRouteInformationDao
 import com.young.cache.factory.DataFactory.randomString
 import com.young.cache.factory.ModelFactory
@@ -20,11 +20,12 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 import java.io.IOException
 import java.time.LocalTime
 
 @ExperimentalCoroutinesApi
-@RunWith(AndroidJUnit4::class)
+@RunWith(JUnit4::class)
 class FullRouteInformationTest {
 
     private lateinit var dao: FullRouteInformationDao
@@ -33,7 +34,7 @@ class FullRouteInformationTest {
 
     @Before
     fun setUp() {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val context = ApplicationProvider.getApplicationContext<Context>()
         db = Room.inMemoryDatabaseBuilder(context, AppDataBase::class.java).build()
         dao = db.fullRouteInformationDao()
 
