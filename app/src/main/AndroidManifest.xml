@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.young.metro">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.young.metro">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
             android:networkSecurityConfig="@xml/network_security_config"
@@ -18,6 +19,7 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.Metro">
+
         <activity android:name=".ui.MainActivity"
                   android:exported="true"
                   android:theme="@style/AppTheme.NoActionBar">
@@ -30,11 +32,11 @@
         <service android:name="com.young.metro.service.LocationService"
                  android:exported="false"
                  android:foregroundServiceType="location"/>
-
         <meta-data
-                android:name="com.google.android.geo.API_KEY"
-                android:value="@string/google_cloude_key">
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${cloud_key}">
         </meta-data>
+
     </application>
 
 </manifest>

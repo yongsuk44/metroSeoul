@@ -9,10 +9,6 @@ android{
         jvmTarget = Versions.jvmTarget
         languageVersion = Versions.kotlinLanguageVersion
     }
-
-    testOptions {
-        unitTests.isIncludeAndroidResources = true
-    }
 }
 
 dependencies {

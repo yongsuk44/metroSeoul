@@ -1,7 +1,5 @@
 package com.young.domain.timetable
 
-import androidx.test.espresso.matcher.ViewMatchers.assertThat
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.nhaarman.mockito_kotlin.whenever
 import com.young.domain.factory.ModelFactory.generatePublicDomainStationTimeTable
 import com.young.domain.factory.ModelFactory.generateRowData
@@ -22,13 +20,15 @@ import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.singleOrNull
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 import org.mockito.Mockito.mock
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(JUnit4::class)
 class TimeTableDomainTest {
 
     private lateinit var stationDAtaUseCase: StationDataUseCase
