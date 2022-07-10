@@ -3,7 +3,7 @@ object Versions {
 
 
     const val gradlePlugin = "4.2.0"
-    const val kotlin = "1.4.21"
+    const val kotlin = "1.5.10"
 
     const val jvmTarget = "1.8"
     const val kotlinLanguageVersion = "1.4"

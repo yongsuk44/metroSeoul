@@ -1,9 +1,6 @@
 plugins {
     id(GradlePluginId.ANDROID_LIBRARY)
-    id(GradlePluginId.kotlinAndroid)
-    id(GradlePluginId.kotlinKapt)
-    id(GradlePluginId.kotlinAndroidExtensions)
-    id(GradlePluginId.hilt)
+    id(GradlePluginId.BASE_GRADLE_PLUGIN)
 }
 
 android{
@@ -22,13 +19,7 @@ dependencies {
     implementation(project(Modules.base))
     implementation(project(Modules.data))
 
-    implementation(AndroidLibraries.kotlinReflection)
-    implementationList(LibraryList.HiltLibraries)
-    kaptList(LibraryList.HiltLibraryKapt)
-
     kapt(AndroidLibraries.roomKapt)
     api(AndroidLibraries.roomRuntime)
     implementation(AndroidLibraries.roomKtx)
-    androidTestImplementationList(LibraryList.AndroidTestLibrary)
-    testImplementationList(LibraryList.AndroidTestLibrary)
 }
