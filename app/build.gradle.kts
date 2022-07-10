@@ -1,12 +1,11 @@
+import base_plugin.androidTestImplementations
+import base_plugin.implementations
 import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
     id(GradlePluginId.ANDROID_APP)
-    id(GradlePluginId.kotlinAndroid)
-    id(GradlePluginId.kotlinKapt)
-    id(GradlePluginId.kotlinAndroidExtensions)
-    id(GradlePluginId.hilt)
+    id(GradlePluginId.BASE_GRADLE_PLUGIN)
     id(GradlePluginId.googlePluginService)
     id(GradlePluginId.safeArgs)
 }
@@ -16,26 +15,6 @@ val debugKeystoreFile = file("${projectDir}/debug.keystore")
 val properties = Properties()
 
 android {
-    compileSdkVersion(AppConfig.compileSdk)
-    buildToolsVersion(AppConfig.buildToolsVersion)
-
-    defaultConfig.apply {
-        applicationId = AppConfig.id
-
-        minSdkVersion(AppConfig.minSdk)
-        targetSdkVersion(AppConfig.targetSdk)
-
-        versionCode = AppConfig.versionCode
-        versionName = AppConfig.versionName
-
-        testInstrumentationRunner("com.young.metro.HiltApplicationTestRunner")
-
-        compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_1_8
-            targetCompatibility = JavaVersion.VERSION_1_8
-        }
-    }
-
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
@@ -73,6 +52,11 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
     buildFeatures {
         dataBinding = true
     }
@@ -81,12 +65,6 @@ android {
         jvmTarget = Versions.jvmTarget
         languageVersion = Versions.kotlinLanguageVersion
     }
-
-    testOptions {
-        unitTests.isReturnDefaultValues = true
-        animationsDisabled = true
-    }
-
 }
 
 dependencies {
@@ -98,23 +76,18 @@ dependencies {
     implementation(project(Modules.cache))
 
     implementation(platform(googleCloudeService.googleBom))
-    implementationList(LibraryList.firebaseLibrary)
+    implementations(*LibraryList.firebaseLibrary)
 
     implementation(Libraries.lottie)
     implementation(AndroidLibraries.timber)
-    implementationList(LibraryList.appLibraries)
-    implementationList(LibraryList.cameraLibrary)
-    implementationList(LibraryList.exoLibrary)
-    implementationList(LibraryList.RecyclerViewLibraries)
-    implementationList(LibraryList.NavigationLibraries)
-    implementationList(LibraryList.RetrofitLibraries)
-    implementationList(LibraryList.Glide)
-    implementationList(LibraryList.HiltLibraries)
-    kaptList(LibraryList.HiltLibraryKapt)
+    implementations(*LibraryList.appLibraries)
+    implementations(*LibraryList.cameraLibrary)
+    implementations(*LibraryList.exoLibrary)
+    implementations(*LibraryList.RecyclerViewLibraries)
+    implementations(*LibraryList.NavigationLibraries)
+    implementations(*LibraryList.Glide)
 
-    kaptAndroidTest(Libraries.hiltKapt)
     debugImplementation(AndroidX.fragmentTest)
-    testImplementation(Libraries.coroutineTest)
-    testImplementationList(LibraryList.AndroidTestLibrary)
-    androidTestImplementationList(LibraryList.AndroidTestLibrary)
+    kaptAndroidTest(Libraries.hiltKapt)
+    androidTestImplementations(*LibraryList.AndroidTestLibrary)
 }
