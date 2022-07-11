@@ -1,7 +1,5 @@
 package com.young.presentation.consts
 
-import com.young.presentation.R
-
 enum class DayType(val seoul : String , val public: String) {
     WEEK("1","8") , SAT("2" , "7") , SUN("3","9");
 }

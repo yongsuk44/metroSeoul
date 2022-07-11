@@ -1,12 +1,15 @@
 package com.young.presentation.factory
 
+import com.young.domain.model.DomainRow
 import com.young.domain.model.DomainStationEntrance
 import com.young.domain.model.DomainStationEntranceBody
-import com.young.domain.model.DomainRow
 import com.young.domain.model.DomainStationTimeTable
 import com.young.presentation.factory.DataFactory.randomInt
 import com.young.presentation.factory.DataFactory.randomString
-import com.young.presentation.model.*
+import com.young.presentation.model.IndexAllRouteInformation
+import com.young.presentation.model.StationEntranceBody
+import com.young.presentation.model.UiStationEntrance
+import com.young.presentation.model.UiStationTimeTable
 import kotlinx.coroutines.flow.flowOf
 
 object ModelFactory {

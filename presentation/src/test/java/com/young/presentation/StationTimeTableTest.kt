@@ -19,8 +19,11 @@ import com.young.presentation.model.UiStationTimeTable
 import com.young.presentation.viewmodel.SealedTimeTableData
 import com.young.presentation.viewmodel.StationTimeTableViewModel
 import junit.framework.Assert.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.singleOrNull
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat

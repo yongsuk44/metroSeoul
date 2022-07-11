@@ -25,5 +25,5 @@ dependencies {
     implementation(platform(googleCloudeService.googleBom))
     implementations(*LibraryList.firebaseLibrary)
 
-    implementation(googleCloudeService.googleService)
+    implementation(googleCloudeService.googleLocationService)
 }

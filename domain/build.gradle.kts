@@ -13,4 +13,5 @@ android {
 
 dependencies {
     implementation(project(Modules.base))
+    implementation(googleCloudeService.googleLocationService)
 }
