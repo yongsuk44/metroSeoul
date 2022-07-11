@@ -4,6 +4,7 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.young.base.di.IoDispatcher
 import com.young.domain.model.DomainFullRouteInformationBody
 import com.young.domain.model.DomainTrailCodeAndLineCode
 import com.young.domain.usecase.AllStationCodeUseCase
@@ -14,6 +15,7 @@ import com.young.presentation.consts.Event
 import com.young.presentation.mapper.DomainToUiMapper.DomainToUi
 import com.young.presentation.model.ListRouteInformation
 import com.young.presentation.modelfunction.FullRouteInformationCase
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
@@ -24,6 +26,7 @@ import java.util.*
 @ExperimentalCoroutinesApi
 @FlowPreview
 class FullRouteInformationViewModel @ViewModelInject constructor(
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val fullRouteInformationUseCase: FullRouteInformationUseCase,
     private val allStationCodeUseCase: AllStationCodeUseCase
 ) : BaseViewModel(), FullRouteInformationCase {
@@ -69,7 +72,8 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
                 .flatMapConcat {
                     if (it > 0) findStationRouteInformation(null)
                     else findStationRouteInformation(trailKey)
-                }.collect {
+                }
+                .collect {
                     _fullRouteInformation.value = it.DomainToUi()
                     insertFullRouteInformationDataAndTrailLineCode(it)
                 }
@@ -95,10 +99,10 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
         fullRouteInformationUseCase.findStationRouteInformation(key)
 
     override fun insertAllStationCodes(seoulKey: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             fullRouteInformationUseCase.getAllStationCode(seoulKey)
                 .catch { Timber.e(it) }
-                .collect { allStationCodeUseCase.insert(it).single() }
+                .collect { allStationCodeUseCase.insert(it) }
         }
     }
 

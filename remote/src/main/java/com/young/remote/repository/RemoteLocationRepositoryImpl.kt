@@ -3,15 +3,12 @@ package com.young.remote.repository
 import com.young.data.model.DataLocationTrailData
 import com.young.remote.api.TrailPorTalService
 import com.young.remote.mapper.RemoteToDataMapper.RemoteData
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class RemoteLocationRepositoryImpl @Inject constructor(
-    private val service: TrailPorTalService,
-    private val dispatcher: CoroutineDispatcher
+    private val service: TrailPorTalService
 ) : com.young.data.datasource.remote.RemoteLocationDataSource {
     override suspend fun getStationAddress(
         key: String,
@@ -19,5 +16,5 @@ class RemoteLocationRepositoryImpl @Inject constructor(
         lineCode: String
     ): Flow<DataLocationTrailData> = flowOf(
         service.getStationAddressData(key, "json", trailCode, lineCode).RemoteData()
-    ).flowOn(dispatcher)
+    )
 }

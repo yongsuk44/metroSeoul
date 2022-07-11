@@ -3,25 +3,20 @@ package com.young.presentation.viewmodel
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.young.domain.model.DomainRow
-import com.young.domain.model.DomainStationTimeTable
 import com.young.domain.usecase.AllStationCodeUseCase
 import com.young.domain.usecase.StationDataUseCase
-import com.young.presentation.R
-import com.young.presentation.consts.*
+import com.young.presentation.consts.BaseViewModel
+import com.young.presentation.consts.DayType
+import com.young.presentation.consts.ResourceProvider
 import com.young.presentation.mapper.FlowMapper.domainStationTimeTableCombine
 import com.young.presentation.model.IndexAllRouteInformation
 import com.young.presentation.model.UiStationTimeTable
 import com.young.presentation.modelfunction.StationTimeTableFunction
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import timber.log.Timber
-import java.time.LocalTime
-import kotlin.math.abs
 
 sealed class SealedTimeTableData {
     data class Success(val data: UiStationTimeTable?) : SealedTimeTableData()

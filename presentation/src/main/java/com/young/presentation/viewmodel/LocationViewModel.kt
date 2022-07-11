@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson
 import com.young.domain.usecase.CoordinateUseCase
+import com.young.domain.usecase.location.UpdateLocationServiceUseCase
 import com.young.presentation.R
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.consts.Event
@@ -37,7 +38,8 @@ interface LocationViewModelFunction {
 class LocationViewModel @ViewModelInject constructor(
     private val provider: ResourceProvider,
     private val useCase: CoordinateUseCase,
-    @Assisted private val saveInstance: SavedStateHandle
+    @Assisted private val saveInstance: SavedStateHandle,
+    private val updateLocationServiceUseCase: UpdateLocationServiceUseCase
 ) : BaseViewModel(), LocationViewModelFunction {
 
     private val _locationRadiusData = MutableLiveData<Double>(saveInstance.get("locationRadius"))
@@ -75,6 +77,8 @@ class LocationViewModel @ViewModelInject constructor(
     private val _selectPosition = MutableLiveData<Int>()
     val selectPosition: LiveData<Int>
         get() = _selectPosition
+
+    fun updateLocationService() = updateLocationServiceUseCase()
 
     override fun onSaveLocationRadiusData(data: Double) {
         saveInstance.set("locationRadius", data)

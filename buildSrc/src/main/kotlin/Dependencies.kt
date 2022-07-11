@@ -145,7 +145,7 @@ object AndroidLibraries {
 }
 
 object googleCloudeService {
-    const val googleService =
+    const val googleLocationService =
         "com.google.android.gms:play-services-location:${Versions.googleLocationService}"
     const val googleBom = "com.google.firebase:firebase-bom:${Versions.firebaseBom}"
     const val analytics = "com.google.firebase:firebase-analytics"
@@ -155,7 +155,7 @@ object googleCloudeService {
 
 object LibraryList {
     val firebaseLibrary = arrayOf<String>(
-        googleCloudeService.googleService,
+        googleCloudeService.googleLocationService,
         googleCloudeService.analytics,
         googleCloudeService.database
     )
