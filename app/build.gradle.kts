@@ -89,9 +89,6 @@ dependencies {
     implementation(project(Modules.presentation))
     implementation(project(Modules.cache))
 
-    implementation(platform(googleCloudeService.googleBom))
-    implementations(*LibraryList.firebaseLibrary)
-
     implementation(Libraries.lottie)
     implementation(AndroidLibraries.timber)
     implementations(*LibraryList.appLibraries)

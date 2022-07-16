@@ -7,6 +7,7 @@ import Libraries
 import LibraryList
 import com.android.build.gradle.BaseExtension
 import org.gradle.api.Project
+import org.gradle.api.artifacts.Dependency
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
@@ -53,7 +54,13 @@ internal fun Project.configureBaseDependencies() = dependencies {
     testImplementations(Libraries.coroutineTest)
     testImplementations(*LibraryList.AndroidTestLibrary)
     testImplementations(*LibraryList.mockitoLibrary)
+
+    implementation(platform(googleCloudeService.googleBom))
+    implementations(*LibraryList.firebaseLibrary)
 }
+
+fun DependencyHandler.implementation(lib : Dependency) =
+    add("implementation", lib)
 
 fun DependencyHandler.kapts(vararg list: String) =
     list.forEach { dependency -> add("kapt", dependency) }

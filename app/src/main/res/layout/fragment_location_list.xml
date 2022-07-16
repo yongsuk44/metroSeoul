@@ -92,6 +92,7 @@
             android:layout_height="40dp"
             android:src="@drawable/ic_refresh_black"
             android:layout_marginEnd="20dp"
+            android:onClick="@{() -> vm.readUserLastLocation() }"
             app:layout_constraintTop_toTopOf="@id/hsv_area_radius"
             app:layout_constraintBottom_toBottomOf="@id/hsv_area_radius"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -145,7 +146,7 @@
             setDataCheckVisible="@{vm.zeroLocationDataList}"
             android:layout_width="90dp"
             android:layout_height="90dp"
-            android:onClick="@{() -> vm.loadAddressDataSize()}"
+            android:onClick="@{() -> vm.readUserLastLocation()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/gl_loading_top"
