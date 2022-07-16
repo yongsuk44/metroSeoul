@@ -13,18 +13,18 @@ interface CoordinateBaseUseCase {
 }
 
 class CoordinateUseCase @Inject constructor(
-    private val cache : StationCoordinatesRepository
+    private val repository : StationCoordinatesRepository
 ) : CoordinateBaseUseCase {
     override suspend fun insertStationCoordinateData(items: List<DomainStationNameAndMapXY>) : Flow<List<Long>> =
-        cache.insertStationCoordinateData(items)
+        repository.insertStationCoordinateData(items)
 
     override suspend fun getStationCoordinateAllData(): Flow<List<DomainStationNameAndMapXY>> =
-        cache.getStationCoordinateAllData()
+        repository.getStationCoordinateAllData()
 
     override suspend fun getStationCoordinateDataSize(): Flow<Int> =
-        cache.getStationCoordinateDataSize()
+        repository.getStationCoordinateDataSize()
 
     override suspend fun getLocationNearStationList(lastX : Double , lastY :Double , km : Double): Flow<List<DomainStationNameAndMapXY>> =
-        cache.getLocationNearStationList(lastX, lastY, km)
+        repository.getLocationNearStationList(lastX, lastY, km)
 
 }

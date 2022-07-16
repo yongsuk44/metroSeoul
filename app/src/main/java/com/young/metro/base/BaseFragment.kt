@@ -14,7 +14,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 
-abstract class BaseFragment<B : ViewDataBinding, V : ViewModel> : Fragment() {
+abstract class BaseFragment<B : ViewDataBinding> : Fragment() {
 
     abstract val layoutResource: Int
     lateinit var viewDataBinding: B

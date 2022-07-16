@@ -1,6 +1,8 @@
 package com.young.domain.di
 
+import android.app.Application
 import android.content.Context
+import android.location.Geocoder
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
@@ -29,4 +31,7 @@ object GoogleLocationServiceModule {
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
 
+    @Provides
+    @Reusable
+    fun provideGeoCoder(context: Application): Geocoder = Geocoder(context)
 }

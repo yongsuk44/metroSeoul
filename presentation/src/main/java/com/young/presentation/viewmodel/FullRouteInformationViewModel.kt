@@ -36,7 +36,7 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
         get() = _failedInformationData
 
     private val _popupWindowVisible = MutableLiveData(false)
-    val popupWindowVisible : LiveData<Boolean>
+    val popupWindowVisible: LiveData<Boolean>
         get() = _popupWindowVisible
 
     private val _fullRouteInformation = MutableLiveData<List<ListRouteInformation>>()
@@ -69,9 +69,12 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
                     Timber.e(it)
                     _failedInformationData.value = true
                 }
-                .flatMapConcat {
-                    if (it > 0) findStationRouteInformation(null)
-                    else findStationRouteInformation(trailKey)
+                .map { size ->
+                    if (size > 0) null
+                    else trailKey
+                }
+                .flatMapConcat { key ->
+                    fullRouteInformationUseCase.findStationRouteInformation(key)
                 }
                 .collect {
                     _fullRouteInformation.value = it.DomainToUi()
@@ -86,17 +89,18 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
                 .transform {
                     fullRouteInformationUseCase.insert(it).single()
                     emit(it)
-                }.mapLatest {
+                }
+                .map {
                     it.map { DomainTrailCodeAndLineCode(it.railOprIsttCd, it.lnCd) }
-                        .distinctBy { it.lnCd to it.railOprIsttCd }
-                }.collect {
+                }
+                .mapLatest {
+                    it.distinctBy { it.lnCd to it.railOprIsttCd }
+                }
+                .collect {
                     fullRouteInformationUseCase.insertLineCodeAndTrailCode(it).single()
                 }
         }
     }
-
-    override suspend fun findStationRouteInformation(key: String?): Flow<List<DomainFullRouteInformationBody>> =
-        fullRouteInformationUseCase.findStationRouteInformation(key)
 
     override fun insertAllStationCodes(seoulKey: String) {
         viewModelScope.launch(ioDispatcher) {

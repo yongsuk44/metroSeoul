@@ -17,8 +17,4 @@ object DiModule {
     @Provides
     @Singleton
     fun provideResourceProvider(context: Application): ResourceProvider = ResourceProvider(context)
-
-    @Provides
-    @Reusable
-    fun provideGeoCoder(context: Application): Geocoder = Geocoder(context)
 }

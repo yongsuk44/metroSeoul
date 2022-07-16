@@ -25,7 +25,7 @@ import kotlinx.coroutines.FlowPreview
 @ExperimentalCoroutinesApi
 @FlowPreview
 @AndroidEntryPoint
-class HomeFragment : BaseFragment<FragmentHomeBinding, FullRouteInformationViewModel>() {
+class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override val layoutResource: Int = R.layout.fragment_home
     override val bindingVariable: Int = BR.vm
 

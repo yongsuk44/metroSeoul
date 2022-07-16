@@ -10,6 +10,7 @@
         <entry key="app/src/main/res/drawable/line_incheon_1_svg.xml" value="0.33229166666666665" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.2966485507246377" />
         <entry key="app/src/main/res/layout/fragment_location_list.xml" value="0.19630192502532928" />
+        <entry key="app/src/main/res/layout/item_location_near_station.xml" value="0.31567028985507245" />
         <entry key="presentation/src/main/res/drawable/ic_launcher_background.xml" value="0.16979166666666667" />
       </map>
     </option>

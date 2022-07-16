@@ -21,9 +21,4 @@ dependencies {
     implementation(AndroidLibraries.lifecycleViewModel)
     implementation(AndroidLibraries.lifecycleLiveData)
     implementation(AndroidLibraries.lifecycleExtensions)
-
-    implementation(platform(googleCloudeService.googleBom))
-    implementations(*LibraryList.firebaseLibrary)
-
-    implementation(googleCloudeService.googleLocationService)
 }
