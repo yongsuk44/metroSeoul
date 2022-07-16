@@ -5,13 +5,13 @@ import com.young.domain.repository.LocationRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-interface RemoteLocationBaseUseCase {
+interface LocationBaseUseCase {
     suspend fun getStationAddress(key : String , railCdoe : String , lineCode : String) : Flow<DomainLocationTrailData>
 }
 
 class LocationUseCase @Inject constructor(
     private val remote: LocationRepository
-) : RemoteLocationBaseUseCase {
+) : LocationBaseUseCase {
 
     override suspend fun getStationAddress(
         key: String,

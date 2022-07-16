@@ -36,7 +36,7 @@ class AllStationCodeTest {
         db = Room.inMemoryDatabaseBuilder(context , AppDataBase::class.java).build()
         dao = db.allStationCodeDao()
 
-        repo = CacheAllStationCodesRepositoryImpl(dao, Dispatchers.IO)
+        repo = CacheAllStationCodesRepositoryImpl(dao)
     }
 
     @After

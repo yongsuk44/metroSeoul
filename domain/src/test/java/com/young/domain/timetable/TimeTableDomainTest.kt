@@ -35,7 +35,6 @@ class TimeTableDomainTest {
     private lateinit var allStationCodeUseCase: AllStationCodeUseCase
 
     private lateinit var remoteStationTimeTableRepository: StationDataRepository
-    private lateinit var cacheFullRouteInformationRepository: FullRouteInformationRepository
 
     private lateinit var allStationCodesRepository: AllStationCodesRepository
 
@@ -44,9 +43,7 @@ class TimeTableDomainTest {
         allStationCodesRepository = mock(FakeFindStationCodeRepository::class.java)
         allStationCodeUseCase = AllStationCodeUseCase(allStationCodesRepository)
 
-        remoteStationTimeTableRepository = mock(FakeStationTimeTableRepository::class.java)
-        cacheFullRouteInformationRepository = mock(FakeFullRouteInformationRepository::class.java)
-        stationDAtaUseCase = StationDataUseCase(cacheFullRouteInformationRepository, remoteStationTimeTableRepository)
+        stationDAtaUseCase = StationDataUseCase(mock(StationDataRepository::class.java))
     }
 
     @Test

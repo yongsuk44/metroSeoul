@@ -3,10 +3,11 @@ package com.young.domain.usecase.permission
 import android.content.Context
 import android.content.pm.PackageManager
 import com.young.base.locationPermissionList
+import javax.inject.Inject
 
-internal typealias PermissionLocationBaseUseCase = () -> Boolean
+typealias PermissionLocationBaseUseCase = () -> Boolean
 
-class PermissionLocationUseCase constructor(
+class PermissionLocationUseCase @Inject constructor(
     private val context: Context
 ) : PermissionLocationBaseUseCase {
     override fun invoke(): Boolean = locationPermissionList.all { permission ->

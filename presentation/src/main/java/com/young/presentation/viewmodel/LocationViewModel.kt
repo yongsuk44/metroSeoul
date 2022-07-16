@@ -8,9 +8,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.FirebaseDatabase
 import com.young.domain.usecase.CoordinateUseCase
-import com.young.domain.usecase.location.GetStationCoordinateDataUseCase
-import com.young.domain.usecase.location.ReadLocationServiceUseCase
-import com.young.domain.usecase.location.UpdateLocationServiceUseCase
+import com.young.domain.usecase.location.*
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.consts.Event
 import com.young.presentation.mapper.DomainToUiMapper.DomainToUiDistance
@@ -36,9 +34,9 @@ class LocationViewModel @ViewModelInject constructor(
     @Assisted private val saveInstance: SavedStateHandle,
     private val useCase: CoordinateUseCase,
     private val ioDispatcher: CoroutineDispatcher,
-    private val updateLocationServiceUseCase: UpdateLocationServiceUseCase,
-    private val readLocationServiceUseCase: ReadLocationServiceUseCase,
-    private val getStationCoordinateDataUseCase: GetStationCoordinateDataUseCase
+    private val updateLocationServiceUseCase: UpdateLocationServiceBaseUseCase,
+    private val readLocationServiceUseCase: ReadLocationServiceBaseUseCase,
+    private val getStationCoordinateDataUseCase: GetStationCoordinateDataBaseUseCase
 ) : BaseViewModel(), LocationViewModelFunction {
 
     private val _locationRadiusData = MutableStateFlow(saveInstance.get(LOCATION_RADIUS) ?: 3.0)
@@ -65,7 +63,7 @@ class LocationViewModel @ViewModelInject constructor(
     val selectPosition: LiveData<Int>
         get() = _selectPosition
 
-    fun updateLocationService() = updateLocationServiceUseCase()
+    fun updateLocationService() = updateLocationServiceUseCase.updateLocationService()
 
     override fun onStationClick(data: UiStationNameDistance, position: Int) {
         _selectPosition.value = position
@@ -80,7 +78,7 @@ class LocationViewModel @ViewModelInject constructor(
     private fun locationRadiusChange() {
         viewModelScope.launch(ioDispatcher) {
             locationRadiusData.collect { radius ->
-                readLocationServiceUseCase()
+                readLocationServiceUseCase.readLocationService()
                     .map { it.toMapper() }
                     .flatMapConcat { uiUserLocationData ->
                         getLocationNearStationList(radius , uiUserLocationData)
@@ -106,7 +104,7 @@ class LocationViewModel @ViewModelInject constructor(
                     else flowOf(true)
                 }
                 .flatMapConcat { verify ->
-                    if (verify) readLocationServiceUseCase()
+                    if (verify) readLocationServiceUseCase.readLocationService()
                     else throw NullPointerException("Station Data Error")
                 }
                 .map { it.toMapper() }

@@ -9,17 +9,16 @@ import com.young.domain.model.DomainFullRouteInformationBody
 import com.young.domain.model.DomainTrailCodeAndLineCode
 import com.young.domain.usecase.AllStationCodeUseCase
 import com.young.domain.usecase.FullRouteInformationUseCase
+import com.young.domain.usecase.information.FindStationRouteInformationUseCase
+import com.young.domain.usecase.information.InsertStationCodeUseCase
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.consts.CustomTransformationDataMap
 import com.young.presentation.consts.Event
 import com.young.presentation.mapper.DomainToUiMapper.DomainToUi
 import com.young.presentation.model.ListRouteInformation
 import com.young.presentation.modelfunction.FullRouteInformationCase
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
 
@@ -27,8 +26,8 @@ import java.util.*
 @FlowPreview
 class FullRouteInformationViewModel @ViewModelInject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    private val fullRouteInformationUseCase: FullRouteInformationUseCase,
-    private val allStationCodeUseCase: AllStationCodeUseCase
+    private val findStationRouteInformationUseCase: FindStationRouteInformationUseCase,
+    private val insertStationCodeUseCase: InsertStationCodeUseCase
 ) : BaseViewModel(), FullRouteInformationCase {
 
     private val _failedInformationData = MutableLiveData(false)
@@ -63,50 +62,24 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
 
 
     override fun loadFullRouteInformation(trailKey: String) {
-        viewModelScope.launch {
-            fullRouteInformationUseCase.readDataSize()
+        viewModelScope.launch(ioDispatcher) {
+            findStationRouteInformationUseCase.onFindStationRouteInformation(trailKey)
                 .catch {
                     Timber.e(it)
                     _failedInformationData.value = true
                 }
-                .map { size ->
-                    if (size > 0) null
-                    else trailKey
-                }
-                .flatMapConcat { key ->
-                    fullRouteInformationUseCase.findStationRouteInformation(key)
-                }
-                .collect {
-                    _fullRouteInformation.value = it.DomainToUi()
-                    insertFullRouteInformationDataAndTrailLineCode(it)
-                }
-        }
-    }
-
-    override fun insertFullRouteInformationDataAndTrailLineCode(list: List<DomainFullRouteInformationBody>) {
-        viewModelScope.launch {
-            flowOf(list)
-                .transform {
-                    fullRouteInformationUseCase.insert(it).single()
-                    emit(it)
-                }
-                .map {
-                    it.map { DomainTrailCodeAndLineCode(it.railOprIsttCd, it.lnCd) }
-                }
-                .mapLatest {
-                    it.distinctBy { it.lnCd to it.railOprIsttCd }
-                }
-                .collect {
-                    fullRouteInformationUseCase.insertLineCodeAndTrailCode(it).single()
+                .map { it.DomainToUi() }
+                .collect { list ->
+                    _fullRouteInformation.value = list
                 }
         }
     }
 
     override fun insertAllStationCodes(seoulKey: String) {
         viewModelScope.launch(ioDispatcher) {
-            fullRouteInformationUseCase.getAllStationCode(seoulKey)
+            insertStationCodeUseCase.onInsertStationCode(seoulKey)
                 .catch { Timber.e(it) }
-                .collect { allStationCodeUseCase.insert(it) }
+                .collect { }
         }
     }
 

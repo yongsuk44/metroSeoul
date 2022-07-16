@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.young.domain.model.DomainRow
 import com.young.domain.usecase.AllStationCodeUseCase
+import com.young.domain.usecase.StationDataBaseUseCase
 import com.young.domain.usecase.StationDataUseCase
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.consts.DayType
@@ -25,8 +26,7 @@ sealed class SealedTimeTableData {
 }
 
 class StationTimeTableViewModel @ViewModelInject constructor(
-    private val provider: ResourceProvider,
-    private val stationDataUseCase: StationDataUseCase,
+    private val stationDataUseCase: StationDataBaseUseCase,
     private val allStationCodeUseCase: AllStationCodeUseCase
 ) : BaseViewModel(), StationTimeTableFunction {
 

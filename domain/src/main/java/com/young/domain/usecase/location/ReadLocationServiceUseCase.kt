@@ -8,22 +8,25 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.young.base.exception.LocationPermissionException
 import com.young.domain.model.DomainUserLocationData
 import com.young.domain.model.DomainUserLocationData.Companion.fromAddressToUserLocationData
-import com.young.domain.usecase.permission.PermissionLocationUseCase
+import com.young.domain.usecase.permission.PermissionLocationBaseUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.transform
+import javax.inject.Inject
 
-internal typealias ReadLocationServiceBaseUseCase = () -> Flow<DomainUserLocationData>
+interface ReadLocationServiceBaseUseCase {
+    fun readLocationService(): Flow<DomainUserLocationData>
+}
 
-class ReadLocationServiceUseCase constructor(
+class ReadLocationServiceUseCase @Inject constructor(
     private val geocoder: Geocoder,
     private val fusedLocationProviderClient: FusedLocationProviderClient,
-    private val permissionLocationUseCase: PermissionLocationUseCase
+    private val permissionLocationUseCase: PermissionLocationBaseUseCase
 ) : ReadLocationServiceBaseUseCase {
 
     @SuppressLint("MissingPermission")
-    override fun invoke() = callbackFlow {
+    override fun readLocationService() = callbackFlow {
         when {
             permissionLocationUseCase() -> {
                 fusedLocationProviderClient.lastLocation
