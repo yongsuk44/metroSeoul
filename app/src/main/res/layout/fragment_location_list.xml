@@ -11,6 +11,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lo_location_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white">
@@ -76,8 +77,8 @@
                     android:id="@+id/tv_location_area_radius_10"
                     style="@style/LocationAreaRadiusTextView"
                     android:text="@string/location_radius_10"
-                    android:onClick="@{() -> vm.onLocationRadiusData(50.0)}"
-                    LocationRadiusClickCheck="@{vm.locationRadiusData == 50.0}"
+                    android:onClick="@{() -> vm.onLocationRadiusData(10.0)}"
+                    LocationRadiusClickCheck="@{vm.locationRadiusData == 10.0}"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/tv_location_area_radius_7"/>
@@ -85,21 +86,32 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </HorizontalScrollView>
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_location_list_refresh"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_refresh_black"
+            android:layout_marginEnd="20dp"
+            android:onClick="@{() -> vm.readUserLastLocation() }"
+            app:layout_constraintTop_toTopOf="@id/hsv_area_radius"
+            app:layout_constraintBottom_toBottomOf="@id/hsv_area_radius"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottie_loading"
-            setDataCheckVisible="@{vm.loading}"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            app:lottie_repeatCount="10"
+            setDataCheckVisible="@{vm.loading &amp;&amp; !vm.zeroLocationDataList}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:lottie_loop="true"
             app:lottie_autoPlay="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/gl_loading_top"
-            app:lottie_fileName="loading.json" />
+            app:lottie_rawRes="@raw/loading" />
 
         <androidx.appcompat.widget.AppCompatTextView
             style="@style/BlackTextViewMediumSize15"
-            setDataCheckVisible="@{vm.loading}"
+            setDataCheckVisible="@{vm.loading &amp;&amp; !vm.zeroLocationDataList}"
             android:layout_width="0dp"
             android:layout_margin="20dp"
             android:gravity="center"
@@ -134,6 +146,7 @@
             setDataCheckVisible="@{vm.zeroLocationDataList}"
             android:layout_width="90dp"
             android:layout_height="90dp"
+            android:onClick="@{() -> vm.readUserLastLocation()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/gl_loading_top"

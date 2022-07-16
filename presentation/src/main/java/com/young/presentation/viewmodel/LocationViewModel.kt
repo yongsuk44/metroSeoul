@@ -7,44 +7,40 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.FirebaseDatabase
-import com.google.gson.Gson
 import com.young.domain.usecase.CoordinateUseCase
-import com.young.presentation.R
+import com.young.domain.usecase.location.*
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.consts.Event
-import com.young.presentation.consts.ResourceProvider
 import com.young.presentation.mapper.DomainToUiMapper.DomainToUiDistance
-import com.young.presentation.mapper.DomainToUiMapper.UiToDomain
-import com.young.presentation.model.UiStationNameAndMapXY
 import com.young.presentation.model.UiStationNameDistance
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
+import com.young.presentation.model.UiUserLocationData
+import com.young.presentation.model.UiUserLocationData.Companion.toMapper
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 interface LocationViewModelFunction {
-    fun setNowLocation(latitude: Double, longitude: Double)
-    fun loadAddressDataSize()
-    fun insertAllStationNameAndMapXYData(items: List<UiStationNameAndMapXY>)
-    fun getLocationNearStationList(areaKm : Double)
-    fun onStationClick(data : UiStationNameDistance , position: Int)
-    fun getFireBaseMapXYData(firebase : FirebaseDatabase)
-    fun onLocationRadiusData(data : Double)
-    fun onSaveLocationRadiusData(data : Double)
+    fun loadStationData(firebase: FirebaseDatabase)
+    suspend fun getLocationNearStationList(areaKm: Double, uiUserLocationData: UiUserLocationData): Flow<List<UiStationNameDistance>>
+    fun onStationClick(data: UiStationNameDistance, position: Int)
+    fun onLocationRadiusData(data: Double)
 }
+
+const val LOCATION_RADIUS = "locationRadius"
 
 @ExperimentalCoroutinesApi
 @FlowPreview
 class LocationViewModel @ViewModelInject constructor(
-    private val provider : ResourceProvider,
-    private val useCase : CoordinateUseCase,
-    @Assisted private val saveInstance : SavedStateHandle
+    @Assisted private val saveInstance: SavedStateHandle,
+    private val useCase: CoordinateUseCase,
+    private val ioDispatcher: CoroutineDispatcher,
+    private val updateLocationServiceUseCase: UpdateLocationServiceBaseUseCase,
+    private val readLocationServiceUseCase: ReadLocationServiceBaseUseCase,
+    private val getStationCoordinateDataUseCase: GetStationCoordinateDataBaseUseCase
 ) : BaseViewModel(), LocationViewModelFunction {
 
-    private val _locationRadiusData = MutableLiveData<Double>(saveInstance.get("locationRadius"))
-    val locationRadiusData: LiveData<Double>
+    private val _locationRadiusData = MutableStateFlow(saveInstance.get(LOCATION_RADIUS) ?: 3.0)
+    val locationRadiusData: StateFlow<Double>
         get() = _locationRadiusData
 
     private val _zeroLocationDataList = MutableLiveData<Boolean>(false)
@@ -55,21 +51,9 @@ class LocationViewModel @ViewModelInject constructor(
     val failedLocationData: LiveData<Boolean>
         get() = _failedLocationData
 
-    private val _nowLocationLatitude = MutableLiveData<Double>()
-    val nowLocationLatitude: LiveData<Double>
-        get() = _nowLocationLatitude
-
-    private val _nowLocationLongitude = MutableLiveData<Double>()
-    val nowLocationLongitude: LiveData<Double>
-        get() = _nowLocationLongitude
-
     private val _stationNameAndMapXY = MutableLiveData<List<UiStationNameDistance>>()
     val stationNameAndMapXY: LiveData<List<UiStationNameDistance>>
         get() = _stationNameAndMapXY
-
-    private val _stationCoordinateDataSize = MutableLiveData<Int>()
-    val stationCoordinateDataSize: LiveData<Int>
-        get() = _stationCoordinateDataSize
 
     private val _stationClick = MutableLiveData<Event<UiStationNameDistance>>()
     val stationClick: LiveData<Event<UiStationNameDistance>>
@@ -79,85 +63,31 @@ class LocationViewModel @ViewModelInject constructor(
     val selectPosition: LiveData<Int>
         get() = _selectPosition
 
-    override fun onSaveLocationRadiusData(data: Double) {
-        saveInstance.set("locationRadius" , data)
+    fun updateLocationService() = updateLocationServiceUseCase.updateLocationService()
+
+    override fun onStationClick(data: UiStationNameDistance, position: Int) {
+        _selectPosition.value = position
+        _stationClick.value = Event(data)
     }
 
-    override fun setNowLocation(latitude: Double, longitude: Double) {
-        _nowLocationLatitude.value = latitude
-        _nowLocationLongitude.value = longitude
-
-        if (nowLocationLongitude.value != null && nowLocationLatitude.value != null) {
-            loadAddressDataSize()
-        }
+    override fun onLocationRadiusData(data: Double) {
+        saveInstance.set(LOCATION_RADIUS, data)
+        viewModelScope.launch(ioDispatcher) { _locationRadiusData.emit(data) }
     }
 
-    override fun loadAddressDataSize() {
-        viewModelScope.launch(handler) {
-            useCase.getStationCoordinateDataSize()
-                .flowOn(Dispatchers.IO)
-                .take(1)
-                .collect {
-                    _stationCoordinateDataSize.value = it
-                }
-        }
-    }
-
-    override fun getFireBaseMapXYData(firebase: FirebaseDatabase) {
-        viewModelScope.launch {
-            flowOf(firebase.reference.child("StationLocationData").get())
-                .flowOn(Dispatchers.IO)
-                .catch { e ->
-                    Timber.e(e)
-                    setToastMsg(provider.getString(R.string.toast_location_data_failed))
-                }
-                .collect {
-                    it.addOnSuccessListener {
-                        insertAllStationNameAndMapXYData(
-                            (it.value as List<String>).map {
-                                Gson().fromJson(it, UiStationNameAndMapXY::class.java)
-                            }
-                        )
-                    }.addOnCanceledListener {
-                        setToastMsg(provider.getString(R.string.toast_location_data_cancel))
+    private fun locationRadiusChange() {
+        viewModelScope.launch(ioDispatcher) {
+            locationRadiusData.collect { radius ->
+                readLocationServiceUseCase.readLocationService()
+                    .map { it.toMapper() }
+                    .flatMapConcat { uiUserLocationData ->
+                        getLocationNearStationList(radius , uiUserLocationData)
                     }
-                }
-        }
-    }
-
-    override fun insertAllStationNameAndMapXYData(items: List<UiStationNameAndMapXY>) {
-        viewModelScope.launch(handler) {
-            flowOf(items)
-                .map {
-                    it.map { it.UiToDomain() }
-                }
-                .flatMapConcat {
-                    flowOf(useCase.insertStationCoordinateData(it)).flowOn(Dispatchers.IO)
-                }
-                .collect {
-                    _locationRadiusData.value = 3.0
-                }
-        }
-    }
-
-    override fun getLocationNearStationList(areaKm: Double) {
-        viewModelScope.launch {
-            if (nowLocationLatitude.value != null && nowLocationLongitude.value != null) {
-                useCase.getLocationNearStationList(nowLocationLatitude.value!!, nowLocationLongitude.value!!, areaKm)
-                    .flowOn(Dispatchers.IO)
-                    .transform {
-                        emit(
-                            it.DomainToUiDistance(nowLocationLatitude.value!! , nowLocationLongitude.value!!)
-                        )
-                    }
-                    .flowOn(Dispatchers.Default)
                     .catch { e ->
                         Timber.e(e)
-                        _failedLocationData.value = true
-                    }.onCompletion {
                         setLoadingValue(false)
-                    }
-                    .collect {
+                        _failedLocationData.value = true
+                    }.collect {
                         _zeroLocationDataList.value = it.isEmpty()
                         _stationNameAndMapXY.value = it
                     }
@@ -165,12 +95,38 @@ class LocationViewModel @ViewModelInject constructor(
         }
     }
 
-    override fun onStationClick(data: UiStationNameDistance , position : Int) {
-        _selectPosition.value = position
-        _stationClick.value = Event(data)
+    override fun loadStationData(firebase: FirebaseDatabase) {
+        viewModelScope.launch(handler + ioDispatcher) {
+            useCase.getStationCoordinateDataSize()
+                .take(1)
+                .flatMapConcat { size ->
+                    if (size <= 0) getStationCoordinateDataUseCase.insertStationCoordinateData(firebase)
+                    else flowOf(true)
+                }
+                .flatMapConcat { verify ->
+                    if (verify) readLocationServiceUseCase.readLocationService()
+                    else throw NullPointerException("Station Data Error")
+                }
+                .map { it.toMapper() }
+                .flatMapConcat { uiUserLocationData ->
+                    getLocationNearStationList(locationRadiusData.value ?: 3.0, uiUserLocationData)
+                }
+                .catch { e ->
+                    Timber.e(e)
+                    setLoadingValue(false)
+                    _failedLocationData.value = true
+                }.collect {
+                    _zeroLocationDataList.value = it.isEmpty()
+                    _stationNameAndMapXY.value = it
+                }
+        }
+
+        locationRadiusChange()
     }
 
-    override fun onLocationRadiusData(data: Double) {
-        _locationRadiusData.value = data
-    }
+    override suspend fun getLocationNearStationList(areaKm: Double, uiUserLocationData: UiUserLocationData) =
+        useCase.getLocationNearStationList(uiUserLocationData.latitude, uiUserLocationData.longitude, areaKm)
+            .transform { emit(it.DomainToUiDistance(uiUserLocationData.latitude, uiUserLocationData.longitude)) }
+            .flowOn(Dispatchers.Default)
+
 }

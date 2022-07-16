@@ -1,7 +1,7 @@
 package com.young.remote.mapper
 
 import com.young.base.BaseMapper
-import com.young.cache.cache.model.*
+import com.young.data.model.*
 import com.young.remote.model.*
 
 object RemoteToDataMapper {
@@ -21,7 +21,7 @@ object RemoteToDataMapper {
     fun RemoteStationSeoulTimeTable.RemoteToData() : DataStationSeoulTimeTable {
         val mapper = BaseMapper<RemoteStationSeoulTimeTable , DataStationSeoulTimeTable>()
         val search = BaseMapper<RemoteSearchSTNTimeTableByIDService , DataSearchSTNTimeTableByIDService>()
-        val result = BaseMapper<com.young.remote.model.TimeTableRESULT, com.young.cache.cache.model.TimeTableRESULT>()
+        val result = BaseMapper<com.young.remote.model.TimeTableRESULT, com.young.data.model.TimeTableRESULT>()
         val body = BaseMapper<RemoteTimeTableRow , DataTimeTableRow>()
 
         search.apply {
@@ -100,14 +100,14 @@ object RemoteToDataMapper {
         }
     }
 
-    fun RemotePlatformEntrance.RemoteToData() : DataPlatformEntrance {
-        val mapper = BaseMapper<RemotePlatformEntrance , DataPlatformEntrance>()
-        val bodyMapper = BaseMapper<PlatformEntranceBody , DataPlatformEntranceBody>()
+    fun RemoteStationEntrance.RemoteToData() : DataStationEntrance {
+        val mapper = BaseMapper<RemoteStationEntrance , DataStationEntrance>()
+        val bodyMapper = BaseMapper<StationEntranceBody , DataStationEntranceBody>()
         val headerMapper = BaseMapper(Header::class, DataHeader::class)
 
         return mapper.apply {
             register("header" , headerMapper)
-            register("body", bodyMapper)
+            register("body", BaseMapper.setList(bodyMapper))
         }.run {
             this(this@RemoteToData)
         }

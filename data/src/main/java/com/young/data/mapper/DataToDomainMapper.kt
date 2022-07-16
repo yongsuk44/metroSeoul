@@ -1,7 +1,9 @@
 package com.young.data.mapper
 
-import com.young.cache.cache.model.*
+import com.young.base.BaseMapper
+import com.young.data.model.*
 import com.young.domain.model.*
+import kotlinx.coroutines.flow.*
 
 object DataToDomainMapper {
     fun DataLocationTrailData.DataToDomain() : DomainLocationTrailData {
@@ -65,10 +67,10 @@ object DataToDomainMapper {
         }
     }
 
-    fun DataPlatformEntrance.DataToDomain(): DomainPlatformEntrance {
-        val mapper = BaseMapper<DataPlatformEntrance, DomainPlatformEntrance>()
-        val body = BaseMapper<DataPlatformEntranceBody, DomainPlatformEntranceBody>()
-        val header = BaseMapper(Header::class, Header::class)
+    fun DataStationEntrance.DataToDomain(): DomainStationEntrance {
+        val mapper = BaseMapper<DataStationEntrance, DomainStationEntrance>()
+        val body = BaseMapper<DataStationEntranceBody, DomainStationEntranceBody>()
+        val header = BaseMapper(DataHeader::class, Header::class)
 
         mapper.apply {
             register("header", header)
@@ -101,8 +103,8 @@ object DataToDomainMapper {
         .insert(time.length - 1, ":")
         .toString()
 
-    suspend fun DataStationTimeTable.DataToDomain(upDown: String): DomainStationTimeTable {
-        return if (body.isNullOrEmpty()) DomainStationTimeTable(listOf(), "", "")
+    suspend fun DataStationTimeTable.DataToDomain(upDown: String): DomainStationTimeTable? {
+        return if (body.isNullOrEmpty()) null
         else {
             val group = body.groupBy { it.orgStinCd < it.tmnStinCd }
 
@@ -128,17 +130,16 @@ object DataToDomainMapper {
         }
     }
 
-    suspend fun DataStationSeoulTimeTable.DataToDomain(): DomainStationTimeTable {
-        return if (SearchSTNTimeTableByIDService == null) DomainStationTimeTable(listOf(), "", "")
+    suspend fun DataStationSeoulTimeTable.DataToDomain(): DomainStationTimeTable? {
+        return if (SearchSTNTimeTableByIDService == null) null
         else {
             flowOf(SearchSTNTimeTableByIDService.row)
-                .transform {
+                .map {
                     it.map {
                         (it.ARRIVETIME).dropLast(3)
-                    }.run {
-                        emit(
-                            DomainStationTimeTable(this, first(), last())
-                        )
+                    }.let {
+                        val sortList = it.toSortedSet().toList()
+                        DomainStationTimeTable(sortList, sortList.first(), sortList.last())
                     }
                 }.first()
         }

@@ -1,29 +1,29 @@
 package com.young.cache
 
+import android.content.Context
 import androidx.room.Room
-import androidx.test.espresso.matcher.ViewMatchers.assertThat
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.core.app.ApplicationProvider
 import com.young.cache.dao.AllStationCodeDao
 import com.young.cache.factory.DataFactory.randomString
 import com.young.cache.factory.ModelFactory.generateAllStationCodes
 import com.young.cache.mapper.CacheToDataMapper.CacheToData
-import com.young.cache.model.CacheAllStationCodes
 import com.young.cache.repository.CacheAllStationCodesRepositoryImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.nullValue
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 import java.io.IOException
 
 @ExperimentalCoroutinesApi
-@RunWith(AndroidJUnit4::class)
+@RunWith(JUnit4::class)
 class AllStationCodeTest {
 
     private lateinit var dao : AllStationCodeDao
@@ -32,7 +32,7 @@ class AllStationCodeTest {
 
     @Before
     fun setUp() {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val context = ApplicationProvider.getApplicationContext<Context>()
         db = Room.inMemoryDatabaseBuilder(context , AppDataBase::class.java).build()
         dao = db.allStationCodeDao()
 

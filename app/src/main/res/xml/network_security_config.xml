@@ -9,6 +9,10 @@
         </domain>
 
         <domain includeSubdomains="true">
+            hc.kric.go.kr
+        </domain>
+
+        <domain includeSubdomains="true">
             api.data.go.kr
         </domain>
     </domain-config>

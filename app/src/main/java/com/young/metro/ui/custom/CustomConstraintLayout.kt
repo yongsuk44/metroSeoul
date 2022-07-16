@@ -28,8 +28,8 @@ class CustomConstraintLayout(context: Context, attrs: AttributeSet) :
                 typedArray.getDimension(R.styleable.CustomConstraintLayout_cornerTopRightRadius , 0f) ,
                 typedArray.getDimension(R.styleable.CustomConstraintLayout_cornerBottomRightRadius , 0f) ,
                 typedArray.getDimension(R.styleable.CustomConstraintLayout_cornerBottomRightRadius , 0f) ,
-                typedArray.getDimension(R.styleable.CustomConstraintLayout_cornerBottomLeftadius , 0f) ,
-                typedArray.getDimension(R.styleable.CustomConstraintLayout_cornerBottomLeftadius , 0f)
+                typedArray.getDimension(R.styleable.CustomConstraintLayout_cornerBottomLeftRadius , 0f) ,
+                typedArray.getDimension(R.styleable.CustomConstraintLayout_cornerBottomLeftRadius , 0f)
             )
 
             typedArray.getDimension(R.styleable.CustomConstraintLayout_cornerRadius, 0f).run {

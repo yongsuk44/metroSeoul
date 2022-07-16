@@ -54,3 +54,9 @@ class EventObserver<T>(private val onEventUnhandledContent: (T) -> Unit) : Obser
         }
     }
 }
+
+sealed class BaseResult<out T : Any> {
+    data class Success<out T : Any>(val data: T) : BaseResult<T>()
+    data class Failed(val exception: Throwable) : BaseResult<Nothing>()
+    data class Loading(val loading : Boolean) : BaseResult<Nothing>()
+}

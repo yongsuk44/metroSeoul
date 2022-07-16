@@ -1,5 +1,3 @@
-import org.gradle.api.artifacts.dsl.DependencyHandler
-
 object Modules {
     const val app = ":app"
     const val cache = ":cache"
@@ -14,16 +12,19 @@ object Libraries {
     const val hilt = "com.google.dagger:hilt-android:${Versions.hiltCore}"
     const val hiltLifecycle = "androidx.hilt:hilt-lifecycle-viewmodel:${Versions.hiltAndroidX}"
     const val hiltCore = "com.google.dagger:hilt-android:${Versions.hiltCore}"
-
     const val hiltKapt = "com.google.dagger:hilt-android-compiler:${Versions.hiltCore}"
     const val hiltAndroidx = "androidx.hilt:hilt-compiler:${Versions.hiltAndroidX}"
+    const val hiltTest = "com.google.dagger:hilt-android-testing:${Versions.hiltCore}"
 
     const val gson = "com.google.code.gson:gson:${Versions.gson}"
     const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
-    const val retrofitGsonConverter = "com.squareup.retrofit2:converter-gson:${Versions.retrofitGson}"
-    const val retrofitMoshiConverter = "com.squareup.retrofit2:converter-moshi:${Versions.retrofitGson}"
+    const val retrofitGsonConverter =
+        "com.squareup.retrofit2:converter-gson:${Versions.retrofitGson}"
+    const val retrofitMoshiConverter =
+        "com.squareup.retrofit2:converter-moshi:${Versions.retrofitGson}"
     const val httpLoggingInterceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.okHttp}"
-    const val retrofitRxAdapter = "com.squareup.retrofit2:adapter-rxjava2:${Versions.rxjava2Adapter}"
+    const val retrofitRxAdapter =
+        "com.squareup.retrofit2:adapter-rxjava2:${Versions.rxjava2Adapter}"
 
     const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
     const val glideCompiler = "com.github.bumptech.glide:compiler:${Versions.glide}"
@@ -32,6 +33,7 @@ object Libraries {
     const val coroutineTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.1"
 
     const val lottie = "com.airbnb.android:lottie:${Versions.lottie}"
+    const val photoView = "com.github.chrisbanes:PhotoView:${Versions.photoView}"
 }
 
 object AndroidX {
@@ -55,12 +57,12 @@ object AndroidX {
         "androidx.paging:paging-common:${Versions.paging}"
     const val roomTest =
         "androidx.room:room-testing:${Versions.room}"
+    const val navigationTest =
+        "androidx.navigation:navigation-testing:${Versions.navigationTest}"
+    const val fragmentTest =
+        "androidx.fragment:fragment-testing:${Versions.fragmentTest}"
 
-    const val robolectric = "org.robolectric:robolectric:4.5-alpha-3"
-}
-
-object AndroidTestImplementationList {
-
+    const val robolectric = "org.robolectric:robolectric:4.5.1"
 }
 
 object Mockito {
@@ -81,10 +83,13 @@ object AndroidLibraries {
     const val appCompat = "androidx.appcompat:appcompat:${Versions.appCompat}"
     const val materialDesign = "com.google.android.material:material:${Versions.materialDesign}"
     const val coreKtx = "androidx.core:core-ktx:${Versions.coreKtx}"
-    const val constraintLayout = "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
+    const val constraintLayout =
+        "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
 
-    const val lifecycleViewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}"
-    const val lifecycleExtensions = "androidx.lifecycle:lifecycle-viewmodel-savedstate:${Versions.lifecycle}"
+    const val lifecycleViewModel =
+        "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}"
+    const val lifecycleExtensions =
+        "androidx.lifecycle:lifecycle-viewmodel-savedstate:${Versions.lifecycle}"
     const val lifecycleLiveData = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycle}"
     const val lifecycleRunTime = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycle}"
 
@@ -99,11 +104,12 @@ object AndroidLibraries {
         "androidx.recyclerview:recyclerview-selection:${Versions.recyclerviewSelection}"
     const val paging = "androidx.paging:paging-runtime:${Versions.paging}"
     const val pagingRxjava = "androidx.paging:paging-rxjava2:${Versions.paging}"
-    const val pagingJetPack = "androidx.paging:paging-compose:${Versions.pagingJetpack}"
 
     // navigation
-    const val navigationRuntimeKtx = "androidx.navigation:navigation-runtime-ktx:${Versions.navigation}"
-    const val navigationFragmentKtx = "androidx.navigation:navigation-fragment-ktx:${Versions.navigation}"
+    const val navigationRuntimeKtx =
+        "androidx.navigation:navigation-runtime-ktx:${Versions.navigation}"
+    const val navigationFragmentKtx =
+        "androidx.navigation:navigation-fragment-ktx:${Versions.navigation}"
     const val navigationUiKtx = "androidx.navigation:navigation-ui-ktx:${Versions.navigation}"
 
     // Room
@@ -139,7 +145,8 @@ object AndroidLibraries {
 }
 
 object googleCloudeService {
-    const val googleService = "com.google.android.gms:play-services-location:${Versions.googleLocationService}"
+    const val googleLocationService =
+        "com.google.android.gms:play-services-location:${Versions.googleLocationService}"
     const val googleBom = "com.google.firebase:firebase-bom:${Versions.firebaseBom}"
     const val analytics = "com.google.firebase:firebase-analytics"
     const val database = "com.google.firebase:firebase-database-ktx"
@@ -147,124 +154,102 @@ object googleCloudeService {
 }
 
 object LibraryList {
-    val firebaseLibrary = arrayListOf<String>().apply {
-        add(googleCloudeService.googleService)
-        add(googleCloudeService.analytics)
-        add(googleCloudeService.database)
-    }
+    val firebaseLibrary = arrayOf<String>(
+        googleCloudeService.googleLocationService,
+        googleCloudeService.analytics,
+        googleCloudeService.database
+    )
 
-    val appLibraries = arrayListOf<String>().apply {
-        add(AndroidLibraries.kotlin)
-        add(AndroidLibraries.appCompat)
-        add(AndroidLibraries.materialDesign)
-        add(AndroidLibraries.coreKtx)
-        add(AndroidLibraries.constraintLayout)
-        add(AndroidLibraries.lifecycleViewModel)
-        add(AndroidLibraries.lifecycleExtensions)
-        add(AndroidLibraries.lifecycleLiveData)
-        add(AndroidLibraries.lifecycleRunTime)
-        add(AndroidLibraries.viewPager)
-        add(AndroidLibraries.fragment)
-        add(AndroidLibraries.googleCore)
-        add(AndroidLibraries.viewPager)
-    }
+    val appLibraries = arrayOf<String>(
+        AndroidLibraries.kotlin,
+        AndroidLibraries.appCompat,
+        AndroidLibraries.materialDesign,
+        AndroidLibraries.coreKtx,
+        AndroidLibraries.constraintLayout,
+        AndroidLibraries.lifecycleViewModel,
+        AndroidLibraries.lifecycleExtensions,
+        AndroidLibraries.lifecycleLiveData,
+        AndroidLibraries.lifecycleRunTime,
+        AndroidLibraries.viewPager,
+        AndroidLibraries.fragment,
+        AndroidLibraries.googleCore,
+        AndroidLibraries.viewPager
+    )
 
-    val exoLibrary = arrayListOf<String>().apply {
-        add(AndroidLibraries.exoPlayerCore)
-        add(AndroidLibraries.exoPlayerUI)
-        add(AndroidLibraries.exoMediasession)
-        add(AndroidLibraries.exoDash)
-    }
+    val exoLibrary = arrayOf<String>(
+        AndroidLibraries.exoPlayerCore,
+        AndroidLibraries.exoPlayerUI,
+        AndroidLibraries.exoMediasession,
+        AndroidLibraries.exoDash
+    )
 
-    val cameraLibrary = arrayListOf<String>().apply {
-        add(AndroidLibraries.cameraCore)
-        add(AndroidLibraries.camera2)
-        add(AndroidLibraries.cameraLifeCycle)
-        add(AndroidLibraries.cameraView)
-    }
+    val cameraLibrary = arrayOf<String>(
+        AndroidLibraries.cameraCore,
+        AndroidLibraries.camera2,
+        AndroidLibraries.cameraLifeCycle,
+        AndroidLibraries.cameraView
+    )
 
-    val RecyclerViewLibraries = arrayListOf<String>().apply {
-        add(AndroidLibraries.recyclerView)
-        add(AndroidLibraries.recyclerViewTracker)
-        add(AndroidLibraries.paging)
-        add(AndroidLibraries.pagingJetPack)
-        add(AndroidLibraries.pagingRxjava)
-    }
+    val RecyclerViewLibraries = arrayOf<String>(
+        AndroidLibraries.recyclerView,
+        AndroidLibraries.recyclerViewTracker,
+        AndroidLibraries.paging,
+        AndroidLibraries.pagingRxjava
+    )
 
-    val NavigationLibraries = arrayListOf<String>().apply {
-        add(AndroidLibraries.navigationRuntimeKtx)
-        add(AndroidLibraries.navigationFragmentKtx)
-        add(AndroidLibraries.navigationUiKtx)
-    }
+    val NavigationLibraries = arrayOf(
+        AndroidLibraries.navigationRuntimeKtx,
+        AndroidLibraries.navigationFragmentKtx,
+        AndroidLibraries.navigationUiKtx
+    )
 
-    val HiltLibraries = arrayListOf<String>().apply {
-        add(Libraries.hilt)
-        add(Libraries.hiltCore)
-        add(Libraries.hiltLifecycle)
-    }
+    val HiltLibraries = arrayOf(
+        Libraries.hilt,
+        Libraries.hiltCore,
+        Libraries.hiltLifecycle
+    )
 
-    val HiltLibraryKapt = arrayListOf<String>().apply {
-        add(Libraries.hiltKapt)
-        add(Libraries.hiltAndroidx)
-    }
+    val HiltLibraryKapt = arrayOf(
+        Libraries.hiltKapt,
+        Libraries.hiltAndroidx
+    )
 
-    val RetrofitLibraries = arrayListOf<String>().apply {
-        add(Libraries.gson)
-        add(Libraries.retrofit)
-        add(Libraries.retrofitGsonConverter)
-        add(Libraries.retrofitMoshiConverter)
-        add(Libraries.httpLoggingInterceptor)
-        add(Libraries.retrofitRxAdapter)
-    }
-
-    val Glide = arrayListOf<String>().apply {
-        add(Libraries.glide)
-        add(Libraries.glideCompiler)
-    }
-
-    val AndroidTestLibrary = arrayListOf<String>().apply {
-        add(AndroidX.core)
-        add(AndroidX.coreKtx)
-        add(AndroidX.runner)
-        add(AndroidX.rules)
-        add(AndroidX.espressoCore)
-        add(AndroidX.espressoContrib)
-        add(AndroidX.junit)
-        add(AndroidX.coreTesting)
-        add(AndroidX.pagingTesting)
-        add(AndroidX.roomTest)
-        add(AndroidX.robolectric)
-    }
-
-    val mockitoLibrary = arrayListOf<String>().apply {
-        add(Mockito.mockitoCore)
-        add(Mockito.mockitoInline)
-        add(Mockito.mockitoKotlin)
-        add(Mockito.mockWebServer)
-    }
-}
-
-fun DependencyHandler.kaptList(list: List<String>) {
-    list.forEach { dependency ->
-        add("kapt", dependency)
-    }
-}
+    val RetrofitLibraries = arrayOf<String>(
+        Libraries.gson,
+        Libraries.retrofit,
+        Libraries.retrofitGsonConverter,
+        Libraries.retrofitMoshiConverter,
+        Libraries.httpLoggingInterceptor,
+        Libraries.retrofitRxAdapter
+    )
 
 
-fun DependencyHandler.implementationList(list: List<String>) {
-    list.forEach { dependency ->
-        add("implementation", dependency)
-    }
-}
+    val Glide = arrayOf(
+        Libraries.glide,
+        Libraries.glideCompiler,
+        Libraries.photoView
+    )
 
-fun DependencyHandler.androidTestImplementationList(list: List<String>) {
-    list.forEach { dependency ->
-        add("androidTestImplementation", dependency)
-    }
-}
+    val AndroidTestLibrary = arrayOf(
+        AndroidX.core,
+        AndroidX.coreKtx,
+        AndroidX.runner,
+        AndroidX.rules,
+        AndroidX.espressoCore,
+        AndroidX.espressoContrib,
+        AndroidX.junit,
+        AndroidX.coreTesting,
+        AndroidX.pagingTesting,
+        AndroidX.roomTest,
+//        AndroidX.robolectric,
+        AndroidX.navigationTest,
+        Libraries.hiltTest
+    )
 
-fun DependencyHandler.testImplementationList(list: List<String>) {
-    list.forEach { dependency ->
-        add("testImplementation", dependency)
-    }
+    val mockitoLibrary = arrayOf<String>(
+        Mockito.mockitoCore,
+        Mockito.mockitoInline,
+        Mockito.mockitoKotlin,
+        Mockito.mockWebServer
+    )
 }

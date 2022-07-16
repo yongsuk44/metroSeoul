@@ -1,19 +1,17 @@
 package com.young.cache
 
+import android.content.Context
 import androidx.room.Room
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import com.young.cache.dao.FullRouteInformationDao
 import com.young.cache.factory.DataFactory.randomString
 import com.young.cache.factory.ModelFactory
 import com.young.cache.mapper.CacheToDataMapper.CacheToData
 import com.young.cache.repository.CacheFullRouteInformationRepositoryImpl
+import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.core.Is.`is`
@@ -22,11 +20,12 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 import java.io.IOException
 import java.time.LocalTime
 
 @ExperimentalCoroutinesApi
-@RunWith(AndroidJUnit4::class)
+@RunWith(JUnit4::class)
 class FullRouteInformationTest {
 
     private lateinit var dao: FullRouteInformationDao
@@ -35,7 +34,7 @@ class FullRouteInformationTest {
 
     @Before
     fun setUp() {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val context = ApplicationProvider.getApplicationContext<Context>()
         db = Room.inMemoryDatabaseBuilder(context, AppDataBase::class.java).build()
         dao = db.fullRouteInformationDao()
 
@@ -63,11 +62,12 @@ class FullRouteInformationTest {
             }
 
             val call = LocalTime.now().toNanoOfDay()
-            repo.insert(items.map { it.CacheToData() }).single()
+            val insertReturn = repo.insert(items.map { it.CacheToData() }).single()
             val time = LocalTime.now().minusNanos(call)
             println(time)
 
-            val allData = repo.getAllData().single()
+            assertTrue(insertReturn.all { it > 0 })
+            val allData = repo.findStationRouteInformation(null).single()
 
             assertThat(
                 allData.first().railOprIsttCd,
@@ -93,7 +93,7 @@ class FullRouteInformationTest {
 
             repo.insertLineCodeAndTrailCode(items.map { it.CacheToData() }).single()
 
-            val allData = repo.getTrailCodeAllData().single()
+            val allData = repo.readTrailCodeAllData().single()
 
             val assertAllData = allData.map { it.lnCd to it.railOprIsttCd }
             val assertInsertData = items.map { it.lnCd to it.railOprIsttCd }
@@ -118,7 +118,7 @@ class FullRouteInformationTest {
 
             repo.insert(items.map { it.CacheToData() }).single()
 
-            val selectData = repo.getStationNameToFullRouteInformationData("테스트역1").single()
+            val selectData = repo.readStationNameToFullRouteInformationData("테스트역1").single()
 
             assertThat(selectData.stinCd, `is`(items[0].stinCd))
         }
@@ -141,7 +141,7 @@ class FullRouteInformationTest {
 
             repo.insert(items.map { it.CacheToData() }).single()
 
-            val selectData = repo.getStationData(selectCodeList).single()
+            val selectData = repo.readStationData(selectCodeList).single()
 
             assertThat(selectData.last().stinCd, IsNot.not(items.last().stinCd))
             assertThat(selectData.first().stinCd, `is`(items.first().stinCd))

@@ -5,13 +5,14 @@ object AppConfig {
     const val versionCode = 21071406
     const val versionName = "0.1"
 
-    const val compileSdk = 30
+    const val compileSdk = 31
     const val minSdk = 26
-    const val targetSdk = 30
+    const val targetSdk = 31
     const val buildToolsVersion = "30.0.3"
 }
 
 object GradlePluginId {
+    const val BASE_GRADLE_PLUGIN = "base-gradle-plugin"
     const val ANDROID_APP = "com.android.application"
     const val ANDROID_LIBRARY = "com.android.library"
     const val FIREBASE_CRASH ="com.google.firebase.crashlytics"

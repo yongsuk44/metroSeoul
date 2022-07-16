@@ -1,11 +1,11 @@
 package com.young.cache.mapper
 
 import com.young.base.BaseMapper
-import com.young.cache.cache.model.*
 import com.young.cache.model.CacheAllStationCodes
 import com.young.cache.model.CacheFullRouteInformation
 import com.young.cache.model.CacheStationNameAndMapXY
 import com.young.cache.model.CacheTrailCodeAndLineCode
+import com.young.data.model.*
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -15,7 +15,7 @@ object DataToCacheMapper {
             this(this@DataToCache)
         }
 
-    fun DataRow.DataToCahe() : CacheAllStationCodes = BaseMapper<DataRow , CacheAllStationCodes>().run { this(this@DataToCahe) }
+    fun DataRow.DataToCache() : CacheAllStationCodes = BaseMapper<DataRow , CacheAllStationCodes>().run { this(this@DataToCache) }
 
     fun DataAllStationCodes.DataToCache(): List<CacheAllStationCodes> {
         val row = SearchInfoBySubwayNameService.row

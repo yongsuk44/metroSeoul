@@ -1,11 +1,14 @@
 package com.young.cache.mapper
 
 import com.young.base.BaseMapper
-import com.young.cache.cache.model.*
 import com.young.cache.model.CacheAllStationCodes
 import com.young.cache.model.CacheFullRouteInformation
 import com.young.cache.model.CacheStationNameAndMapXY
 import com.young.cache.model.CacheTrailCodeAndLineCode
+import com.young.data.model.DataFullRouteInformationBody
+import com.young.data.model.DataRow
+import com.young.data.model.DataStationNameAndMapXY
+import com.young.data.model.DataTrailCodeAndLineCode
 
 object CacheToDataMapper {
     fun CacheTrailCodeAndLineCode.CacheToData() : DataTrailCodeAndLineCode =

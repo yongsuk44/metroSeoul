@@ -14,28 +14,41 @@ import com.young.metro.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.time.LocalTime
+import kotlin.math.abs
 
-fun RecyclerView.recyclerViewScrollPosition(scope : LifecycleCoroutineScope, position : Int) {
+fun List<String>?.nowTimeNearList(): Int {
+    val min = 1000
+    val target = LocalTime.now().toSecondOfDay()
+
+    return this?.find { s -> abs(min) > abs(LocalTime.parse(s).toSecondOfDay() - target) }
+        .let { this@nowTimeNearList?.indexOf(it) ?: 0 }
+}
+
+fun RecyclerView.recyclerViewScrollPosition(scope: LifecycleCoroutineScope, position: Int) {
     if (position <= 0) return
     else {
         scope.launch(Dispatchers.Main) {
-            delay(600)
+            delay(500)
             scrollToPosition(position)
         }
     }
 }
 
-fun Fragment.waitForTransition(view : View) {
+fun Fragment.waitForTransition(view: View) {
     postponeEnterTransition()
     view.doOnPreDraw { startPostponedEnterTransition() }
 }
 
 fun View.toTransitionGroup() = this to transitionName
 
-fun Int?.ZeroOrNull() = this != null && this != 0
+fun Int?.zeroOrNull() = this != null && this != 0
+fun Double?.zeroOrNull() = this != null && this != 0.0
 fun Int?.intNullCheck() = this != null
+fun Double?.nullCheck() = this != null
+
 fun String.equlesDataToInt(value: String): Int = if (this == value) 1 else 0
-inline fun <reified T>equalsZeroCheck(value : T) : T? = if (value == 0f) null else value
+inline fun <reified T> equalsZeroCheck(value: T): T? = if (value == 0f) null else value
 
 val Int.toPx: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
@@ -43,8 +56,8 @@ val Int.toPx: Int
 val Int.toDp: Int
     get() = (this / Resources.getSystem().displayMetrics.density).toInt()
 
-enum class StatusColor(val color : Int) {
-    WHITE(R.color.white) ,
+enum class StatusColor(val color: Int) {
+    WHITE(R.color.white),
     BLACK(R.color.black)
 }
 
@@ -52,7 +65,7 @@ fun setStatusBarColor(activity: Activity, statusColor: StatusColor) {
     activity.window.statusBarColor = activity.getColor(statusColor.color)
 
     activity.window.decorView.systemUiVisibility =
-        when(statusColor.color) {
+        when (statusColor.color) {
             StatusColor.WHITE.color -> View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
             else -> 0
         }
@@ -61,6 +74,7 @@ fun setStatusBarColor(activity: Activity, statusColor: StatusColor) {
 fun Activity.showSystemUI() {
     window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 }
+
 fun Activity.hideSystemUI() {
     window.decorView.systemUiVisibility =
             // 전체화면 Mode

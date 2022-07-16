@@ -14,11 +14,10 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 
-abstract class BaseFragment<B : ViewDataBinding, V : ViewModel> : Fragment() {
+abstract class BaseFragment<B : ViewDataBinding> : Fragment() {
 
     abstract val layoutResource: Int
     lateinit var viewDataBinding: B
-    abstract val viewModel: V
     abstract val bindingVariable: Int
 
     @LayoutRes var dialogLoading: Int? = null
@@ -34,11 +33,7 @@ abstract class BaseFragment<B : ViewDataBinding, V : ViewModel> : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewDataBinding.apply {
-            setVariable(bindingVariable, viewModel)
-            lifecycleOwner = this@BaseFragment
-        }
-
+        viewDataBinding.lifecycleOwner = this@BaseFragment
         initBinding()
     }
 

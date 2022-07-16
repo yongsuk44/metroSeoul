@@ -4,7 +4,7 @@ import com.young.remote.TestCoroutineRule
 import com.young.remote.enqueueResponse
 import com.young.remote.generate.DataFactory.getRandomString
 import com.young.remote.generate.RetrofitFactory
-import com.young.remote.repository.RemoteFullRouteInformationRepositoryImpl
+import com.young.remote.mapper.RemoteToDataMapper.RemoteToData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockWebServer
@@ -20,19 +20,22 @@ import org.junit.runners.JUnit4
 class FullRouteInformationImplTest {
     private val mockWebServer = MockWebServer()
 
-    private lateinit var repository: RemoteFullRouteInformationRepositoryImpl
     private lateinit var seoulApiService: SeoulApiService
     private lateinit var service: TrailPorTalService
 
     @get:Rule
     val rule: TestCoroutineRule = TestCoroutineRule()
 
+    var key: String = getRandomString()
+    var railCode: String = getRandomString()
+    var lineCd: String = getRandomString()
+    var stinCode: String = getRandomString()
     @Before
     fun setUp() {
         mockWebServer.start()
+
         seoulApiService = RetrofitFactory.RetrofitGenerate(mockWebServer).create(SeoulApiService::class.java)
         service = RetrofitFactory.RetrofitGenerate(mockWebServer).create(TrailPorTalService::class.java)
-        repository = RemoteFullRouteInformationRepositoryImpl(seoulApiService, service)
     }
 
     @After
@@ -65,14 +68,14 @@ class FullRouteInformationImplTest {
     }
 
     @Test
-    fun `getPlatformEntranceData Success`() {
-        mockWebServer.enqueueResponse("EntranceData", 200)
+    fun `getStationEntranceData Success`() {
+        mockWebServer.enqueueResponse("EntranceData2", 200)
 
         runBlocking {
-            val call = service.getPlatformEntranceData(getRandomString() , getRandomString() , getRandomString() , getRandomString(), getRandomString())
-            call.body?.forEach {
-                println(it)
-            }
+            val api = service.getStationEntranceData(key, "json",railCode, lineCd, stinCode)
+            api.body?.groupBy { it.edMovePath }?.forEach { it.value.forEach { println(it) } }
+            api.body?.forEach { println(it) }
+            println(api.RemoteToData())
         }
     }
 

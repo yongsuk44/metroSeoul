@@ -1,12 +1,11 @@
+import base_plugin.androidTestImplementations
+import base_plugin.implementations
 import java.io.FileInputStream
-import java.util.*
+import java.util.Properties
 
 plugins {
     id(GradlePluginId.ANDROID_APP)
-    id(GradlePluginId.kotlinAndroid)
-    id(GradlePluginId.kotlinKapt)
-    id(GradlePluginId.kotlinAndroidExtensions)
-    id(GradlePluginId.hilt)
+    id(GradlePluginId.BASE_GRADLE_PLUGIN)
     id(GradlePluginId.googlePluginService)
     id(GradlePluginId.safeArgs)
 }
@@ -14,30 +13,10 @@ plugins {
 val releaseKeystoreFile = rootProject.file("keystore.properties")
 val debugKeystoreFile = file("${projectDir}/debug.keystore")
 val properties = Properties()
+val keyProperties = Properties().apply { load(FileInputStream(rootProject.file("local.properties"))) }
 
 android {
-    compileSdkVersion(AppConfig.compileSdk)
-    buildToolsVersion(AppConfig.buildToolsVersion)
-
-    defaultConfig.apply {
-        applicationId = AppConfig.id
-
-        minSdkVersion(AppConfig.minSdk)
-        targetSdkVersion(AppConfig.targetSdk)
-
-        versionCode = AppConfig.versionCode
-        versionName = AppConfig.versionName
-
-        testInstrumentationRunner = "com.young.metro.HiltTestRunner"
-
-        compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_1_8
-            targetCompatibility = JavaVersion.VERSION_1_8
-        }
-    }
-
     buildTypes {
-
         getByName("release") {
             isMinifyEnabled = false
             isDebuggable = false
@@ -50,9 +29,15 @@ android {
                 storePassword = properties.getProperty("storePassword")
             }
 
-            manifestPlaceholders["appName"] = "서울지하철 편의시설"
-            manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher"
+            manifestPlaceholders.apply {
+                put("appName", "서울지하철 편의시설")
+                put("appIcon", "@mipmap/ic_launcher")
+                put("cloud_key", keyProperties.getProperty("googleCloudeKey"))
+            }
 
+            buildConfigField("String", "seoulKey", keyProperties.getProperty("seoulKey"))
+            buildConfigField("String", "trailKey", keyProperties.getProperty("trailKey"))
+            buildConfigField("String", "apiKey", keyProperties.getProperty("apiKey"))
         }
 
         getByName("debug") {
@@ -69,10 +54,21 @@ android {
                 storePassword = "android"
             }
 
-            manifestPlaceholders["appName"] = "app_dev"
-            manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher"
+            manifestPlaceholders.apply {
+                put("appName", "서울 지하철 테스트")
+                put("appIcon", "@mipmap/ic_launcher")
+                put("cloud_key", keyProperties.getProperty("googleCloudeKey"))
+            }
 
+            buildConfigField("String", "seoulKey", keyProperties.getProperty("seoulKey"))
+            buildConfigField("String", "trailKey", keyProperties.getProperty("trailKey"))
+            buildConfigField("String", "apiKey", keyProperties.getProperty("apiKey"))
         }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     buildFeatures {
@@ -83,10 +79,6 @@ android {
         jvmTarget = Versions.jvmTarget
         languageVersion = Versions.kotlinLanguageVersion
     }
-    testOptions {
-        unitTests.isReturnDefaultValues = true
-    }
-
 }
 
 dependencies {
@@ -97,21 +89,16 @@ dependencies {
     implementation(project(Modules.presentation))
     implementation(project(Modules.cache))
 
-    implementation(platform(googleCloudeService.googleBom))
-    implementationList(LibraryList.firebaseLibrary)
-
     implementation(Libraries.lottie)
     implementation(AndroidLibraries.timber)
-    implementationList(LibraryList.appLibraries)
-    implementationList(LibraryList.cameraLibrary)
-    implementationList(LibraryList.exoLibrary)
-    implementationList(LibraryList.RecyclerViewLibraries)
-    implementationList(LibraryList.NavigationLibraries)
-    implementationList(LibraryList.RetrofitLibraries)
-    implementationList(LibraryList.Glide)
-    implementationList(LibraryList.HiltLibraries)
-    kaptList(LibraryList.HiltLibraryKapt)
+    implementations(*LibraryList.appLibraries)
+    implementations(*LibraryList.cameraLibrary)
+    implementations(*LibraryList.exoLibrary)
+    implementations(*LibraryList.RecyclerViewLibraries)
+    implementations(*LibraryList.NavigationLibraries)
+    implementations(*LibraryList.Glide)
 
-    testImplementation(Libraries.coroutineTest)
-    androidTestImplementationList(LibraryList.AndroidTestLibrary)
+    debugImplementation(AndroidX.fragmentTest)
+    kaptAndroidTest(Libraries.hiltKapt)
+    androidTestImplementations(*LibraryList.AndroidTestLibrary)
 }

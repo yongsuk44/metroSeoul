@@ -3,7 +3,6 @@ package com.young.cache.dao
 import androidx.room.*
 import com.young.cache.model.CacheFullRouteInformation
 import com.young.cache.model.CacheTrailCodeAndLineCode
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FullRouteInformationDao {

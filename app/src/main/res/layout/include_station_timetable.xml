@@ -10,15 +10,47 @@
         <variable
             name="vm"
             type="com.young.presentation.viewmodel.StationTimeTableViewModel" />
+
+        <variable
+            name="timeTableLoading"
+            type="Boolean" />
+
+        <variable
+            name="timeTableData"
+            type="com.young.presentation.model.UiStationTimeTable" />
     </data>
 
     <com.young.metro.ui.custom.CustomConstraintLayout
         android:id="@+id/lo_station_timetable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
         app:cornerRadius="15dp"
         app:customBackgroundColor="@color/colorBg">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_station_timetable_title"
+            style="@style/BlackTextViewBoldSize18"
+            android:layout_width="0dp"
+            android:onClick="@{() -> vm.timeTableOpenAndClose()}"
+            android:text="@string/view_station_timetable_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_station_timetable_arrow"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_station_timetable_arrow"
+            spinnerArrowAnimation="@{vm.timeTableOpen}"
+            android:onClick="@{() -> vm.timeTableOpenAndClose()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/tv_station_timetable_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_station_timetable_title"
+            app:srcCompat="@drawable/ic_arrow_drop_down_black" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/gl_horizon_center"
@@ -30,7 +62,7 @@
         <com.young.metro.ui.custom.CircleTextView
             android:id="@+id/tv_station_timetable_week_day"
             style="@style/BlackTextViewBoldSize16"
-            timeTableDayBoxCheckBackground="@{vm.dayCodeChangeData == DayType.WEEK}"
+            CircleTextViewSelectedBackground="@{vm.dayCodeChangeData == DayType.WEEK}"
             android:layout_width="0dp"
             android:gravity="center"
             android:onClick="@{() -> vm.changeDayCode(DayType.WEEK)}"
@@ -46,9 +78,10 @@
         <com.young.metro.ui.custom.CircleTextView
             android:id="@+id/tv_station_timetable_sat_day"
             style="@style/BlackTextViewBoldSize16"
-            timeTableDayBoxCheckBackground="@{vm.dayCodeChangeData == DayType.SAT}"
+            CircleTextViewSelectedBackground="@{vm.dayCodeChangeData == DayType.SAT}"
             android:layout_width="0dp"
             android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="15dp"
             android:gravity="center"
             android:onClick="@{() -> vm.changeDayCode(DayType.SAT)}"
@@ -58,12 +91,12 @@
             app:customBackgroundColor="@color/white"
             app:layout_constraintEnd_toStartOf="@id/tv_station_timetable_sun_day"
             app:layout_constraintStart_toEndOf="@id/tv_station_timetable_week_day"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/tv_station_timetable_title" />
 
         <com.young.metro.ui.custom.CircleTextView
             android:id="@+id/tv_station_timetable_sun_day"
             style="@style/BlackTextViewBoldSize16"
-            timeTableDayBoxCheckBackground="@{vm.dayCodeChangeData == DayType.SUN}"
+            CircleTextViewSelectedBackground="@{vm.dayCodeChangeData == DayType.SUN}"
             android:layout_width="wrap_content"
             android:gravity="center"
             android:onClick="@{() -> vm.changeDayCode(DayType.SUN)}"
@@ -135,7 +168,7 @@
             android:id="@+id/tv_station_timetable_up_first_time"
             style="@style/BlackTextViewMediumSize13"
             android:layout_margin="10dp"
-            android:text="@{vm.timeTable.upFirstTime}"
+            android:text="@{timeTableData.upFirstTime}"
             app:layout_constraintBottom_toBottomOf="@id/iv_station_up_timetable_bg"
             app:layout_constraintEnd_toEndOf="@id/tv_station_timetable_up_first_time_title"
             app:layout_constraintStart_toStartOf="@id/tv_station_timetable_up_first_time_title"
@@ -145,7 +178,7 @@
             android:id="@+id/tv_station_timetable_up_last_time"
             style="@style/BlackTextViewMediumSize13"
             android:layout_margin="10dp"
-            android:text="@{vm.timeTable.upLastTime}"
+            android:text="@{timeTableData.upLastTime}"
             app:layout_constraintBottom_toBottomOf="@id/iv_station_up_timetable_bg"
             app:layout_constraintEnd_toEndOf="@id/tv_station_timetable_up_last_time_title"
             app:layout_constraintStart_toStartOf="@id/tv_station_timetable_up_last_time_title"
@@ -182,7 +215,7 @@
             android:id="@+id/tv_station_timetable_down_first_time"
             style="@style/BlackTextViewMediumSize13"
             android:layout_margin="10dp"
-            android:text="@{vm.timeTable.downFirstTime}"
+            android:text="@{timeTableData.downFirstTime}"
             app:layout_constraintBottom_toBottomOf="@id/iv_station_down_timetable_bg"
             app:layout_constraintEnd_toEndOf="@id/tv_station_timetable_down_first_time_title"
             app:layout_constraintStart_toStartOf="@id/tv_station_timetable_down_first_time_title"
@@ -192,7 +225,7 @@
             android:id="@+id/tv_station_timetable_down_last_time"
             style="@style/BlackTextViewMediumSize13"
             android:layout_margin="10dp"
-            android:text="@{vm.timeTable.downlastTime}"
+            android:text="@{timeTableData.downlastTime}"
             app:layout_constraintBottom_toBottomOf="@id/iv_station_down_timetable_bg"
             app:layout_constraintEnd_toEndOf="@id/tv_station_timetable_down_last_time_title"
             app:layout_constraintStart_toStartOf="@id/tv_station_timetable_down_last_time_title"
@@ -203,8 +236,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
             android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
             android:minHeight="150dp"
             app:cornerRadius="10dp"
             app:customBackgroundColor="@color/white"
@@ -229,9 +262,9 @@
             android:id="@+id/iv_station_down_timetable_list_bg"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginStart="10dp"
             android:minHeight="150dp"
             app:cornerRadius="10dp"
             app:customBackgroundColor="@color/white"
@@ -255,7 +288,7 @@
         <ProgressBar
             android:id="@+id/pb_up_time_title"
             style="@style/BaseProgressBar"
-            setDataCheckVisible="@{vm.loading}"
+            setDataCheckVisible="@{timeTableLoading}"
             android:layout_margin="40dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -263,10 +296,16 @@
             app:layout_constraintTop_toBottomOf="@id/tv_station_timetable_sat_day" />
 
         <androidx.constraintlayout.widget.Group
-            setDataCheckVisible="@{!vm.loading}"
+            setDataCheckVisible="@{!timeTableLoading}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:constraint_referenced_ids="tv_station_timetable_down_time_title,tv_station_timetable_up_time_title,tv_station_timetable_up_last_time,tv_station_timetable_down_last_time,tv_station_timetable_down_first_time,tv_station_timetable_up_first_time,iv_station_up_timetable_list_bg, iv_station_down_timetable_list_bg, tv_station_timetable_down_first_time_title , tv_station_timetable_up_first_time_title , tv_station_timetable_down_last_time_title , tv_station_timetable_up_last_time_title" />
+
+        <androidx.constraintlayout.widget.Group
+            viewOpenClose="@{vm.timeTableOpen}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="rv_station_timetable_up_list,rv_station_timetable_down_list,tv_station_timetable_down_time_title,tv_station_timetable_up_time_title,tv_station_timetable_up_last_time,tv_station_timetable_down_last_time,tv_station_timetable_down_first_time,tv_station_timetable_up_first_time,iv_station_up_timetable_list_bg, iv_station_down_timetable_list_bg, tv_station_timetable_down_first_time_title , tv_station_timetable_up_first_time_title , tv_station_timetable_down_last_time_title , tv_station_timetable_up_last_time_title,tv_station_timetable_week_day,tv_station_timetable_sat_day,tv_station_timetable_sun_day,iv_station_up_timetable_bg,iv_station_up_timetable_list_bg,iv_station_down_timetable_bg,iv_station_down_timetable_list_bg" />
 
     </com.young.metro.ui.custom.CustomConstraintLayout>
 

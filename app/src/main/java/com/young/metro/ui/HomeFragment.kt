@@ -1,71 +1,39 @@
 package com.young.metro.ui
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Looper
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.PopupWindow
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.translationMatrix
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
+import com.young.base.locationPermissionList
 import com.young.metro.BR
+import com.young.metro.BuildConfig
 import com.young.metro.R
 import com.young.metro.adapter.DropBoxAdapter
 import com.young.metro.base.BaseFragment
 import com.young.metro.base.showToast
-import com.young.metro.databinding.BaseSpinnerListBinding
 import com.young.metro.databinding.FragmentHomeBinding
-import com.young.metro.locationPermissionList
 import com.young.presentation.consts.EventObserver
 import com.young.presentation.viewmodel.FullRouteInformationViewModel
+import com.young.presentation.viewmodel.LocationViewModel
 import com.young.presentation.viewmodel.PermissionViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.launch
-import timber.log.Timber
 
+@ExperimentalCoroutinesApi
 @FlowPreview
 @AndroidEntryPoint
-class HomeFragment : BaseFragment<FragmentHomeBinding, FullRouteInformationViewModel>() {
+class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override val layoutResource: Int = R.layout.fragment_home
-    override val viewModel: FullRouteInformationViewModel by viewModels()
     override val bindingVariable: Int = BR.vm
 
+    private val fullRouteInformationViewModel by viewModels<FullRouteInformationViewModel>()
     private val permissionViewModel by viewModels<PermissionViewModel>()
+    private val locationViewModel by viewModels<LocationViewModel>()
 
-    lateinit var popup: PopupWindow
-    private val dropBoxAdapter: DropBoxAdapter by lazy { DropBoxAdapter(viewModel) }
-
-    private val popUpListBinding by lazy {
-        DataBindingUtil.bind<BaseSpinnerListBinding>(
-            LayoutInflater.from(requireContext())
-                .inflate(R.layout.base_spinner_list, null, false)
-        )
-    }
-
-    private val fusedLocationProviderClient by lazy {
-        LocationServices.getFusedLocationProviderClient(requireContext())
-    }
-
-    private val locationRequest by lazy {
-        LocationRequest.create().apply {
-            interval = 5 * 1000L
-            fastestInterval = 1 * 1000L
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        }
-    }
+    private val dropBoxAdapter: DropBoxAdapter by lazy { DropBoxAdapter(fullRouteInformationViewModel) }
 
     private val requestPermission = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -77,36 +45,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, FullRouteInformationViewM
 
     override fun initBinding() {
         viewDataBinding.permissionVm = permissionViewModel
+        viewDataBinding.trailKey = BuildConfig.trailKey
+
         requestPermission.launch(locationPermissionList)
-        getRequestLocationData()
-        viewModel.insertAllStationCodes()
-        viewModel.loadFullRouteInformation()
+        locationViewModel.updateLocationService()
+
+        fullRouteInformationViewModel.insertAllStationCodes(BuildConfig.seoulKey)
+        fullRouteInformationViewModel.loadFullRouteInformation(BuildConfig.trailKey)
+
+        viewDataBinding.rvPopupList.adapter = dropBoxAdapter
     }
 
 
     override fun observerLiveData() {
-
-        viewDataBinding.etStationSearch.viewTreeObserver.addOnWindowFocusChangeListener {
-            popup = setPopUpWindow(viewDataBinding.etStationSearch)
+        fullRouteInformationViewModel.filterList.observe(viewLifecycleOwner) {
+            dropBoxAdapter.submitList(it)
+            fullRouteInformationViewModel.onSearchEditViewClick(!it.isNullOrEmpty())
         }
 
-        viewModel.userSearchStationName.observe(viewLifecycleOwner) { searchString ->
-            lifecycleScope.launch(Dispatchers.Main) {
-                searchString.isNotEmpty().also {
-                    if (it) {
-                        searchDataFilter(searchString)
-                    }
-
-                    viewModel.onSearchEditViewClick(it)
-                }
-            }
-        }
-
-        viewModel.searchEditViewClick.observe(viewLifecycleOwner, EventObserver {
-            if (it)
-                popup.showAsDropDown(viewDataBinding.etStationSearch, 0, 0)
-            else
-                popup.dismiss()
+        fullRouteInformationViewModel.searchEditViewClick.observe(viewLifecycleOwner, EventObserver {
+            fullRouteInformationViewModel.onPopupWindowViewVisibleCheck(it)
         })
 
         permissionViewModel.locationSearchClick.observe(viewLifecycleOwner, EventObserver {
@@ -116,71 +74,24 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, FullRouteInformationViewM
             } else {
                 requestPermission.launch(locationPermissionList)
             }
-
         })
 
         permissionViewModel.locationPermission.observe(viewLifecycleOwner) {
             if (!it) showToast(R.string.toast_location_permission_failed)
         }
 
-        viewModel.searchActionStation.observe(viewLifecycleOwner, EventObserver {
+        fullRouteInformationViewModel.searchActionStation.observe(viewLifecycleOwner, EventObserver {
             hideSoftKeyboard(requireView())
-            popup.dismiss()
-
             findNavController().navigate(
-                HomeFragmentDirections.actionFragmentHomeToStationInformationDetailFragment(it.stinCd.toTypedArray() , it.stinNm)
+                HomeFragmentDirections.actionFragmentHomeToStationInformationDetailFragment(
+                    it.stinCd.toTypedArray(),
+                    it.stinNm
+                )
             )
         })
-    }
 
-    @SuppressLint("DefaultLocale")
-    private fun searchDataFilter(searchData: String) {
-        viewModel.fullRouteInformation.value?.filter {
-            it.stinNm.toLowerCase().contains(searchData.toLowerCase())
-        }.run {
-            dropBoxAdapter.submitList(this)
-        }
-    }
-
-    private fun setPopUpWindow(
-        parentView: View
-    ): PopupWindow {
-        return PopupWindow(parentView.measuredWidth, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
-
-            setBackgroundDrawable(
-                ResourcesCompat.getDrawable(resources, R.drawable.popup_background, null))
-
-                popUpListBinding.apply {
-                    this?.vm = viewModel
-                    this?.rvList?.apply {
-                        adapter = dropBoxAdapter
-                    }
-                }.run {
-                    contentView = this?.root
-                }
-
-            isOutsideTouchable = true
-            elevation = resources.getDimension(R.dimen.defaultViewShadow)
-            translationMatrix(0f, resources.getDimension(R.dimen.defaultViewShadowTansY))
-        }
-
-    }
-
-    private fun hideSoftKeyboard(view: View) {
-        (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).apply {
-            hideSoftInputFromWindow(view.windowToken, 0)
-        }
-    }
-
-    private fun getRequestLocationData() {
-        try {
-            fusedLocationProviderClient.requestLocationUpdates(
-                locationRequest,
-                requestCallback,
-                Looper.getMainLooper()
-            )
-        } catch (e: SecurityException) {
-            Timber.e("Location Data Update Failed : $e")
+        fullRouteInformationViewModel.failedInformationData.observe(viewLifecycleOwner) {
+            if (it) showToast(R.string.text_data_not_found)
         }
     }
 
@@ -189,15 +100,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, FullRouteInformationViewM
         super.onResume()
     }
 
-    private val requestCallback = object : LocationCallback() {
-        override fun onLocationResult(p0: LocationResult) {
-            Timber.d("Update Latitude : ${p0.lastLocation.latitude} \nUpdate Longitude : ${p0.lastLocation.longitude}")
-            fusedLocationProviderClient.removeLocationUpdates(this)
+    private fun hideSoftKeyboard(view: View) {
+        (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).apply {
+            hideSoftInputFromWindow(view.windowToken, 0)
         }
-    }
-
-    override fun onDestroy() {
-        popup.dismiss()
-        super.onDestroy()
     }
 }

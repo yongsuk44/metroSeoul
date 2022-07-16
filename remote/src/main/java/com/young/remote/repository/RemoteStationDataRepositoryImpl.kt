@@ -1,8 +1,8 @@
 package com.young.remote.repository
 
-import com.young.cache.cache.model.DataStationBody
-import com.young.cache.cache.model.DataStationSeoulTimeTable
-import com.young.cache.cache.model.DataStationTimeTable
+import com.young.data.model.DataStationBody
+import com.young.data.model.DataStationSeoulTimeTable
+import com.young.data.model.DataStationTimeTable
 import com.young.remote.api.PublicDataOpenApiService
 import com.young.remote.api.SeoulApiService
 import com.young.remote.api.TrailPorTalService

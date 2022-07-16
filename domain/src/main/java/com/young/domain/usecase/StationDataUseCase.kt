@@ -1,17 +1,12 @@
 package com.young.domain.usecase
 
-import com.young.domain.model.DomainFullRouteInformationBody
 import com.young.domain.model.DomainStationBody
 import com.young.domain.model.DomainStationTimeTable
-import com.young.domain.repository.location.CacheFullRouteInformationRepository
-import com.young.domain.repository.remote.RemoteStationDataRepository
-import com.young.domain.usecase.base.BaseUseCase
+import com.young.domain.repository.StationDataRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-typealias StationDataBaseUseCase = BaseUseCase<List<String>, Flow<List<DomainFullRouteInformationBody>>>
-
-interface RemoteStationTelBaseUseCase {
+interface StationDataBaseUseCase {
     suspend fun getStationTelData(
         publicDataKey: String,
         stationCode: String
@@ -24,28 +19,25 @@ interface RemoteStationTelBaseUseCase {
         lineCode: String,
         stationCode: String,
         updown: String
-    ): Flow<DomainStationTimeTable>
+    ): Flow<DomainStationTimeTable?>
 
     suspend fun getSeoulStationTimeTable(
         key: String,
         updown: String,
         dayCd: String,
         stationCode: String
-    ): Flow<DomainStationTimeTable>
+    ): Flow<DomainStationTimeTable?>
 }
 
 class StationDataUseCase @Inject constructor(
-    private val cache: CacheFullRouteInformationRepository,
-    private val remote: RemoteStationDataRepository
-) : StationDataBaseUseCase, RemoteStationTelBaseUseCase {
-    override suspend fun invoke(param: List<String>): Flow<List<DomainFullRouteInformationBody>> =
-        cache.getStationData(param)
+    private val repository: StationDataRepository
+) : StationDataBaseUseCase {
 
     override suspend fun getStationTelData(
         publicDataKey: String,
         stationCode: String
     ): Flow<List<DomainStationBody>?> =
-        remote.getStationTelData(publicDataKey, stationCode)
+        repository.getStationTelData(publicDataKey, stationCode)
 
     override suspend fun getStationTimetables(
         key: String,
@@ -54,16 +46,16 @@ class StationDataUseCase @Inject constructor(
         lineCode: String,
         stationCode: String,
         updown: String
-    ): Flow<DomainStationTimeTable> =
-        remote.getStationTimetables(key, railCode, dayCd, lineCode, stationCode, updown)
+    ): Flow<DomainStationTimeTable?> =
+        repository.getStationTimetables(key, railCode, dayCd, lineCode, stationCode, updown)
 
     override suspend fun getSeoulStationTimeTable(
         key: String,
         updown: String,
         dayCd: String,
         stationCode: String
-    ): Flow<DomainStationTimeTable> =
-        remote.getSeoulStationTimeTable(key, updown, dayCd, stationCode)
+    ): Flow<DomainStationTimeTable?> =
+        repository.getSeoulStationTimeTable(key, updown, dayCd, stationCode)
 
 
 }

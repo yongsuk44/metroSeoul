@@ -1,6 +1,6 @@
 package com.young.presentation.model
 
-data class UiTrailTimeTable(
+data class UiStationTimeTable(
     val up: List<String>,
     val down: List<String>,
     val upFirstTime : String ,
