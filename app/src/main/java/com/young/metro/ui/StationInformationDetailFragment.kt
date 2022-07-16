@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.young.metro.BR
+import com.young.metro.BuildConfig
 import com.young.metro.R
 import com.young.metro.adapter.EntranceGuideDescriptionAdapter
 import com.young.metro.adapter.EntranceNumberAdapter
@@ -34,12 +35,11 @@ import timber.log.Timber
 @ExperimentalCoroutinesApi
 @FlowPreview
 @AndroidEntryPoint
-class StationInformationDetailFragment :
-    BaseFragment<FragmentStationInformationDetailBinding, DetailStationInformationViewModel>() {
+class StationInformationDetailFragment : BaseFragment<FragmentStationInformationDetailBinding>() {
     override val layoutResource: Int = R.layout.fragment_station_information_detail
-    override val viewModel: DetailStationInformationViewModel by viewModels()
     override val bindingVariable: Int = BR.vm
 
+    val viewModel: DetailStationInformationViewModel by viewModels()
     private val stationEntranceViewModel: StationEntranceViewModel by viewModels()
     private val stationTimeTableViewModel: StationTimeTableViewModel by viewModels()
 
@@ -81,8 +81,8 @@ class StationInformationDetailFragment :
         }
 
         viewModel.selectStationLineData.observe(viewLifecycleOwner) {
-            viewModel.getStationCodeToTelData(it.stinCd)
-            stationEntranceViewModel.getStationEntranceData(getString(R.string.trailKey), it.railOprIsttCd, it.lnCd, it.stinCd)
+            viewModel.getStationCodeToTelData(it.stinCd, BuildConfig.apiKey)
+            stationEntranceViewModel.getStationEntranceData(BuildConfig.trailKey, it.railOprIsttCd, it.lnCd, it.stinCd)
             stationTimeTableViewModel.changeDayCode(DayType.WEEK)
         }
 

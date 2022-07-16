@@ -63,6 +63,7 @@ class StationEntranceViewModel @ViewModelInject constructor(
                     else flowOf(it)
                 }
                 .map { it.DomainToUi() }
+                .flowOn(Dispatchers.IO)
                 .catch { _stationEntranceData.value = BaseResult.Failed(it) }
                 .onStart { _stationEntranceData.value = BaseResult.Loading(true) }
                 .collect { _stationEntranceData.value = BaseResult.Success(it) }

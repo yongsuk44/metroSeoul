@@ -5,14 +5,14 @@ import com.young.domain.repository.AllStationCodesRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-interface CacheAllStationCodeBaseUseCase {
+interface AllStationCodeBaseUseCase {
     suspend fun insert(items : List<DomainRow>) : Flow<List<Long>>
     suspend fun findStationCode(code : String) : Flow<DomainRow?>
 }
 
 class AllStationCodeUseCase @Inject constructor(
     private val repository: AllStationCodesRepository
-) : CacheAllStationCodeBaseUseCase {
+) : AllStationCodeBaseUseCase {
     override suspend fun insert(items: List<DomainRow>) : Flow<List<Long>> =
         repository.insert(items)
 

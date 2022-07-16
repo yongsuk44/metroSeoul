@@ -6,11 +6,14 @@ import android.location.Geocoder
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
+import com.young.domain.usecase.permission.PermissionLocationBaseUseCase
+import com.young.domain.usecase.permission.PermissionLocationUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 
 @Module
 @InstallIn(ActivityComponent::class)
@@ -19,7 +22,7 @@ object GoogleLocationServiceModule {
     @Provides
     @Reusable
     fun provideLocationService(
-        context: Context
+        @ApplicationContext context: Context
     ): FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
 
     @Provides
@@ -33,5 +36,5 @@ object GoogleLocationServiceModule {
 
     @Provides
     @Reusable
-    fun provideGeoCoder(context: Application): Geocoder = Geocoder(context)
+    fun provideGeoCoder(@ApplicationContext context: Application): Geocoder = Geocoder(context)
 }

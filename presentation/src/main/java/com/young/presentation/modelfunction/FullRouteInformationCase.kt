@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface FullRouteInformationCase {
     fun loadFullRouteInformation(trailKey: String)
-    fun insertFullRouteInformationDataAndTrailLineCode(list: List<DomainFullRouteInformationBody>)
     fun insertAllStationCodes(seoulKey: String)
     fun onSearchEditViewClick(value: Boolean)
     fun onStationClick(item: ListRouteInformation)

@@ -38,7 +38,7 @@ class FullRouteInformationTest {
         db = Room.inMemoryDatabaseBuilder(context, AppDataBase::class.java).build()
         dao = db.fullRouteInformationDao()
 
-        repo = CacheFullRouteInformationRepositoryImpl(dao , Dispatchers.IO)
+        repo = CacheFullRouteInformationRepositoryImpl(dao)
     }
 
     @After

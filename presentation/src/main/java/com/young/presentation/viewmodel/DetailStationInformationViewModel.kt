@@ -6,6 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.young.domain.usecase.AllStationCodeUseCase
 import com.young.domain.usecase.StationDataUseCase
+import com.young.domain.usecase.information.ReadRouteInformationBaseUseCase
+import com.young.domain.usecase.information.ReadRouteInformationUseCase
+import com.young.domain.usecase.information.ReadStationTelNumberBaseUseCase
+import com.young.domain.usecase.information.ReadStationTelNumberUseCase
 import com.young.presentation.R
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.consts.ResourceProvider
@@ -20,9 +24,8 @@ import timber.log.Timber
 @FlowPreview
 @ExperimentalCoroutinesApi
 class DetailStationInformationViewModel @ViewModelInject constructor(
-    private val provider: ResourceProvider,
-    private val useCase : StationDataUseCase,
-    private val allStationCodeUseCase : AllStationCodeUseCase,
+    private val readStationTelNumberUseCase: ReadStationTelNumberBaseUseCase,
+    private val readRouteInformationUseCase: ReadRouteInformationBaseUseCase
 ) : BaseViewModel(), DetailStationInformationViewFunction {
 
     private val _selectStationLineListData = MutableLiveData<List<IndexAllRouteInformation>>()
@@ -51,34 +54,25 @@ class DetailStationInformationViewModel @ViewModelInject constructor(
 
     override fun getStationData(stinCodes: List<String>) {
         viewModelScope.launch(handler) {
-            useCase(stinCodes)
+            readRouteInformationUseCase.readRouteInformation(stinCodes)
+                .map { it.map { it.DomainToUi() } }
+                .onCompletion { onLinePositionClick(0) }
                 .flowOn(Dispatchers.IO)
-                .map {
-                    it.map { it.DomainToUi() }
-                }
-                .flowOn(Dispatchers.IO)
-                .collect {
-                    _selectStationLineListData.value = it
-                    onLinePositionClick(0)
-                }
+                .collect { _selectStationLineListData.value = it }
         }
     }
 
-    override fun getStationCodeToTelData(stationCode : String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            allStationCodeUseCase.findStationCode(stationCode)
-                .flatMapConcat {
-                    if (it == null) throw NullPointerException("Station Code를 찾지 못함")
-                    else useCase.getStationTelData(provider.getString(R.string.key), it.STATION_CD)
-                }
+    override fun getStationCodeToTelData(stationCode : String, key: String) {
+        viewModelScope.launch {
+            readStationTelNumberUseCase.readStationTelNumber(stationCode, key)
+                .flowOn(Dispatchers.IO)
+                .onStart { setLoadingValue(true) }
+                .onCompletion { setLoadingValue(false) }
                 .catch {
                     _stationTelNumber.postValue("1544-7788")
                     Timber.e(it)
-                }.collect {
-                    withContext(Dispatchers.Main) {
-                        _stationTelNumber.value = it?.first()?.phoneNumber ?: "1544-7788"
-                        setLoadingValue(false)
-                    }
+                }.collect { telNumber ->
+                    _stationTelNumber.value = telNumber
                 }
         }
     }

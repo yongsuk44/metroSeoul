@@ -6,6 +6,7 @@ import com.nhaarman.mockito_kotlin.whenever
 import com.young.domain.model.DomainRow
 import com.young.domain.model.DomainStationTimeTable
 import com.young.domain.usecase.AllStationCodeUseCase
+import com.young.domain.usecase.StationDataBaseUseCase
 import com.young.domain.usecase.StationDataUseCase
 import com.young.presentation.consts.DayType
 import com.young.presentation.consts.ResourceProvider
@@ -44,7 +45,7 @@ class StationTimeTableViewModelTest {
 
     private lateinit var viewModel: StationTimeTableViewModel
 
-    private lateinit var stationDataUseCase: StationDataUseCase
+    private lateinit var stationDataUseCase: StationDataBaseUseCase
     private lateinit var allStationCodeUseCase: AllStationCodeUseCase
     private lateinit var provider: ResourceProvider
 
@@ -61,11 +62,11 @@ class StationTimeTableViewModelTest {
 
     @Before
     fun setUp() {
-        stationDataUseCase = mock(StationDataUseCase::class.java)
+        stationDataUseCase = mock(StationDataBaseUseCase::class.java)
         allStationCodeUseCase = mock(AllStationCodeUseCase::class.java)
         provider = mock(ResourceProvider::class.java)
 
-        viewModel = StationTimeTableViewModel(provider, stationDataUseCase, allStationCodeUseCase)
+        viewModel = StationTimeTableViewModel(stationDataUseCase, allStationCodeUseCase)
     }
 
     @Test
