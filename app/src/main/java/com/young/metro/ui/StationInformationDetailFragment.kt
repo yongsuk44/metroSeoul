@@ -102,7 +102,7 @@ class StationInformationDetailFragment : BaseFragment<FragmentStationInformation
         stationEntranceViewModel.stationEntranceOpen.observe(viewLifecycleOwner) {
             if (it && viewModel.selectStationLineData.value != null) {
                 viewModel.selectStationLineData.value!!.run {
-                    stationEntranceViewModel.getStationEntranceData(getString(R.string.trailKey), railOprIsttCd, lnCd, stinCd)
+                    stationEntranceViewModel.getStationEntranceData(BuildConfig.trailKey, railOprIsttCd, lnCd, stinCd)
                 }
             }
         }
@@ -111,8 +111,8 @@ class StationInformationDetailFragment : BaseFragment<FragmentStationInformation
             stationTimeTableViewModel.getStationTimeTable(
                 viewModel.selectStationLineData.value,
                 it,
-                getString(R.string.seoulKey),
-                getString(R.string.trailKey)
+                BuildConfig.seoulKey,
+                BuildConfig.trailKey
             )
         }
 

@@ -1,12 +1,6 @@
 package com.young.domain.di
 
-import android.location.Geocoder
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationRequest
-import com.young.domain.repository.LocationRepository
-import com.young.domain.usecase.CoordinateBaseUseCase
 import com.young.domain.usecase.location.*
-import com.young.domain.usecase.permission.PermissionLocationUseCase
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -17,11 +11,11 @@ import dagger.hilt.android.components.ApplicationComponent
 abstract class LocationModule {
 
     @Binds
-    abstract fun providesReadLocationService(readLocationServiceUseCase: ReadLocationServiceUseCase) : ReadLocationServiceBaseUseCase
+    abstract fun providesGetStationCoordinateData(getStationCoordinateDataUseCase: GetStationCoordinateDataUseCase): GetStationCoordinateDataBaseUseCase
 
     @Binds
-    abstract fun providesUpdateLocationService(updateLocationServiceUseCase: UpdateLocationServiceUseCase) : UpdateLocationServiceBaseUseCase
+    abstract fun providesReadLastLocation(readLastLocationUseCase: ReadLastLocationUseCase): ReadLastLocationBaseUseCase
 
     @Binds
-    abstract fun providesGetStationCoordinateData(getStationCoordinateDataUseCase: GetStationCoordinateDataUseCase) : GetStationCoordinateDataBaseUseCase
+    abstract fun providesUpdateLastLocation(updateLastLocationUseCase: UpdateLastLocationUseCase): UpdateLastLocationBaseUseCase
 }

@@ -20,6 +20,7 @@ android {
         getByName("release") {
             isMinifyEnabled = false
             isDebuggable = false
+            applicationIdSuffix = ""
 
             signingConfig = signingConfigs.create("release") {
                 properties.load(FileInputStream(releaseKeystoreFile))
@@ -32,7 +33,7 @@ android {
             manifestPlaceholders.apply {
                 put("appName", "서울지하철 편의시설")
                 put("appIcon", "@mipmap/ic_launcher")
-                put("cloud_key", keyProperties.getProperty("googleCloudeKey"))
+                put("cloud_key", keyProperties.getProperty("googleCloudKey"))
             }
 
             buildConfigField("String", "seoulKey", keyProperties.getProperty("seoulKey"))
@@ -57,7 +58,7 @@ android {
             manifestPlaceholders.apply {
                 put("appName", "서울 지하철 테스트")
                 put("appIcon", "@mipmap/ic_launcher")
-                put("cloud_key", keyProperties.getProperty("googleCloudeKey"))
+                put("cloud_key", keyProperties.getProperty("googleCloudKey"))
             }
 
             buildConfigField("String", "seoulKey", keyProperties.getProperty("seoulKey"))

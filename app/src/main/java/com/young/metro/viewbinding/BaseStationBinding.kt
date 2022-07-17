@@ -5,7 +5,7 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.young.metro.R
-import com.young.presentation.consts.STATION_LINE
+import com.young.metro.util.STATION_LINE
 
 @BindingAdapter("lineColor")
 fun getTextLineColor(view: TextView, line: String) {

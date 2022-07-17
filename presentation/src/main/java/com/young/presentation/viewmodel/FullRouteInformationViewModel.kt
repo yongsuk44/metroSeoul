@@ -4,21 +4,21 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.young.base.di.IoDispatcher
-import com.young.domain.model.DomainFullRouteInformationBody
-import com.young.domain.model.DomainTrailCodeAndLineCode
-import com.young.domain.usecase.AllStationCodeUseCase
-import com.young.domain.usecase.FullRouteInformationUseCase
 import com.young.domain.usecase.information.FindStationRouteInformationUseCase
 import com.young.domain.usecase.information.InsertStationCodeUseCase
 import com.young.presentation.consts.BaseViewModel
 import com.young.presentation.consts.CustomTransformationDataMap
 import com.young.presentation.consts.Event
+import com.young.presentation.di.IoDispatcher
+import com.young.presentation.di.MainDispatcher
 import com.young.presentation.mapper.DomainToUiMapper.DomainToUi
 import com.young.presentation.model.ListRouteInformation
 import com.young.presentation.modelfunction.FullRouteInformationCase
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import timber.log.Timber
 import java.util.*
 
@@ -26,6 +26,7 @@ import java.util.*
 @FlowPreview
 class FullRouteInformationViewModel @ViewModelInject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @MainDispatcher private val mainDispatcher: CoroutineDispatcher,
     private val findStationRouteInformationUseCase: FindStationRouteInformationUseCase,
     private val insertStationCodeUseCase: InsertStationCodeUseCase
 ) : BaseViewModel(), FullRouteInformationCase {
@@ -62,16 +63,15 @@ class FullRouteInformationViewModel @ViewModelInject constructor(
 
 
     override fun loadFullRouteInformation(trailKey: String) {
-        viewModelScope.launch(ioDispatcher) {
+        viewModelScope.launch(mainDispatcher) {
             findStationRouteInformationUseCase.onFindStationRouteInformation(trailKey)
+                .map { it.DomainToUi() }
+                .flowOn(ioDispatcher)
                 .catch {
                     Timber.e(it)
                     _failedInformationData.value = true
                 }
-                .map { it.DomainToUi() }
-                .collect { list ->
-                    _fullRouteInformation.value = list
-                }
+                .collect { list -> _fullRouteInformation.value = list }
         }
     }
 

@@ -11,11 +11,11 @@ import kotlinx.coroutines.FlowPreview
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-class SplashFragment : BaseFragment<FragmentSplashBinding , LocationViewModel>() {
-    override val layoutResource: Int
-        get() = R.layout.fragment_splash
-    override val viewModel: LocationViewModel by viewModels()
+class SplashFragment : BaseFragment<FragmentSplashBinding>() {
+    override val layoutResource: Int get() = R.layout.fragment_splash
     override val bindingVariable: Int = BR.vm
+
+    val viewModel: LocationViewModel by viewModels()
 
     override fun initBinding() {
 

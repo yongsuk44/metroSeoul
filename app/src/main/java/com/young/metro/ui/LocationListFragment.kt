@@ -32,12 +32,15 @@ class LocationListFragment : BaseFragment<FragmentLocationListBinding>() {
     val viewModel: LocationViewModel by viewModels()
 
     override fun initBinding() {
-        viewDataBinding.rvLocationNearStation.adapter = this@LocationListFragment.adapter
+        viewDataBinding.apply {
+            vm = viewModel
+            rvLocationNearStation.adapter = this@LocationListFragment.adapter
+        }
+
         viewModel.loadStationData(Firebase.database)
     }
 
     override fun observerLiveData() {
-
         viewModel.stationNameAndMapXY.observe(viewLifecycleOwner) {
             adapter.submitList(it)
             viewModel.setLoadingValue(false)

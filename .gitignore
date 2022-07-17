@@ -47,21 +47,16 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
-
+*.properties
 *.jks
 *.keystore
 
 .gradle/
 *.imi
 Build/
-local.properties
-keystore.properties
-app/debug.keystore
 
 *.aab
 *.apk
-
-/gradle.properties
 
 app/build
 presentation/build
@@ -69,3 +64,5 @@ domain/build
 data/build
 cache/build
 base/build
+
+app/metroKey
