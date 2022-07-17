@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+option java_package = "com.young.cache";
+
+message LocationStore {
+  double latitude = 1;
+  double longitude = 2;
+}

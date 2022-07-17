@@ -1,6 +1,7 @@
 package com.young.data.di
 
 import com.young.data.datasource.cache.CacheFullRouteInformationDataSource
+import com.young.data.datasource.cache.CacheLocationDataSource
 import com.young.data.datasource.remote.RemoteFullRouteInformationDataSource
 import com.young.data.impl.*
 import com.young.domain.repository.*
@@ -32,9 +33,10 @@ class DataSourceModule {
     @Provides
     @Singleton
     fun provideLocationDataSource(
-        remote: com.young.data.datasource.remote.RemoteLocationDataSource
+        remote: com.young.data.datasource.remote.RemoteLocationDataSource,
+        cache: CacheLocationDataSource
     ): LocationRepository =
-        LocationDataSourceImpl(remote)
+        LocationDataSourceImpl(remote,cache)
 
     // cache
     @Provides

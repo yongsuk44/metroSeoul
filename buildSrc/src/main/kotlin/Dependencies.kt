@@ -13,7 +13,7 @@ object Libraries {
     const val hiltLifecycle = "androidx.hilt:hilt-lifecycle-viewmodel:${Versions.hiltAndroidX}"
     const val hiltCore = "com.google.dagger:hilt-android:${Versions.hiltCore}"
     const val hiltKapt = "com.google.dagger:hilt-android-compiler:${Versions.hiltCore}"
-    const val hiltAndroidx = "androidx.hilt:hilt-compiler:${Versions.hiltAndroidX}"
+//    const val hiltAndroidx = "androidx.hilt:hilt-compiler:${Versions.hiltAndroidX}"
     const val hiltTest = "com.google.dagger:hilt-android-testing:${Versions.hiltCore}"
 
     const val gson = "com.google.code.gson:gson:${Versions.gson}"
@@ -97,6 +97,9 @@ object AndroidLibraries {
     const val fragment = "androidx.fragment:fragment-ktx:${Versions.fragmentVersion}"
     const val googleCore = "com.google.android.play:core:${Versions.googleCore}"
     const val kotlinReflection = "org.jetbrains.kotlin:kotlin-reflect:${Versions.kotlin}"
+
+    const val dataStore = "androidx.datastore:datastore:${Versions.dataStore}"
+    const val dataStoreJava = "com.google.protobuf:protobuf-javalite:${Versions.dataStoreProtoVersion}"
 
     // recyclerview
     const val recyclerView = "androidx.recyclerview:recyclerview:${Versions.recyclerview}"
@@ -210,8 +213,8 @@ object LibraryList {
     )
 
     val HiltLibraryKapt = arrayOf(
-        Libraries.hiltKapt,
-        Libraries.hiltAndroidx
+        Libraries.hiltKapt
+//        Libraries.hiltAndroidx
     )
 
     val RetrofitLibraries = arrayOf<String>(

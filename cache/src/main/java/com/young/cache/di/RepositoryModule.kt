@@ -1,11 +1,15 @@
 package com.young.cache.di
 
+import androidx.datastore.core.DataStore
+import com.young.cache.Metro.LocationStore
 import com.young.cache.dao.AllStationCodeDao
 import com.young.cache.dao.FullRouteInformationDao
 import com.young.cache.dao.LocationDao
 import com.young.cache.repository.CacheAllStationCodesRepositoryImpl
 import com.young.cache.repository.CacheFullRouteInformationRepositoryImpl
+import com.young.cache.repository.CacheLocationRepositoryImpl
 import com.young.cache.repository.CacheStationCoordinatesRepositoryImpl
+import com.young.data.datasource.cache.CacheLocationDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
@@ -34,4 +38,10 @@ class RepositoryModule {
         dao: LocationDao
     ) : com.young.data.datasource.cache.CacheStationCoordinatesDataSource = CacheStationCoordinatesRepositoryImpl(dao)
 
+
+    @Provides
+    @Reusable
+    fun provideCacheLocationRepository(
+        locationDataStore: DataStore<LocationStore>
+    ) : CacheLocationDataSource = CacheLocationRepositoryImpl(locationDataStore)
 }

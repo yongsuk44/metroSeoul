@@ -80,12 +80,12 @@ object Versions {
 
     const val googleLocationService = "18.0.0"
 
-    const val hiltCore = "2.28-alpha"
-    const val hiltAndroidX = "1.0.0-alpha02"
+    const val hiltCore = "2.35"
+    const val hiltAndroidX = "1.0.0-alpha03"
 
     const val gpsLocation  ="18.0.0"
-
     const val firebaseBom ="28.3.0"
-
     const val ratingBar ="1.0.5"
+    const val dataStore = "1.0.0"
+    const val dataStoreProtoVersion ="3.18.0"
 }

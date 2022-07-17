@@ -1,4 +1,4 @@
-package com.young.base.di
+package com.young.presentation.di
 
 import javax.inject.Qualifier
 

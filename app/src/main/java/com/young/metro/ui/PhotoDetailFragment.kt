@@ -10,11 +10,11 @@ import com.young.presentation.viewmodel.PhotoListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class PhotoDetailFragment : BaseFragment<FragmentPhotoDetailBinding , PhotoListViewModel>() {
+class PhotoDetailFragment : BaseFragment<FragmentPhotoDetailBinding>() {
     override val layoutResource: Int = R.layout.fragment_photo_detail
-    override val viewModel: PhotoListViewModel by viewModels()
     override val bindingVariable: Int = BR.vm
 
+    val viewModel: PhotoListViewModel by viewModels()
     val args : PhotoDetailFragmentArgs by navArgs()
 
     override fun initBinding() {

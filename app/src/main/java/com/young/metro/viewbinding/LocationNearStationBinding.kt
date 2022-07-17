@@ -5,6 +5,7 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.young.metro.R
 import com.young.metro.ui.custom.CircleTextView
+import kotlinx.coroutines.flow.StateFlow
 
 @BindingAdapter("StringPlusMeter")
 fun setStringPlusMeter(view : TextView , data : Double) {
@@ -17,9 +18,9 @@ fun setStringPlusMeter(view : TextView , data : Double) {
     }.start()
 }
 
-@BindingAdapter("LocationRadiusClickCheck")
-fun setLocationRadiusPositionCheck(view : CircleTextView , check : Boolean) {
-    if (check) {
+@BindingAdapter("LocationNowRadius" , "LocationViewRadius")
+fun setLocationRadiusPositionCheck(view : CircleTextView , nowRadius: StateFlow<Double>, viewRadius: Double) {
+    if (nowRadius.value == viewRadius) {
         view.setCustomBackgroundColor(R.color.black)
         view.setTextColor(view.context.getColor(R.color.white))
     } else {
