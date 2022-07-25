@@ -9,18 +9,18 @@ import com.young.cache.datastore.LocationSerializer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
-import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.qualifiers.ActivityContext
 import com.young.cache.Metro.LocationStore
 import javax.inject.Singleton
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(ActivityComponent::class)
 object DataStoreModule {
 
     @Provides
     @Singleton
-    fun providesLocationDataStore(@ApplicationContext context: Context) : DataStore<LocationStore> =
+    fun providesLocationDataStore(@ActivityContext context: Context) : DataStore<LocationStore> =
         DataStoreFactory.create(
             serializer = LocationSerializer,
             produceFile = { context.dataStoreFile("metro.proto") }

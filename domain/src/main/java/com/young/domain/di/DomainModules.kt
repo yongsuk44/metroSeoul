@@ -12,17 +12,17 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
-import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.android.qualifiers.ActivityContext
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(ViewModelComponent::class)
 object DomainModules {
 
     @Provides
     @Reusable
     fun providePermission(
-        @ApplicationContext context: Context
+        @ActivityContext context: Context
     ): PermissionLocationBaseUseCase =
         PermissionLocationUseCase(context)
 

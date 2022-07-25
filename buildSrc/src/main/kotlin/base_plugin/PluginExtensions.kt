@@ -59,6 +59,9 @@ internal fun Project.configureBaseDependencies() = dependencies {
     implementations(*LibraryList.firebaseLibrary)
 }
 
+fun DependencyHandler.implementation(lib : String) =
+    add("implementation", lib)
+
 fun DependencyHandler.implementation(lib : Dependency) =
     add("implementation", lib)
 

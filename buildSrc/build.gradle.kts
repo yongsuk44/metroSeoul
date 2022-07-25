@@ -18,6 +18,6 @@ gradlePlugin {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("com.android.tools.build:gradle:4.2.0")
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10")
+    implementation("com.android.tools.build:gradle:7.0.4")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10")
 }

@@ -23,8 +23,6 @@ object Libraries {
     const val retrofitMoshiConverter =
         "com.squareup.retrofit2:converter-moshi:${Versions.retrofitGson}"
     const val httpLoggingInterceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.okHttp}"
-    const val retrofitRxAdapter =
-        "com.squareup.retrofit2:adapter-rxjava2:${Versions.rxjava2Adapter}"
 
     const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
     const val glideCompiler = "com.github.bumptech.glide:compiler:${Versions.glide}"
@@ -124,25 +122,6 @@ object AndroidLibraries {
     // Room api
     const val roomRuntime = "androidx.room:room-runtime:${Versions.room}"
 
-    // legacy
-    const val legacyCore = "androidx.legacy:legacy-support-core-utils:${Versions.legacy}"
-    const val browser = "androidx.browser:browser:${Versions.browser}"
-    const val legacySupport = "androidx.legacy:legacy-support-v4:${Versions.legacy}"
-    const val customtabs = "com.android.support:customtabs:${Versions.coreKtx}"
-
-    // camera
-    const val cameraCore = "androidx.camera:camera-core:${Versions.camera}"
-    const val camera2 = "androidx.camera:camera-camera2:${Versions.camera}"
-    const val cameraLifeCycle = "androidx.camera:camera-lifecycle:${Versions.camera}"
-    const val cameraView = "androidx.camera:camera-view:1.0.0-alpha10"
-
-    // player
-    const val exoPlayerCore = "com.google.android.exoplayer:exoplayer-core:${Versions.exoPlayer}"
-    var exoPlayerUI = "com.google.android.exoplayer:exoplayer-ui:${Versions.exoPlayer}"
-    var exoDash = "com.google.android.exoplayer:exoplayer-dash:${Versions.exoPlayer}"
-    var exoMediasession =
-        "com.google.android.exoplayer:extension-mediasession:${Versions.exoPlayer}"
-
     // Timber
     val timber = "com.jakewharton.timber:timber:${Versions.timber}"
 }
@@ -179,20 +158,6 @@ object LibraryList {
         AndroidLibraries.viewPager
     )
 
-    val exoLibrary = arrayOf<String>(
-        AndroidLibraries.exoPlayerCore,
-        AndroidLibraries.exoPlayerUI,
-        AndroidLibraries.exoMediasession,
-        AndroidLibraries.exoDash
-    )
-
-    val cameraLibrary = arrayOf<String>(
-        AndroidLibraries.cameraCore,
-        AndroidLibraries.camera2,
-        AndroidLibraries.cameraLifeCycle,
-        AndroidLibraries.cameraView
-    )
-
     val RecyclerViewLibraries = arrayOf<String>(
         AndroidLibraries.recyclerView,
         AndroidLibraries.recyclerViewTracker,
@@ -222,8 +187,7 @@ object LibraryList {
         Libraries.retrofit,
         Libraries.retrofitGsonConverter,
         Libraries.retrofitMoshiConverter,
-        Libraries.httpLoggingInterceptor,
-        Libraries.retrofitRxAdapter
+        Libraries.httpLoggingInterceptor
     )
 
 

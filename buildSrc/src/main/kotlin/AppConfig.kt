@@ -36,4 +36,5 @@ object GradleClasspath {
     const val googleCrashlytics = "com.google.firebase:firebase-crashlytics-gradle:2.5.2"
     const val safeArgs = "androidx.navigation:navigation-safe-args-gradle-plugin:2.3.2"
     const val googleService = "com.google.gms:google-services:4.3.8"
+    const val javapoet = "com.squareup:javapoet:1.13.0"
 }
