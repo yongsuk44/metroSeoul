@@ -4,11 +4,11 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.components.ViewModelComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
-@InstallIn(ApplicationComponent::class)
+@InstallIn(ViewModelComponent::class)
 @Module
 object CoroutineDispatcherModule {
 

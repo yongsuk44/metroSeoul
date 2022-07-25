@@ -46,7 +46,6 @@ class StationTimeTableViewModel @ViewModelInject constructor(
     // 시간표가 있으면 flatMapConcat 전부 패스
     // 시간표 없으면 공공 데이터 포털에서 시간표를 가져옴
     // 공공 데이터 포털에서 토요일에 대한 데이터가 없을경우 다시 일요일에 대한 데이터를 호출
-    @FlowPreview
     override fun getStationTimeTable(
         indexAllRouteInformation: IndexAllRouteInformation?,
         day: DayType ,

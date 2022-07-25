@@ -93,8 +93,6 @@ dependencies {
     implementation(Libraries.lottie)
     implementation(AndroidLibraries.timber)
     implementations(*LibraryList.appLibraries)
-    implementations(*LibraryList.cameraLibrary)
-    implementations(*LibraryList.exoLibrary)
     implementations(*LibraryList.RecyclerViewLibraries)
     implementations(*LibraryList.NavigationLibraries)
     implementations(*LibraryList.Glide)
